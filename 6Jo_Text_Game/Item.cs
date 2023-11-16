@@ -2,12 +2,13 @@
 {
         //아이템 속성 커밋테스트
         public string Name { get; set; }
-        public int Akt { get; set; }
-        public int Def { get; set; }
+        public float Akt { get; set; }
+        public float Def { get; set; }
         public string ItemDescription { get; set; }
         public bool Stallation { get; set; }
         public bool Buy { get; set; }
-        public int Gold { get; }
+        public int Gold { get; set; }
+        public float Health { get; set; }
 
         // 기본 생성자
         public Item()
@@ -25,6 +26,16 @@
                 GameData.I.AddItem(new Item("용의 심장", 8, 12, "한국 신화에서 나온 용을 상징하는 심장으로, 강력한 공격력을 부여합니다.", false, false, 4300));
                 GameData.I.AddItem(new Item("해신의 투구", 10, 8, "한국 신화의 바다 신, 해신의 투구로, 물 속에서 강력한 방어 능력을 발휘합니다.", false, false, 4100));
         }
+        /// <summary>
+        /// 일반 장비아이템 생성입니다.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="atk"></param>
+        /// <param name="def"></param>
+        /// <param name="ItemDescription"></param>
+        /// <param name="stallation"></param>
+        /// <param name="buy"></param>
+        /// <param name="gold"></param>
         // 매개변수가 있는 생성자
         public Item(string name, int atk, int def, string ItemDescription, bool stallation, bool buy, int gold)
         {
@@ -37,11 +48,26 @@
                 this.Buy = buy;
                 this.Gold = gold;
         }
-
-        // 아이템 추가 메서드
-        public void Add(Item itme)
+        /// <summary>
+        /// 포션아이템 생성입니다.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="gold"></param>
+        public Item(string name, int gold)
         {
-                GameData.I.AddItem(itme);
+                // 아이템 속성들 초기화
+                this.Name = name;
+                this.Gold = gold;
+        }
+
+        public void HealthPotion(Character character,Item item)
+        {
+                character.Health += item.Health;
+        }
+        // 아이템 추가 메서드
+        private  void Add(IItem itme)
+        {
+                GameData.I.(itme);
         }
         // 현재 인스턴스의 아이템 추가 메서드
         public void Add()

@@ -37,8 +37,7 @@
         // 기본 생성자
         public Character()
         {
-        Console.WriteLine();
-    }
+        }
 
         // 모든 속성을 초기화하는 생성자
         public Character(string name, float level, float attack, float defense, float speed, float health, int gold, Job job, Attribute attribute)

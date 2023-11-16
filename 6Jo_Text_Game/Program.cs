@@ -10,7 +10,7 @@ public class GameData
         // 몬스터 및 캐릭터를 저장하는 데이터 구조
         private List<Monster> monsters;
         private List<Character> characters;
-        private List<Item> items;
+        private List<IItem> items;
         private List<Skill> skills;
 
         // 인스턴스 생성을 위한 private 생성자
@@ -18,7 +18,7 @@ public class GameData
         {
                 monsters = new List<Monster>();
                 characters = new List<Character>();
-                items = new List<Item>();
+                items = new List<IItem>();
                 skills = new List<Skill>();
                 InitializeData(); // 필요시 데이터 초기화 가능
         }
@@ -67,7 +67,7 @@ public class GameData
                 return characters;
         }
 
-        public void AddItem(Item item)
+        public void AddItem(IItem item)
         {
                 items.Add(item);
         }
@@ -77,7 +77,7 @@ public class GameData
                 items.RemoveAll(x => x.Name == item.Name);
         }
 
-        public List<Item> GetItem()
+        public List<IItem> GetItem()
         {
                 return items;
         }
@@ -113,7 +113,7 @@ public interface ICharacter
 }
 
 // 아이템을 나타내는 인터페이스
-interface IItem
+public interface IItem
 {
         string Name { get; }
 
