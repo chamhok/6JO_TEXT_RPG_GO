@@ -65,9 +65,9 @@
                 character.Health += item.Health;
         }
         // 아이템 추가 메서드
-        private  void Add(IItem itme)
+        private  void Add(IItem item)
         {
-                GameData.I.(itme);
+                GameData.I.AddItem(item);
         }
         // 현재 인스턴스의 아이템 추가 메서드
         public void Add()
@@ -75,24 +75,24 @@
                 GameData.I.AddItem(this);
         }
         // 장착 여부 뒤집기 메서드
-        public static void stallationReverse(Item itme)
+        public static void stallationReverse(Item item)
         {
-                itme.Stallation = itme.Stallation == true ? false : true;
+        item.Stallation = item.Stallation == true ? false : true;
         }
         // 구매 여부 뒤집기 메서드
-        public static void BuyReverse(Item itme)
+        public static void BuyReverse(Item item)
         {
-                itme.Buy = itme.Buy == true ? false : true;
+        item.Buy = item.Buy == true ? false : true;
         }
         // 장착 여부 관리 문자열 반환 메서드
-        public static string stallationManagement(Item itme)
+        public static string stallationManagement(Item item)
         {
-                return itme.Stallation == true ? "[E]" : "   ";
+                return item.Stallation == true ? "[E]" : "   ";
         }
         // 구매 여부 관리 문자열 반환 메서드
-        public static string BuyManagement(Item itme)
+        public static string BuyManagement(Item item)
         {
-                return itme.Buy == true ? "[구매완료]" : "   ";
+                return item.Buy == true ? "[구매완료]" : "   ";
         }
         // 객체를 문자열로 표현하는 메서드 오버라이드
         public override string ToString()
