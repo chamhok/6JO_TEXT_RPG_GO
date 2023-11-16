@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-//선건우
 
 // 게임 데이터를 저장하는 싱글톤 클래스 정의 
 public class GameData
