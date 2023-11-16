@@ -27,11 +27,15 @@
         public float Attack { get; set; }
         public float Defense { get; set; }
         public float Speed { get; set; }
-        public bool IsDead { get; set; }
+        public bool IsDead { get; set; } = true;
         public int Gold { get; set; }
+        public float Avoidance { get; set; }
+        public float Crt { get; set; }
 
-        // 직업과 속성
-        public Job Job { get; set; }
+
+
+    // 직업과 속성
+    public Job Job { get; set; }
         public Attribute Attribute { get; set; }
 
         // 기본 생성자
@@ -40,7 +44,7 @@
         }
 
         // 모든 속성을 초기화하는 생성자
-        public Character(string name, float level, float attack, float defense, float speed, float health, int gold, Job job, Attribute attribute)
+        public Character(string name, float level, float attack, float defense, float speed, float health, int gold, Job job, float crt, float avoidance, Attribute attribute)
         {
                 this.Name = name;
                 this.Level = level;
@@ -49,7 +53,8 @@
                 this.Speed = speed;
                 this.Health = health;
                 this.Gold = gold;
-
+                this.Avoidance = Avoidance;
+                this.Crt = Crt;
                 this.Job = job;
                 this.Attribute = attribute;
         }
