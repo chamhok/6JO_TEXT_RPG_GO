@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>_6Jo_Text_Game</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="새 폴더\**" />
+    <EmbeddedResource Remove="새 폴더\**" />
+    <None Remove="새 폴더\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="DataManager.cs" />
+    <Compile Remove="GameManager.cs" />
+    <Compile Remove="SceneManager.cs" />
+    <Compile Remove="Stage.cs" />
+    <Compile Remove="Store.cs" />
+    <Compile Remove="Warrior.cs" />
+  </ItemGroup>
+
+</Project>
