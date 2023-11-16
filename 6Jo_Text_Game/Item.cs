@@ -1,6 +1,6 @@
 ﻿public class Item :IItem
 {
-        //아이템 속성
+        //아이템 속성 커밋테스트
         public string Name { get; set; }
         public int Akt { get; set; }
         public int Def { get; set; }
