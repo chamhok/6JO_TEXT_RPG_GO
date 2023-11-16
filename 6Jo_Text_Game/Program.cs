@@ -209,7 +209,7 @@ class Program
                 GameData.I.GetCharacters().Select(x => x.ToString()).ToList().ForEach(Console.WriteLine);
         Console.WriteLine("TT"      );
         Console.WriteLine();
-        Console.WriteLine("어렵다 어려워");
-        
+        Console.WriteLine("어렵징? 어려워");
+        Console.WriteLine("나만 하면 끝 ");
     }
 }
