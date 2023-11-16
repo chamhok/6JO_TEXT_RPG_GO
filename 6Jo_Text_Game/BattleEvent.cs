@@ -25,7 +25,7 @@ class BattleEvent
         this.monster = monster;
     }
 
-    public void CoinToss()
+    public void CoinToss() //몬스터와 플레이어의 스피드값 비교후 선공 결정
     {
         if (player.Speed >= monster.Speed)
         {
@@ -37,7 +37,7 @@ class BattleEvent
         }
     }
 
-    public void PlayerTurn()
+    public void PlayerTurn() // 플레이어의 행동을 입력받는 메소드
     {
         Console.Clear();
         Console.WriteLine("남은 몫숨" + life);
@@ -133,22 +133,26 @@ class BattleEvent
             default:
                 break;
         }
-    }
+    } //몬스터의 행동을 정하는 메소드
 
     public void MonsterResult()
     {
         monster.TakeDamage((float)PlayerDmg());
-    }
+        if (monster.Health <= 0)
+            monster.IsDead = false;
+    } //몬스터의 피격시 데미지 계산 및 사망처리
 
     public void PlayerResult()
     {
         player.TakeDamage((float)MonsterDmg());
-    }
+        if (player.Health <= 0)
+            player.IsDead = false;
+    } // 플레이어의 피격시 데미지 계산 및 사망처리
 
 
     public void Battles()
     {
-        CoinToss();
+        CoinToss(); 
         do
         {
             if (playerT == true)
@@ -164,13 +168,13 @@ class BattleEvent
 
         if (player.IsDead == false)
         {
-            player.IsDead = false;
+            --life; //라이프 기능 아직 구현X 추가적인 상세 게임 스토리라인 결정후 구현
             Console.WriteLine("전투패배!");
             Console.ReadKey();
         }
         else
         {
-            monster.IsDead = false;
+            ++wincount; //라이프와 동일
             Console.WriteLine("전투승리! 승리횟수: " + wincount);
             Console.ReadKey();
         }
@@ -215,7 +219,7 @@ class BattleEvent
             Console.ReadKey();
             return 0;
         }
-    }
+    } // 몬스터의 공격과 공격 성공유무, 크리티컬 유무 판정( PlayerDmg 주석 참고)
 
     public float PlayerDmg()
     {
@@ -223,44 +227,44 @@ class BattleEvent
         skillPsmash = 1;
         skillMguard = 1;
 
-        if (damage > 0)
+        if (damage > 0) //데미지가 0과 같거나 작은지 체크
         {
-            if (AvoidanceToss() <= monster.Avoidance)
+            if (AvoidanceToss() <= monster.Avoidance) // 회피 성공 유무 체크
             {
                 Console.WriteLine("몬스터가 회피하였습니다!");
                 Console.ReadKey();
                 return 0;
             }
-            else if (CrtToss() <= player.Crt)
+            else if (CrtToss() <= player.Crt) // 크리티컬 유무 체크
             {
                 Console.WriteLine("치명적 일격! 피해량 : " + damage * 2);
                 Console.ReadKey();
                 return damage * 2;
             }
-            else
+            else //위 조건문 모두 false시 기본 피해량만 타격
             {
                 Console.WriteLine("공격 성공! 피해량 : " + damage);
                 Console.ReadKey();
                 return damage;
             }
         }
-        else
+        else // 데미지가 0과 같거나 작을경우 0으로 데미지 리턴 ( 음수가 될경우 생명력이 회복되는 현상을 막기위한 로직)
         {
             Console.WriteLine("상대가 너무 단단하다!");
             Console.ReadKey();
             return 0;
         }
 
-    }
+    } // 플레이어의 공격과 공격 성공유무, 크리티컬 유무 판정
 
 
 
-    public int AvoidanceToss()
+    public int AvoidanceToss() // 회피 성공 주사위
     {
         Random random = new Random();
         return random.Next(1, 100);
     }
-    public int CrtToss()
+    public int CrtToss() //크리티컬 성공 주사위
     {
         Random random = new Random();
         return random.Next(1, 100);

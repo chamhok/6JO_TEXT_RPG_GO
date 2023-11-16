@@ -28,19 +28,20 @@ class ScreenManager
                 playerInfo.Display();
                 Console.ReadKey();
                 ShowMainScreen();
-                break;
+                break; //캐릭터 정보창 호출 ( 별도의 키지정없이 아무키 입력시 다시 메인 화면으로 이동되게 설정)
 
-            case "2":
+            case "2": 
                 Console.Clear();
                 battleScreen.BattleStartSecen();
                 ShowMainScreen();
-                break;
+                break;// 전투 화면으로 이동
 
             default:
+                Console.WriteLine("잘못된입력입니다.");
                 Console.Clear();
                 mainScreen.Display();
                 ShowMainScreen();
-                break;
+                break; //1 과 2가 아닌 입력을 받을시 메인 화면으로 다시 로드
         }
     }
 
