@@ -352,7 +352,7 @@ public class StartScreen
                                         return ret;
                         }
 
-                        Console.WriteLine("잘못된 입력입니다.");
+                        Console.Write(">>");
                 }
         }
 }
