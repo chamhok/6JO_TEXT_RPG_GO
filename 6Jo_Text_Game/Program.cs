@@ -121,6 +121,7 @@ public interface IItem
         string Name { get; }
         void Use(Character character) { }
 }
+
 //상점을 나타내는 인터페이스
 public interface IStore
 {
