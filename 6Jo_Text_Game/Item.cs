@@ -1,4 +1,6 @@
-﻿public class Item : IItem
+﻿using System.Security.Cryptography.X509Certificates;
+
+public class Item : IItem
 {
     //아이템 속성 커밋테스트
     public string Name { get; set; }
@@ -55,7 +57,7 @@
     /// </summary>
     /// <param name="name"></param>
     /// <param name="itemAbility"></param>
-    public Item(string name, int itemAbility)
+    public Item(string name, float itemAbility)
     {
         this.Name = name;
         this.ItemAbility = itemAbility;
@@ -65,7 +67,19 @@
     {
         // 보상 아이템 사용 시 캐릭터의 능력치 증가 등을 구현
         Apply(character);
-        Console.WriteLine($"{character.Name}이(가) {this.Name}을(를) 사용하여 능력치가 조절되었습니다.");
+        string Message;
+
+        // 출력 형태 수정
+        if (this.Name.Contains("Postion"))
+        {
+            Message = "을(를) 먹었습니다.";
+        }
+        else
+        {
+            Message = "을(를) 획득하였습니다.";
+        }
+
+        Console.WriteLine($"\n{character.Name}이(가) {this.Name}{Message}");
         Console.ReadKey(true);
     }
 
@@ -79,6 +93,21 @@
         else if (this.Name == "Attack Postion")
         {
             character.Attack += this.ItemAbility;
+        }
+        else if (this.Name == "Crazy Wood")
+        {
+            // Character 매개변수를 사용하지 않았음.
+            GameData.I.AddItem(new Item("Crazy Wood", 0, 0, "미친 나뭇가지 입니다.", false, true, int.MaxValue));
+        }
+        else if (this.Name == "Very Crazy Sword")
+        {
+            // Character 매개변수를 사용하지 않았음.
+            GameData.I.AddItem(new Item("Very Crazy Sword", 0, 0, "매우 미친 검 입니다..", false, true, int.MaxValue));
+        }
+        else if (this.Name == "Super Crazy Hammer")
+        {
+            // Character 매개변수를 사용하지 않았음.
+            GameData.I.AddItem(new Item("Super Crazy Hammer", 0, 0, "슈퍼 미친 망치 입니다.", false, true, int.MaxValue));
         }
     }
 
