@@ -218,23 +218,18 @@ class Program
 }
 public class StartScreen
 {
-        public string DirectoryGetParent(string directoryInfo)
-        {
-                return Directory.GetParent(Directory.GetParent(Directory.GetParent(directoryInfo).ToString()).ToString()).ToString();
-        }
+
         private void StartScreenText()
         {
-                string currentDirectory = DirectoryGetParent(Directory.GetCurrentDirectory());
-                // Specify the file name (change it to your actual file name)
-                string fileName = "StartScreenText.txt";
-
-                // Combine the current directory and file name to get the full path
-                string filePath = Path.Combine(currentDirectory, fileName);
-
+               /*
+                . (점): 현재 디렉토리를 나타냅니다.
+                ..(점 두 개): 상위 디렉토리를 나타냅니다.
+                / (슬래시): 디렉토리를 구분합니다.
+               */
+                string directory = "../../../StartScreenText.txt";
                 try
                 {
-                        // Read the contents of the file
-                        string[] fileContents = File.ReadAllLines(filePath, Encoding.UTF8);
+                        string[] fileContents = File.ReadAllLines(directory, Encoding.UTF8);
                         foreach (string line in fileContents)
                         {
                                 foreach (char cha in line)
@@ -244,7 +239,6 @@ public class StartScreen
                                 }
                                 Console.WriteLine();
                         }
-                        // Display the contents
 
                 }
                 catch (Exception ex)
@@ -299,7 +293,7 @@ public class StartScreen
                         Console.Write(item);
                         if (!Console.KeyAvailable) Thread.Sleep(50);
                 }
-                Console.Write("\n당신은 어떠한 무기를 선택하실 겁니까? : \n>> ");
+                Console.Write("\n당신은 어떠한 무기를 선택하실 겁니까?  \n>> ");
                 int input = CheckValidInput(1, 4);
 
                 switch (input)
