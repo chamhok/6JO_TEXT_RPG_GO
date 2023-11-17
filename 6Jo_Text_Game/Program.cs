@@ -118,6 +118,13 @@ public interface IItem
     string Name { get; }
     void Use(Character character) { }
 }
+//상점을 나타내는 인터페이스
+public interface IStore
+{
+    string Name { get; }
+
+    //void Use(Store store) { }
+}
 
 // 스킬을 나타내는 클래스
 public class Skill
@@ -181,14 +188,21 @@ class Program
     {
 
         // 캐릭터 생성 및 게임 데이터에 추가 후 목록 출력
-        Character character = new Character("ㅇㅇ", 100, 100, 100, 100, 100, 200, Job.가디언, 10, 10, Attribute.풍);
+        Character character = new Character("ㅇㅇ", 100, 100, 100, 100, 100, 200, Job.가디언,10,10, Attribute.풍);
         character.Add(new Character("ㅇㅇ", 100, 100, 100, 100, 100, 200, Job.가디언, 10, 10, Attribute.풍));
-        Monster monster = new Monster("Test", 1, 1, 1, 1, 1, 1, Species.고블린, 1, 1, Attribute.풍);
-        monster.Add(new Monster("Test", 1, 1, 1, 1, 1, 1, Species.고블린, 1, 1, Attribute.풍));
-        BattleEvent battleEvent = new BattleEvent(character, monster);
+        //Monster monster = new Monster("Test", 1, 1, 1, 1, 1, 1, Species.고블린,1,1, Attribute.풍);
+        //monster.Add(new Monster("Test", 1, 1, 1, 1, 1, 1, Species.고블린, 1, 1, Attribute.풍));
+        //Monster monsterb = new Monster("Test2", 1000, 1000, 1000, 1000, 1000, 1000, Species.고블린,1,1, Attribute.풍);
+        //monster.Add(new Monster("Test2", 1000, 1000, 1000, 1000, 1000, 1000, Species.고블린, 1, 1, Attribute.풍));
+        
+        
+        
+        
+        BattleEvent battleEvent = new BattleEvent(character);
         ScreenManager screenManager = new ScreenManager(character, battleEvent);
         character.Add();
         GameData.I.GetCharacters().Select(x => x.ToString()).ToList().ForEach(Console.WriteLine);
+        //screenManager.Prologue();
         screenManager.ShowMainScreen();
     }
 }

@@ -27,15 +27,15 @@
         public float Attack { get; set; }
         public float Defense { get; set; }
         public float Speed { get; set; }
-        public bool IsDead { get; set; } = true;
+        public bool IsDead { get; set; } = false;
         public int Gold { get; set; }
         public float Avoidance { get; set; }
         public float Crt { get; set; }
+        public int WinCount { get; set; } = 0;
 
 
-
-    // 직업과 속성
-    public Job Job { get; set; }
+        // 직업과 속성
+        public Job Job { get; set; }
         public Attribute Attribute { get; set; }
 
         // 기본 생성자
