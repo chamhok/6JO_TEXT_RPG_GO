@@ -136,14 +136,14 @@ class BattleEvent
     {
         monster.TakeDamage((float)PlayerDmg());
         if (monster.Health <= 0)
-            monster.IsDead = true;
+            monster.IsDead = false;
     } //몬스터의 피격시 데미지 계산 및 사망처리
 
     public void PlayerResult()
     {
         player.TakeDamage((float)MonsterDmg());
         if (player.Health <= 0)
-            player.IsDead = true;
+            player.IsDead = false;
     } // 플레이어의 피격시 데미지 계산 및 사망처리
 
 
@@ -161,9 +161,9 @@ class BattleEvent
                 MonsterTurn();
             }
         }
-        while (player.IsDead == false && monster.IsDead == false);
+        while (player.IsDead == true && monster.IsDead == true);
 
-        if (player.IsDead == true)
+        if (player.IsDead == false)
         {
             --life; //라이프 기능 아직 구현X 추가적인 상세 게임 스토리라인 결정후 구현
             Console.WriteLine("전투패배!");
