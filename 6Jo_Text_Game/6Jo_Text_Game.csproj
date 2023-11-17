@@ -19,7 +19,6 @@
     <Compile Remove="GameManager.cs" />
     <Compile Remove="SceneManager.cs" />
     <Compile Remove="Stage.cs" />
-    <Compile Remove="Store.cs" />
     <Compile Remove="Warrior.cs" />
   </ItemGroup>
 
