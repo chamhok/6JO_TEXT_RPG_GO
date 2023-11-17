@@ -7,13 +7,13 @@ class ScreenManager
     Character player;
     PlayerInfo playerInfo;
     MainScreen mainScreen = new MainScreen();
-    BattleScreen battleScreen;
+    BattleScreen battleScreen;   
 
     public ScreenManager(Character player, BattleEvent battleEvent)
     {
         this.player = player;
         playerInfo = new PlayerInfo(player);
-        battleScreen = new BattleScreen(battleEvent);
+        battleScreen = new BattleScreen(battleEvent);       
     }
 
     public void ShowMainScreen()
@@ -37,7 +37,7 @@ class ScreenManager
                 battleScreen.BattleStartSecen();
                 ShowMainScreen();
                 break;// 전투 화면으로 이동
-
+                
             default:
                 Console.WriteLine("잘못된입력입니다.");
                 Console.Clear();
@@ -65,6 +65,7 @@ class ScreenManager
         {
             Console.WriteLine("1. 정보창");
             Console.WriteLine("2. 전투");
+            Console.WriteLine("3. 상점");
         }
         private void Bottom()
         {

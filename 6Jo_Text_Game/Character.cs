@@ -5,7 +5,18 @@
 
     // 인벤토리 리스트
     public List<Item> Inventory = new List<Item>();
-    
+    public void DisplayInventory()
+    {
+        Console.WriteLine("인벤토리:");
+
+        // 인벤토리에 있는 아이템을 출력
+        foreach (var item in Inventory)
+        {
+            Console.WriteLine($"{item.Name}:");
+        }
+    }
+
+
     // 체력 속성
     private float health;
 
