@@ -1,4 +1,25 @@
 ﻿
+public enum MonsterStage
+{
+    Guard = 0,
+    Knight = 1,
+    Commander = 2,
+
+    // stage 2
+    Witch = 3, 
+    Goblin = 3,
+    Troll = 4,
+    DesertShark = 5,
+    //new Assassin,
+
+    // stage 3
+    Cerberus = 6,
+    VoidMaster = 7,
+    FireQueen = 8,
+    ShadowWizard = 9,
+    CloudSpiter = 10
+}
+
 public class Monster : ICharacter
 {
     // 체력 변경 시 호출될 콜백
@@ -28,10 +49,11 @@ public class Monster : ICharacter
     public float Attack { get; set; }
     public float Defense { get; set; }
     public float Speed { get; set; }
-    public bool IsDead { get; set; } = true;
+    public bool IsDead { get; set; } = false;
     public int Gold { get; set; }
     public float Avoidance { get; set; }
     public float Crt { get; set; }
+    public int StageCount {  get; set; }
 
 
     // 몬스터의 종족과 속성
@@ -62,7 +84,7 @@ public class Monster : ICharacter
     }
 
     // 모든 속성을 초기화하는 생성자
-    public Monster(string name, float level, float attack, float defense, float speed, float health, int gold, Species species, float avoidance, float crt, Attribute attribute)
+    public Monster(string name, float level, float attack, float defense, float speed, float health, int gold, Species species, float avoidance, float crt, Attribute attribute, int stageCount)
     {
         this.Name = name;
         this.Level = level;
@@ -76,6 +98,7 @@ public class Monster : ICharacter
 
         this.Species = species;
         this.Attribute = attribute;
+        this.StageCount = stageCount;
     }
 
     // 데미지를 입는 메서드
@@ -117,12 +140,17 @@ public class Monster : ICharacter
     }
 }
 
+
+
+/// <summary>
+///  몬스터 생성 클래스
+/// </summary>
 // --------------------------------------------------------------------------------
 // Stage 1 - 경비병
 public class Guard : Monster
 {
     public Guard()
-        : base("Guard", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수)
+        : base("Guard", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수, (int)MonsterStage.Guard)
     {
         this.Add();
     }
@@ -132,7 +160,7 @@ public class Guard : Monster
 public class Knight : Monster
 {
     public Knight()
-        : base("Knight", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수)
+        : base("Knight", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수, (int)MonsterStage.Knight)
     {
         this.Add();
     }
@@ -142,7 +170,7 @@ public class Knight : Monster
 public class Commander : Monster
 {
     public Commander()
-        : base("Commander", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수)
+        : base("Commander", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수, (int)MonsterStage.Commander)
     {
         this.Add();
     }
@@ -153,7 +181,7 @@ public class Commander : Monster
 public class Witch : Monster
 {
     public Witch()
-        : base("Witch", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수)
+        : base("Witch", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수, (int)MonsterStage.Witch)
     {
         this.Add();
     }
@@ -163,7 +191,7 @@ public class Witch : Monster
 public class Goblin : Monster
 {
     public Goblin()
-        : base("Goblin", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수)
+        : base("Goblin", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수, (int)MonsterStage.Goblin)
     {
         this.Add();
     }
@@ -173,7 +201,7 @@ public class Goblin : Monster
 public class Troll : Monster
 {
     public Troll()
-        : base("Troll", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수)
+        : base("Troll", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수, (int)MonsterStage.Troll)
     {
         this.Add();
     }
@@ -183,7 +211,7 @@ public class Troll : Monster
 public class DesertShark : Monster
 {
     public DesertShark()
-        : base("DesertShark", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수)
+        : base("DesertShark", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수, (int)MonsterStage.DesertShark)
     {
         this.Add();
     }
@@ -209,7 +237,7 @@ public class DesertShark : Monster
 public class Cerberus : Monster
 {
     public Cerberus()
-        : base("Cerberus", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수)
+        : base("Cerberus", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수, (int)MonsterStage.Cerberus)
     {
         this.Add();
     }
@@ -219,7 +247,7 @@ public class Cerberus : Monster
 public class VoidMaster : Monster
 {
     public VoidMaster()
-        : base("VoidMaster", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수)
+        : base("VoidMaster", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수, (int)MonsterStage.VoidMaster)
     {
         this.Add();
     }
@@ -228,7 +256,7 @@ public class VoidMaster : Monster
 public class FireQueen : Monster
 {
     public FireQueen()
-        : base("FireQueen", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수)
+        : base("FireQueen", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수, (int)MonsterStage.FireQueen)
     {
         this.Add();
     }
@@ -237,7 +265,7 @@ public class FireQueen : Monster
 public class ShadowWizard : Monster
 {
     public ShadowWizard()
-        : base("ShadowWizard", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수)
+        : base("ShadowWizard", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수, (int)MonsterStage.ShadowWizard)
     {
         this.Add();
     }
@@ -246,7 +274,7 @@ public class ShadowWizard : Monster
 public class CloudSpiter : Monster
 {
     public CloudSpiter()
-        : base("CloudSpiter", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수)
+        : base("CloudSpiter", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수, (int)MonsterStage.CloudSpiter)
     {
         this.Add();
     }
