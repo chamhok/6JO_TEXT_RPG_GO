@@ -131,7 +131,7 @@ class ScreenManager
     public void ChapterPicker() // 플레이어의 현재 승리 카운트에 따라 스토리 챕터를 불러오는 함수
     {
 
-        switch (player.Wincount)
+        switch (player.WinCount)
         {
             case 0:
                 ChapterPicker("Chapter1"); ;
