@@ -297,7 +297,7 @@ public class StartScreen
                 foreach (var item in weapon)
                 {
                         Console.Write(item);
-                        Thread.Sleep(50);
+                        if (!Console.KeyAvailable) Thread.Sleep(50);
                 }
                 Console.Write("\n당신은 어떠한 무기를 선택하실 겁니까? : \n>> ");
                 int input = CheckValidInput(1, 4);
