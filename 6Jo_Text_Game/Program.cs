@@ -190,5 +190,7 @@ class Program
         character.Add();
         GameData.I.GetCharacters().Select(x => x.ToString()).ToList().ForEach(Console.WriteLine);
         screenManager.ShowMainScreen();
+
+        Console.WriteLine("fdksljfndklsjnhfklds");
     }
 }

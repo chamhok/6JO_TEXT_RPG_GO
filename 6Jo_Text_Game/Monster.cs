@@ -13,13 +13,13 @@ public class Monster : ICharacter
         // 몬스터의 체력 프로퍼티
         public float Health
         {
-                get { return health; }
-                set
-                {
-                        // 체력 값을 설정하고 변경 콜백 호출
-                        this.health = value;
-                        ChangedCallback?.Invoke(health);
-                }
+            get { return health; }
+            set
+            {
+                // 체력 값을 설정하고 변경 콜백 호출
+                this.health = value;
+                ChangedCallback?.Invoke(health);
+            }
         }
 
         // 몬스터의 이름, 레벨, 공격력, 방어력, 속도, 사망 여부, 골드 등의 속성
@@ -30,17 +30,18 @@ public class Monster : ICharacter
         public float Speed { get; set; }
         public bool IsDead { get; set; } = true;
         public int Gold { get; set; }
-        public  float Avoidance { get; set; }
+        public float Avoidance { get; set; }
         public float Crt { get; set; }
 
 
-    // 몬스터의 종족과 속성
-    public Species Species { get; set; }
+        // 몬스터의 종족과 속성
+        public Species Species { get; set; }
         public Attribute Attribute { get; set; }
 
         // 몬스터 기본 생성자
         public Monster()
         {
+            new Guard();
         }
 
         // 모든 속성을 초기화하는 생성자
@@ -56,7 +57,7 @@ public class Monster : ICharacter
                 this.Avoidance = avoidance;
                 this.Crt = crt;
 
-        this.Species = species;
+                this.Species = species;
                 this.Attribute = attribute;
         }
 
@@ -87,14 +88,27 @@ public class Monster : ICharacter
         // 객체를 문자열로 표현하는 메서드
         public override string ToString()
         {
-                return $"{this.Name} " +
-                       $"{this.Level} " +
-                       $"{this.Attack} " +
-                       $"{this.Defense} " +
-                       $"{this.Speed} " +
-                       $"{this.Health} " +
-                       $"{this.Gold} " +
-                       $"{this.Species} " +
-                       $"{this.Attribute}";
+                return $"이름 : {this.Name} \n" +
+                       $"LV   : {this.Level} \n" +
+                       $"ATK  : {this.Attack} \n" +
+                       $"DEF  : {this.Defense} \n" +
+                       $"SPD  : {this.Speed} \n" +
+                       $"H P  : {this.Health} \n" +
+                       $"GOLD : {this.Gold} \n" +
+                       $"SPC  : {this.Species} \n" +
+                       $"ATB  : {this.Attribute}";
         }
 }
+
+// --------------------------------------------------------------------------------
+// Stage 1 - 경비병
+public class Guard : Monster
+{
+    public Guard()
+        : base("Guard", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수) 
+    { 
+        this.Add();
+    }
+}
+
+

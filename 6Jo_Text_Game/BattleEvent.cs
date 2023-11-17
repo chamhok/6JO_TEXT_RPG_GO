@@ -44,8 +44,9 @@ class BattleEvent
         Console.WriteLine("남은 몫숨" + life);
         Console.WriteLine("플레이어의 남은 생명력 : " + player.Health);
         Console.WriteLine("몬스터의 남은 생명력 : " + monster.Health);
-        Console.WriteLine("다음 행동을 입력해 주세요!");
+        Console.WriteLine("다음 행동을 입력해 주세요!\n");
         Console.WriteLine("1.공격 2.방어 3.일격준비");
+        Console.WriteLine("------------------------------------------------\n");
         String input = Console.ReadLine();
         switch (input)
         {
@@ -54,7 +55,6 @@ class BattleEvent
                 MonsterResult();
                 playerT = false;
                 monsterT = true;
-                Console.ReadKey();
                 break;
 
             case "2":
@@ -64,12 +64,10 @@ class BattleEvent
                     skillPguard = 2;
                     playerT = false;
                     monsterT = true;
-                    Console.ReadKey();
                 }
                 else
                 {
                     Console.WriteLine("다음 공격을 방어할 준비가 되었습니다!");
-                    Console.ReadKey();
                 }
                 break;
 
@@ -80,21 +78,18 @@ class BattleEvent
                     skillPsmash = 2;
                     playerT = false;
                     monsterT = true;
-                    Console.ReadKey();
                 }
                 else
                 {
                     Console.WriteLine("일격 준비가 되었습니다!");
-                    Console.ReadKey();
                 }
                 break;
 
             default:
                 Console.WriteLine("다시입력해주세요!");
-                Console.ReadKey();
                 break;
-
         }
+        Console.ReadKey();
     }
 
     public void MonsterTurn()
@@ -140,14 +135,14 @@ class BattleEvent
     {
         monster.TakeDamage((float)PlayerDmg());
         if (monster.Health <= 0)
-            monster.IsDead = false;
+            monster.IsDead = true;
     } //몬스터의 피격시 데미지 계산 및 사망처리
 
     public void PlayerResult()
     {
         player.TakeDamage((float)MonsterDmg());
         if (player.Health <= 0)
-            player.IsDead = false;
+            player.IsDead = true;
     } // 플레이어의 피격시 데미지 계산 및 사망처리
 
 
@@ -165,13 +160,12 @@ class BattleEvent
                 MonsterTurn();
             }
         }
-        while (player.IsDead == true && monster.IsDead == true);
+        while (player.IsDead == false && monster.IsDead == false);
 
-        if (player.IsDead == false)
+        if (player.IsDead == true)
         {
             --life; //라이프 기능 아직 구현X 추가적인 상세 게임 스토리라인 결정후 구현
             Console.WriteLine("전투패배!");
-            Console.ReadKey();
         }
         else
         {
@@ -181,6 +175,7 @@ class BattleEvent
             GetRewards();
         }
 
+        Console.ReadKey();
     }
 
     // 보상 단계
