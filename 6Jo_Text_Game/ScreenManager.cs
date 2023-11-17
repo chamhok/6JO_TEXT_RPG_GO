@@ -119,6 +119,16 @@ class ScreenManager
         try
         {
             string getTxt = File.ReadAllText(readTxt);
+            foreach (char c in getTxt)
+            {
+                Console.Write(c);
+                Thread.Sleep(100); // 출력 간격 조절 (밀리초 단위)
+                if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Enter)
+                {
+                    Console.Clear();
+                    break;
+                } //플레이어가 Enter 입력시 바로 모든 문자열 출력
+            }
             Console.WriteLine(getTxt);
         }
         catch (Exception ex)
@@ -153,6 +163,15 @@ class ScreenManager
         try
         {
             string getTxt = File.ReadAllText(readTxt);
+            foreach (char c in getTxt)
+            {
+                Console.Write(c);
+                Thread.Sleep(100); // 출력 간격 조절 (밀리초 단위)
+                if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Enter)
+                {
+                    break;
+                }
+            }
             Console.WriteLine(getTxt);
         }
         catch (Exception ex)
