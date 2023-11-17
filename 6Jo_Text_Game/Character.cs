@@ -46,7 +46,7 @@
 
 
         // 직업과 속성
-        public Job Job { get; set; }
+        public Job? Job { get; set; }
         public Attribute Attribute { get; set; }
 
         // 기본 생성자
@@ -55,7 +55,7 @@
         }
 
         // 모든 속성을 초기화하는 생성자
-        public Character(string name, float level, float attack, float defense, float speed, float health, int gold, Job job, float crt, float avoidance, Attribute attribute)
+        public Character(string name, float level, float attack, float defense, float speed, float health, int gold, Job? job, float crt, float avoidance, Attribute attribute)
         {
                 this.Name = name;
                 this.Level = level;

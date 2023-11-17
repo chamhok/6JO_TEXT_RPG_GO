@@ -332,7 +332,7 @@ public class StartScreen
                 CharJob(out charJob);
 
 
-                Character character = new Character(charName, 1, 10, 10, 10, 100, 500, Job.가디언, 10, 10, Attribute.풍);
+                Character character = new Character(charName, 1, 10, 10, 10, 100, 500, charJob, 10, 10, Attribute.풍);
                 character.Add();
                 Console.WriteLine($"\n당신의 이름은 {character.Name}입니다.");
                 Console.WriteLine($"\n당신의 직업은 {character.Job}입니다.");
