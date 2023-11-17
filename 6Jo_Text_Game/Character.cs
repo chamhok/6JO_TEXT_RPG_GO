@@ -1,13 +1,13 @@
 ﻿public class Character : ICharacter
 {
-        // 체력 변경 시 호출될 콜백
-        public Action<float> ChangedCallback;
+    // 체력 변경 시 호출될 콜백
+    public Action<float> ChangedCallback;
 
-        // 인벤토리 리스트
-        public List<Item> Inventory = new List<Item>();
-
-        // 체력 속성
-        private float health;
+    // 인벤토리 리스트
+    public List<Item> Inventory = new List<Item>();
+    
+    // 체력 속성
+    private float health;
 
         // 체력 프로퍼티
         public float Health
