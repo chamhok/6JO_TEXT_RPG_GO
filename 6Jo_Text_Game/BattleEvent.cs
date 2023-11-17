@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 
 class BattleEvent
@@ -177,13 +178,46 @@ class BattleEvent
             ++wincount; //라이프와 동일
             Console.WriteLine("전투승리! 승리횟수: " + wincount);
             Console.ReadKey();
+            GetRewards();
         }
 
     }
 
+    // 보상 단계
+    public void GetRewards()
+    {
+        Console.Clear();
+        Console.WriteLine("아래 항목 중에서 원하는 보상 아이템을 고를 수 있습니다.");
+        SelectRewardList();
+    }
 
+    // 보상 아이템 선택 과정
+    public void SelectRewardList()
+    {
+        // 리스트 생성
+        List<IItem> rewardItems = new List<IItem>
+        {
+            new Item("Health Postion", 1),
+            new Item("Attack Postion", 1),
+        };
 
+        for(int i = 0; i < rewardItems.Count; i++) Console.WriteLine($"{i+1}. {rewardItems[i].Name}");
 
+        Console.WriteLine("보상 아이템 번호를 입력하세요.");
+        while(true)
+        {
+            if (int.TryParse(Console.ReadLine(), out int selectedNumber) && selectedNumber >= 1 && selectedNumber <= rewardItems.Count)
+            {
+                IItem selectedReward = rewardItems[selectedNumber - 1];
+                selectedReward.Use(player);
+                break;
+            }
+            else
+            {
+                Console.WriteLine("올바른 번호를 입력하세요.");
+            }
+        }
+    }
 
     public float MonsterDmg()
     {
