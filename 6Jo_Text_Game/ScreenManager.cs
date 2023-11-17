@@ -113,7 +113,8 @@ class ScreenManager
 
     public void Prologue()
     {
-        string readTxt = @"C:\git\6JO_TEXT_RPG_GO\Story\SPrologue.txt";
+        string currentDirectory = Directory.GetCurrentDirectory();
+        string readTxt = Path.Combine(currentDirectory,"Prologue.txt");
 
         try
         {
