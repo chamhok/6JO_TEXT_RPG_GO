@@ -18,12 +18,58 @@ class BattleEvent
     int skillMsmash = 1;
 
     int life = 10;
-
+    
     public BattleEvent(Character player)
     {
         this.player = player;
+        new Monster();
         this.monsters = GameData.I.GetMonsters(); // GameData에 저장된 몬스터 리스트 참조
-        this.monster = monsters[player.Wincount];
+        this.monster = monsters[player.WinCount];
+    }
+
+// ------------------------------------------------------------------------
+    
+    public void Battles()  // 배틀 시작
+    {
+        CoinToss();
+
+        // 턴제전투 (누구 하난 죽을때까지)
+        do
+        {
+            if (playerT == true) PlayerTurn();
+            else MonsterTurn();
+        }
+        while (player.IsDead == false && monster.IsDead == false);
+        
+
+        // 플레이어 사망시
+        if (player.IsDead == true)
+        {
+            //--life; //라이프 기능 아직 구현X 추가적인 상세 게임 스토리라인 결정후 구현
+            Console.WriteLine("전투패배!");
+        }
+        // 플레이어 생존시
+        else
+        {
+            //++player.Wincount; //라이프와 동일
+            Console.WriteLine("전투승리! 승리횟수: ");
+            GetRewards();
+            Console.ReadKey();
+
+            //if (player.Wincount < monsters.Count)
+            //{
+            //    monster = monsters[player.Wincount];
+            //    Console.WriteLine("다음 몬스터: " + monster.Name);
+            //    Console.ReadKey();
+            //}
+
+            //else
+            //{
+            //    Console.WriteLine("게임 종료: 모든 몬스터를 이겼습니다!");
+            //}
+        }
+
+        Console.ReadKey();
     }
 
 
@@ -39,12 +85,13 @@ class BattleEvent
         }
     }
 
+
     public void PlayerTurn() // 플레이어의 행동을 입력받는 메소드
     {
         Console.Clear();
         Console.WriteLine("남은 몫숨" + life);
         Console.WriteLine("플레이어의 남은 생명력 : " + player.Health);
-        Console.WriteLine("몬스터의 남은 생명력 : " + monster.Health);
+        Console.WriteLine($"{monster.Name}의 남은 생명력 : " + monster.Health);
         Console.WriteLine("다음 행동을 입력해 주세요!\n");
         Console.WriteLine("1.공격 2.방어 3.일격준비");
         Console.WriteLine("------------------------------------------------\n");
@@ -70,6 +117,7 @@ class BattleEvent
                 {
                     Console.WriteLine("다음 공격을 방어할 준비가 되었습니다!");
                 }
+                Console.ReadKey();
                 break;
 
             case "3":
@@ -84,145 +132,81 @@ class BattleEvent
                 {
                     Console.WriteLine("일격 준비가 되었습니다!");
                 }
+                Console.ReadKey();
                 break;
 
             default:
                 Console.WriteLine("다시입력해주세요!");
                 break;
         }
-        Console.ReadKey();
+        
     }
 
     public void MonsterTurn()
     {
         Console.Clear();
         Random random = new Random();
-        Console.WriteLine("몬스터가 다음 행동을 준비중입니다....");
+        Console.WriteLine($"{monster.Name}가 다음 행동을 준비중입니다....");
         switch (random.Next(1, 4))
         {
             case 1:
-                Console.WriteLine("몬스터가 공격합니다!");
+                Console.WriteLine($"{monster.Name}가 공격합니다!");
                 PlayerResult();
                 monsterT = false;
                 playerT = true;
-                Console.ReadKey();
                 break;
             case 2:
                 if (skillMguard == 1)
                 {
-                    Console.WriteLine("몬스터가 특정한 자세를 취합니다.");
+                    Console.WriteLine($"{monster.Name}가 방어 자세를 취합니다.");
                     monsterT = false;
                     playerT = true;
                     skillMguard = 2;
-                    Console.ReadKey();
                 }
+                Console.ReadKey();
                 break;
             case 3:
                 if (skillMsmash == 1)
                 {
-                    Console.WriteLine("몬스터가 특정한 자세를 취합니다.");
+                    Console.WriteLine($"{monster.Name}가 공격 자세를 취합니다.");
                     monsterT = false;
                     playerT = true;
                     skillMsmash = 2;
-                    Console.ReadKey();
                 }
+                Console.ReadKey();
                 break;
             default:
+                Console.ReadKey();
                 break;
         }
+        
+        
     } //몬스터의 행동을 정하는 메소드
+
+
 
     public void MonsterResult()
     {
         monster.TakeDamage((float)PlayerDmg());
         if (monster.Health <= 0)
-            monster.IsDead = false;
+        {
+            monster.IsDead = true;
+            Console.WriteLine($"{monster.Name}가 사망했습니다.");
+            Console.ReadKey();
+        }
     } //몬스터의 피격시 데미지 계산 및 사망처리
 
     public void PlayerResult()
     {
         player.TakeDamage((float)MonsterDmg());
         if (player.Health <= 0)
-            player.IsDead = false;
+        {
+            player.IsDead = true;
+            Console.WriteLine($"{monster.Name}가 사망했습니다.");
+            Console.ReadKey();
+        }
     } // 플레이어의 피격시 데미지 계산 및 사망처리
 
-
-    public void Battles()
-    {
-        CoinToss(); 
-        do
-        {
-            if (playerT == true)
-            {
-                PlayerTurn();
-            }
-            else
-            {
-                MonsterTurn();
-            }
-        }
-        while (player.IsDead == true && monster.IsDead == true);
-
-        if (player.IsDead == false)
-        {
-            --life; //라이프 기능 아직 구현X 추가적인 상세 게임 스토리라인 결정후 구현
-            Console.WriteLine("전투패배!");
-        }
-        else
-        {
-            ++player.Wincount; //라이프와 동일
-            Console.WriteLine("전투승리! 승리횟수: " + player.Wincount);
-            GetRewards();
-            Console.ReadKey();
-
-            if (player.Wincount < monsters.Count)
-            {
-                monster = monsters[player.Wincount]; // 다음 몬스터 호출
-            }
-            else
-            {
-                Console.WriteLine("게임 종료: 모든 몬스터를 이겼습니다!"); //게임 종료 로직 추가하면되는 부분입니다.
-            }
-        }
-
-        Console.ReadKey();
-    }
-
-    // 보상 단계
-    public void GetRewards()
-    {
-        Console.Clear();
-        Console.WriteLine("아래 항목 중에서 원하는 보상 아이템을 고를 수 있습니다.");
-        SelectRewardList();
-    }
-
-    // 보상 아이템 선택 과정
-    public void SelectRewardList()
-    {
-        // 리스트 생성
-        List<IItem> rewardItems = new List<IItem>
-        {
-            new Item("Health Postion", 1),
-            new Item("Attack Postion", 1),
-        };
-
-        for(int i = 0; i < rewardItems.Count; i++) Console.WriteLine($"{i+1}. {rewardItems[i].Name}");
-
-        Console.WriteLine("보상 아이템 번호를 입력하세요.");
-        while(true)
-        {
-            if (int.TryParse(Console.ReadLine(), out int selectedNumber) && selectedNumber >= 1 && selectedNumber <= rewardItems.Count)
-            {
-                IItem selectedReward = rewardItems[selectedNumber - 1];
-                selectedReward.Use(player);
-                break;
-            }
-            else
-            {
-                Console.WriteLine("올바른 번호를 입력하세요.");
-            }
-        }
-    }
 
     public float MonsterDmg()
     {
@@ -246,7 +230,7 @@ class BattleEvent
             }
             else
             {
-                Console.WriteLine("몬스터의 공격을 받았다 피해량 : " + damage);
+                Console.WriteLine($"{monster.Name}의 공격을 받았다 피해량 : " + damage);
                 Console.ReadKey();
                 return damage;
             }
@@ -254,7 +238,7 @@ class BattleEvent
         }
         else
         {
-            Console.WriteLine("몬스터의 공격이 너무 약하다!");
+            Console.WriteLine($"{monster.Name}의 공격이 너무 약하다!");
             Console.ReadKey();
             return 0;
         }
@@ -270,7 +254,7 @@ class BattleEvent
         {
             if (AvoidanceToss() <= monster.Avoidance) // 회피 성공 유무 체크
             {
-                Console.WriteLine("몬스터가 회피하였습니다!");
+                Console.WriteLine($"{monster.Name}가 회피하였습니다!");
                 Console.ReadKey();
                 return 0;
             }
@@ -293,7 +277,6 @@ class BattleEvent
             Console.ReadKey();
             return 0;
         }
-
     } // 플레이어의 공격과 공격 성공유무, 크리티컬 유무 판정
 
 
@@ -309,5 +292,42 @@ class BattleEvent
         return random.Next(1, 100);
     }
 
+
+// -------------------------------------------------------------------------
+    // 보상 단계
+    public void GetRewards()
+    {
+        Console.Clear();
+        Console.WriteLine("아래 항목 중에서 원하는 보상 아이템을 고를 수 있습니다.");
+        SelectRewardList();
+    }
+
+    // 보상 아이템 선택 과정
+    public void SelectRewardList()
+    {
+        // 리스트 생성
+        List<IItem> rewardItems = new List<IItem>
+        {
+            new Item("Health Postion", 1),
+            new Item("Attack Postion", 1),
+        };
+
+        for (int i = 0; i < rewardItems.Count; i++) Console.WriteLine($"{i + 1}. {rewardItems[i].Name}");
+
+        Console.WriteLine("보상 아이템 번호를 입력하세요.");
+        while (true)
+        {
+            if (int.TryParse(Console.ReadLine(), out int selectedNumber) && selectedNumber >= 1 && selectedNumber <= rewardItems.Count)
+            {
+                IItem selectedReward = rewardItems[selectedNumber - 1];
+                selectedReward.Use(player);
+                break;
+            }
+            else
+            {
+                Console.WriteLine("올바른 번호를 입력하세요.");
+            }
+        }
+    }
 
 }
