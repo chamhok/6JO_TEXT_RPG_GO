@@ -177,13 +177,11 @@ class BattleEvent
 
             if (player.Wincount < monsters.Count)
             {
-                monster = monsters[player.Wincount];
-                Console.WriteLine("다음 몬스터: " + monster.Name);
-                Console.ReadKey();
+                monster = monsters[player.Wincount]; // 다음 몬스터 호출
             }
             else
             {
-                Console.WriteLine("게임 종료: 모든 몬스터를 이겼습니다!");
+                Console.WriteLine("게임 종료: 모든 몬스터를 이겼습니다!"); //게임 종료 로직 추가하면되는 부분입니다.
             }
         }
 
