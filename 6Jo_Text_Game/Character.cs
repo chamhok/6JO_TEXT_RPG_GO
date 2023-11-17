@@ -31,6 +31,7 @@
         public int Gold { get; set; }
         public float Avoidance { get; set; }
         public float Crt { get; set; }
+        public int Wincount { get; set; } = 0;
 
 
 

@@ -18,13 +18,14 @@ class BattleEvent
     int skillMsmash = 1;
 
     int life = 10;
-    int wincount = 0;
 
-    public BattleEvent(Character player, Monster monster)
+    public BattleEvent(Character player)
     {
         this.player = player;
-        this.monster = monster;
+        this.monsters = GameData.I.GetMonsters(); // GameData에 저장된 몬스터 리스트 참조
+        this.monster = monsters[player.Wincount];
     }
+
 
     public void CoinToss() //몬스터와 플레이어의 스피드값 비교후 선공 결정
     {
@@ -169,10 +170,20 @@ class BattleEvent
         }
         else
         {
-            ++wincount; //라이프와 동일
-            Console.WriteLine("전투승리! 승리횟수: " + wincount);
+            ++player.Wincount; //라이프와 동일
+            Console.WriteLine("전투승리! 승리횟수: " + player.Wincount);
             Console.ReadKey();
-            GetRewards();
+
+            if (player.Wincount < monsters.Count)
+            {
+                monster = monsters[player.Wincount];
+                Console.WriteLine("다음 몬스터: " + monster.Name);
+                Console.ReadKey();
+            }
+            else
+            {
+                Console.WriteLine("게임 종료: 모든 몬스터를 이겼습니다!");
+            }
         }
 
         Console.ReadKey();
