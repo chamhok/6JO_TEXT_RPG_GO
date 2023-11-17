@@ -129,6 +129,7 @@ class ScreenManager
 
     public void ChapterPicker() // 플레이어의 현재 승리 카운트에 따라 스토리 챕터를 불러오는 함수
     {
+
         switch (player.Wincount)
         {
             case 0:
@@ -145,7 +146,9 @@ class ScreenManager
 
     void ChapterPicker(string filename)
     {
-        string readTxt = Path.Combine(@"C:\git\6JO_TEXT_RPG_GO\Story", $"{filename}.txt");
+        string currentDirectory = Directory.GetCurrentDirectory();// 현재 프로세스가 실행중인 파일의 경로 불러오기
+
+        string readTxt = Path.Combine(currentDirectory, $"{filename}.txt");
         try
         {
             string getTxt = File.ReadAllText(readTxt);
