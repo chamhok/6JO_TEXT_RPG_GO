@@ -43,6 +43,16 @@ public class Monster : ICharacter
         {
             new Guard();
         }
+        // 몬스터 기본 생성자
+        public Monster()
+        {
+            new Guard();
+        }
+        // 몬스터 기본 생성자
+        public Monster()
+        {
+            new Guard();
+        }
 
         // 모든 속성을 초기화하는 생성자
         public Monster(string name, float level, float attack, float defense, float speed, float health, int gold, Species species,  float avoidance, float crt, Attribute attribute)
