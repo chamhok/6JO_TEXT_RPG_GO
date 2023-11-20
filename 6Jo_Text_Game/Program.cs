@@ -25,7 +25,7 @@ public class GameData
                 characters = new List<Character>();
                 items = new List<IItem>();
                 skills = new List<Skill>();
-                
+
                 InitializeData(); // 필요시 데이터 초기화 가능
         }
 
@@ -191,35 +191,36 @@ public enum Species
 // 프로그램 진입점 클래스
 class Program
 {
-    static void Main()
-    {
+        static void Main()
+        {
 
-        /*  // 캐릭터 생성 및 게임 데이터에 추가 후 목록 출력
-            Character character = new Character("ㅇㅇ", 100, 100, 100, 100, 100, 200, Job.가디언,10,10, Attribute.풍);
-            character.Add(new Character("ㅇㅇ", 100, 100, 100, 100, 100, 200, Job.가디언, 10, 10, Attribute.풍));
-            Monster monster = new Monster("Test", 1, 1, 1, 1, 1, 1, Species.고블린,1,1, Attribute.풍);
-            monster.Add(new Monster("Test", 1, 1, 1, 1, 1, 1, Species.고블린, 1, 1, Attribute.풍));
-            Monster monsterb = new Monster("Test2", 1000, 1000, 1000, 1000, 1000, 1000, Species.고블린,1,1, Attribute.풍);
-            monster.Add(new Monster("Test2", 1000, 1000, 1000, 1000, 1000, 1000, Species.고블린, 1, 1, Attribute.풍));
-            BattleEvent battleEvent = new BattleEvent(character);
-            ScreenManager screenManager = new ScreenManager(character, battleEvent);
-            character.Add();
-            GameData.I.GetCharacters().Select(x => x.ToString()).ToList().ForEach(Console.WriteLine);
-            screenManager.Prologue();
-            Console.ReadKey();
-            screenManager.ShowMainScreen();*/
+                /*  // 캐릭터 생성 및 게임 데이터에 추가 후 목록 출력
+                    Character character = new Character("ㅇㅇ", 100, 100, 100, 100, 100, 200, Job.가디언,10,10, Attribute.풍);
+                    character.Add(new Character("ㅇㅇ", 100, 100, 100, 100, 100, 200, Job.가디언, 10, 10, Attribute.풍));
+                    Monster monster = new Monster("Test", 1, 1, 1, 1, 1, 1, Species.고블린,1,1, Attribute.풍);
+                    monster.Add(new Monster("Test", 1, 1, 1, 1, 1, 1, Species.고블린, 1, 1, Attribute.풍));
+                    Monster monsterb = new Monster("Test2", 1000, 1000, 1000, 1000, 1000, 1000, Species.고블린,1,1, Attribute.풍);
+                    monster.Add(new Monster("Test2", 1000, 1000, 1000, 1000, 1000, 1000, Species.고블린, 1, 1, Attribute.풍));
+                    BattleEvent battleEvent = new BattleEvent(character);
+                    ScreenManager screenManager = new ScreenManager(character, battleEvent);
+                    character.Add();
+                    GameData.I.GetCharacters().Select(x => x.ToString()).ToList().ForEach(Console.WriteLine);
+                    screenManager.Prologue();
+                    Console.ReadKey();
+                    screenManager.ShowMainScreen();*/
 
-        //StartScreen startScreen = new StartScreen();
+                StartScreen startScreen = new StartScreen();
 
-        new Monster();
-        Character character = new Character("ㅇㅇ", 100, 100, 100, 10, 100, 200, Job.가디언, 10, 10, Attribute.풍);
-        BattleEvent battleEvent = new BattleEvent(character);
-        ScreenManager screenManager = new ScreenManager(character, battleEvent);
-        character.Add();
-        GameData.I.GetCharacters().Select(x => x.ToString()).ToList().ForEach(Console.WriteLine);
-        screenManager.Prologue();
-        screenManager.ShowMainScreen();
-    }
+                new Monster();
+                Character character = new Character("ㅇㅇ", 100, 100, 100, 10, 100, 200, Job.가디언, 10, 10, Attribute.풍);
+                BattleEvent battleEvent = new BattleEvent(character);
+                ScreenManager screenManager = new ScreenManager(character, battleEvent);
+                character.Add();
+                GameData.I.GetCharacters().Select(x => x.ToString()).ToList().ForEach(Console.WriteLine);
+                screenManager.Prologue();
+                screenManager.ShowMainScreen();
+
+        }
 }
 public class StartScreen
 {
@@ -227,35 +228,51 @@ public class StartScreen
         private void StartScreenText()
         {
                 int y = 1;
-               /*
-                . (점): 현재 디렉토리를 나타냅니다.
-                ..(점 두 개): 상위 디렉토리를 나타냅니다.
-                / (슬래시): 디렉토리를 구분합니다.
-               */
+                /*
+                 . (점): 현재 디렉토리를 나타냅니다.
+                 ..(점 두 개): 상위 디렉토리를 나타냅니다.
+                 / (슬래시): 디렉토리를 구분합니다.
+                */
                 string directory = "../../../StartScreenText.txt";
                 try
                 {
                         string[] fileContents = File.ReadAllLines(directory, Encoding.UTF8);
                         foreach (string line in fileContents)
                         {
-                                
-                              
-                                        Console.SetCursorPosition((Console.WindowWidth) / 2 -line.Length , 3);
-                                        Console.Write(line);
-                                        if (!Console.KeyAvailable) Thread.Sleep(450);
-                                        Console.Clear();
-                                
-                              
+
+
+                                Console.SetCursorPosition((Console.WindowWidth) / 2 - line.Length, 3);
+                                Console.Write(line);
+                                if (!Console.KeyAvailable) Thread.Sleep(450);
+                                Console.Clear();
+
+
                         }
 
+                }
+                catch (Exception ex)
+                {
+                        Console.WriteLine($"Error reading the file: {ex.Message}");
+                }
+
+
         }
-        catch (Exception ex)
+        public void CharName(out string charName)
         {
-                Console.WriteLine($"Error reading the file: {ex.Message}");
-        }
-
-        Console.Write("당신의 이름을 입력하십시오. : ");
-
+                foreach (var item in "\n당신의 이름을 입력하십시오. ")
+                {
+                        Console.Write(item);
+                        Thread.Sleep(50);
+                };
+                while (true)
+                {
+                        Console.Write(">> ");
+                        charName = Console.ReadLine();
+                        if (!(charName == ""))
+                        {
+                                break;
+                        }
+                }
         }
         public void CharJob(out Job? job)
         {
@@ -267,7 +284,7 @@ public class StartScreen
                         string[] fileContents = File.ReadAllLines(directory, Encoding.UTF8);
                         foreach (string line in fileContents)
                         {
-                                
+
                                 foreach (char cha in line)
                                 {
                                         Console.Write(cha);
@@ -282,7 +299,7 @@ public class StartScreen
                 {
                         Console.WriteLine($"Error reading the file: {ex.Message}");
                 }
-              
+
                 Console.Write("\n당신은 어떠한 무기를 선택하실 겁니까?  \n>> ");
                 int input = CheckValidInput(1, 4);
 
@@ -322,7 +339,7 @@ public class StartScreen
                 string charName;
                 Job? charJob;
                 StartScreenText();
-               // ConsoleHelper.SetCurrentFont("양재블럭체", 50);
+                // ConsoleHelper.SetCurrentFont("양재블럭체", 50);
 
                 CharName(out charName);
 
@@ -338,19 +355,19 @@ public class StartScreen
         }
         static int CheckValidInput(int min, int max)
         {
-        while (true)
-        {
-            string input = Console.ReadLine() ?? " ";
+                while (true)
+                {
+                        string input = Console.ReadLine() ?? " ";
 
-            bool parseSuccess = int.TryParse(input, out var ret);
-            if (parseSuccess)
-            {
-                if (ret >= min && ret <= max)
-                    return ret;
-            }
+                        bool parseSuccess = int.TryParse(input, out var ret);
+                        if (parseSuccess)
+                        {
+                                if (ret >= min && ret <= max)
+                                        return ret;
+                        }
+                }
+
         }
-
-    }
 }
 
 
