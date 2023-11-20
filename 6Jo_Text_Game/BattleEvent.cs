@@ -5,7 +5,7 @@ using System.Linq;
 
 class BattleEvent
 {
-    Monster monster;
+    Monster monster = new Monster();
     Character player;
     List<Monster> monsters;
 
@@ -25,26 +25,14 @@ class BattleEvent
     public BattleEvent(Character player)
     {
         this.player = player;
-        //this.monsters = GameData.I.GetMonsters(); // GameData에 저장된 몬스터 리스트 참조
-        //foreach (var x in GameData.I.GetMonsters().Where(x => x.StageCount == player.WinCount))
-        //{
-        //    Console.WriteLine(x.Name);
-        //    monsters?.Add(x);
-        //}
-        //this.monster = monsters[0];
-
     }
 
     // ------------------------------------------------------------------------
 
     public void Battles()  // 배틀 시작
     {
-        this.monsters = new List<Monster>();
-        foreach (var x in GameData.I.GetMonsters().Where(x => x.StageCount == player.WinCount))
-        {
-            monsters?.Add(x);
-        }
-        this.monster = monsters[0];
+
+        this.monsters = monster.StageMonster(player.WinCount);
 
 
         Console.WriteLine($"{this.player.WinCount}");
@@ -61,15 +49,6 @@ class BattleEvent
         // 턴제전투 (누구 하난 죽을때까지)
         do
         {
-            //if (playerT == true) PlayerTurn();
-            //else
-            //{
-            //    foreach (var x in monsters)
-            //    {
-            //        MonsterTurn(x);
-            //    }
-            //}
-
             if (player.Speed == i) PlayerTurn();
             else
             {
