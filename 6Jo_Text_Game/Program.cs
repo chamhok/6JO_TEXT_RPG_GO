@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using static System.Net.Mime.MediaTypeNames;
+using System.Runtime.InteropServices;
 
 
 
@@ -221,6 +223,7 @@ public class StartScreen
 
         private void StartScreenText()
         {
+                int y = 1;
                /*
                 . (점): 현재 디렉토리를 나타냅니다.
                 ..(점 두 개): 상위 디렉토리를 나타냅니다.
@@ -232,12 +235,14 @@ public class StartScreen
                         string[] fileContents = File.ReadAllLines(directory, Encoding.UTF8);
                         foreach (string line in fileContents)
                         {
-                                foreach (char cha in line)
-                                {
-                                        Console.Write(cha);
-                                        if (!Console.KeyAvailable) Thread.Sleep(50);
-                                }
-                                Console.WriteLine();
+                                
+                              
+                                        Console.SetCursorPosition((Console.WindowWidth) / 2 -line.Length , 3);
+                                        Console.Write(line);
+                                        if (!Console.KeyAvailable) Thread.Sleep(450);
+                                        Console.Clear();
+                                
+                              
                         }
 
                 }
@@ -267,32 +272,30 @@ public class StartScreen
         }
         public void CharJob(out Job? job)
         {
+                int y = 1;
                 Console.Clear();
-                string weapon =
-                          $"1. 올곧은 빛의 검 루미나소드\r\n" +
-                          $"검은 마치 어둠을 가를 것처럼 보입니다.\r\n" +
-                          $"투명한 검날에서 빛나는 힘은 마치 마법의 속삭임처럼 들리며,\r\n" +
-                          $"일정한 폭으로 검은 선들이 새겨져 있는 문양은 신비롭습니다.\r\n" +
-                          $"이것으로 나아가면 세계의 비밀스러운 모험을 만날 것입니다.\r\n" +
-                          $"검의 끝에는 지혜와 결단이 서려 있으며,\r\n" +
-                          $"모든 어려움을 극복할 수 있는 힘이 내재되어 있습니다.\r\n" +
-                          $"이 무기를 휘두르며, 나만의 운명을 쓰러뜨리고새로운 세계로 나아갈 것입니다. \n" +
-                          $"\n" +
-                          $"2. 노래하는 환상의 완드 리코드로스\r\n" +
-                          $"오래된 마법 지팡이, \r\n" +
-                          $"그 반짝이는 지팡이는 마법의 힘을 담고 있습니다. \r\n" +
-                          $"누군가 그 지팡이를 휘두르면, \r\n" +
-                          $"공중에 특별한 음향의 고요한 빛이 퍼져나가 마법의 소리로 변합니다. \r\n" +
-                          $"이 마법 지팡이는 마법의 세계에서 흘러나오는 고대의 지식을 기록하고, \r\n" +
-                          $"그 속에서 다양한 이야기와 모험을 펼칠 수 있는 유용한 도구입니다.\n" +
-                          $"" +
-                          $"3.  자비없는 필멸의 활 " +
-                          $"4. 그저 그는 도덕책";
-                foreach (var item in weapon)
+                string directory = "../../../StartScreenJobText.txt";
+                try
                 {
-                        Console.Write(item);
-                        if (!Console.KeyAvailable) Thread.Sleep(50);
+                        string[] fileContents = File.ReadAllLines(directory, Encoding.UTF8);
+                        foreach (string line in fileContents)
+                        {
+                                
+                                foreach (char cha in line)
+                                {
+                                        Console.Write(cha);
+                                        if (!Console.KeyAvailable) Thread.Sleep(50);
+                                }
+                                Console.WriteLine();
+                                y++;
+                        }
+
                 }
+                catch (Exception ex)
+                {
+                        Console.WriteLine($"Error reading the file: {ex.Message}");
+                }
+              
                 Console.Write("\n당신은 어떠한 무기를 선택하실 겁니까?  \n>> ");
                 int input = CheckValidInput(1, 4);
 
@@ -318,11 +321,24 @@ public class StartScreen
         }
         public StartScreen()
         {
+                /*var info = ConsoleHelper.GetCurrentFont();
+
+                Console.SetWindowPosition(0, 0);
+                ConsoleHelper.SetCurrentFont("양재블럭체", 100);
+
+                Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
+
+                // Set the console buffer size to the same dimensions
+                Console.SetBufferSize(Console.LargestWindowWidth, Console.LargestWindowHeight);*/
+                Console.ReadLine();
+
                 string charName;
                 Job? charJob;
                 StartScreenText();
+               // ConsoleHelper.SetCurrentFont("양재블럭체", 50);
 
                 CharName(out charName);
+
                 CharJob(out charJob);
 
 
@@ -347,6 +363,99 @@ public class StartScreen
                         }
 
                         Console.Write(">>");
+                }
+        }
+}
+
+
+public static class ConsoleHelper
+{
+        private const int FixedWidthTrueType = 54;
+        private const int StandardOutputHandle = -11;
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern IntPtr GetStdHandle(int nStdHandle);
+
+        [return: MarshalAs(UnmanagedType.Bool)]
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        static extern bool SetCurrentConsoleFontEx(IntPtr hConsoleOutput, bool MaximumWindow, ref FontInfo ConsoleCurrentFontEx);
+
+        [return: MarshalAs(UnmanagedType.Bool)]
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        static extern bool GetCurrentConsoleFontEx(IntPtr hConsoleOutput, bool MaximumWindow, ref FontInfo ConsoleCurrentFontEx);
+
+
+        private static readonly IntPtr ConsoleOutputHandle = GetStdHandle(StandardOutputHandle);
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public struct FontInfo
+        {
+                internal int cbSize;
+                internal int FontIndex;
+                internal short FontWidth;
+                public short FontSize;
+                public int FontFamily;
+                public int FontWeight;
+                [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+                public string FontName;
+        }
+
+
+        public static FontInfo GetCurrentFont()
+        {
+                FontInfo before = new FontInfo
+                {
+                        cbSize = Marshal.SizeOf<FontInfo>()
+                };
+
+                if (!GetCurrentConsoleFontEx(ConsoleOutputHandle, false, ref before))
+                {
+                        var er = Marshal.GetLastWin32Error();
+                        throw new System.ComponentModel.Win32Exception(er);
+                }
+                return before;
+        }
+
+        public static FontInfo[] SetCurrentFont(string font, short fontSize = 0)
+        {
+
+                FontInfo before = new FontInfo
+                {
+                        cbSize = Marshal.SizeOf<FontInfo>()
+                };
+
+                if (GetCurrentConsoleFontEx(ConsoleOutputHandle, false, ref before))
+                {
+
+                        FontInfo set = new FontInfo
+                        {
+                                cbSize = Marshal.SizeOf<FontInfo>(),
+                                FontIndex = 0,
+                                FontFamily = FixedWidthTrueType,
+                                FontName = font,
+                                FontWeight = 400,
+                                FontSize = fontSize > 0 ? fontSize : before.FontSize
+                        };
+
+                        // Get some settings from current font.
+                        if (!SetCurrentConsoleFontEx(ConsoleOutputHandle, false, ref set))
+                        {
+                                var ex = Marshal.GetLastWin32Error();
+                                throw new System.ComponentModel.Win32Exception(ex);
+                        }
+
+                        FontInfo after = new FontInfo
+                        {
+                                cbSize = Marshal.SizeOf<FontInfo>()
+                        };
+                        GetCurrentConsoleFontEx(ConsoleOutputHandle, false, ref after);
+
+                        return new[] { before, set, after };
+                }
+                else
+                {
+                        var er = Marshal.GetLastWin32Error();
+                        throw new System.ComponentModel.Win32Exception(er);
                 }
         }
 }
