@@ -1,12 +1,13 @@
 ﻿using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
+using System.Linq;
 
 class BattleEvent
 {
     Monster monster;
     Character player;
-    private List<Monster> monsters;
+    List<Monster> monsters;
 
     bool playerT = false;
     bool monsterT = false;
@@ -19,28 +20,74 @@ class BattleEvent
 
     int life = 10;
     
+    
+
     public BattleEvent(Character player)
     {
         this.player = player;
-        new Monster();
-        this.monsters = GameData.I.GetMonsters(); // GameData에 저장된 몬스터 리스트 참조
-        this.monster = monsters[player.WinCount];
+        //this.monsters = GameData.I.GetMonsters(); // GameData에 저장된 몬스터 리스트 참조
+        //foreach (var x in GameData.I.GetMonsters().Where(x => x.StageCount == player.WinCount))
+        //{
+        //    Console.WriteLine(x.Name);
+        //    monsters?.Add(x);
+        //}
+        //this.monster = monsters[0];
+
     }
 
 // ------------------------------------------------------------------------
     
     public void Battles()  // 배틀 시작
     {
-        CoinToss();
+        this.monsters = new List<Monster>();
+        foreach (var x in GameData.I.GetMonsters().Where(x => x.StageCount == player.WinCount))
+        {
+            monsters?.Add(x);
+        }
+        this.monster = monsters[0];
+
+
+        Console.WriteLine($"{this.player.WinCount}");
+        Console.WriteLine(monsters[0].Name);
+        Console.ReadKey();
+        int i = 10;
+
+
+        Console.Clear();
+        Message();
+
+        //CoinToss();
 
         // 턴제전투 (누구 하난 죽을때까지)
         do
         {
-            if (playerT == true) PlayerTurn();
-            else MonsterTurn();
+            //if (playerT == true) PlayerTurn();
+            //else
+            //{
+            //    foreach (var x in monsters)
+            //    {
+            //        MonsterTurn(x);
+            //    }
+            //}
+
+            if (player.Speed == i) PlayerTurn();
+            else
+            {
+                foreach(var x in monsters)
+                {
+                    if (x.Speed == i)
+                    {
+                        monster = x;
+                        MonsterTurn();
+                    }
+                }
+            }
+
+            i--;
+            i = i == 0 ? 10 : i;
         }
         while (player.IsDead == false && monster.IsDead == false);
-        
+
 
         // 플레이어 사망시
         if (player.IsDead == true)
@@ -51,7 +98,7 @@ class BattleEvent
         // 플레이어 생존시
         else
         {
-            //++player.Wincount; //라이프와 동일
+            player.WinCount++; //라이프와 동일
             Console.WriteLine("전투승리! 승리횟수: ");
             GetRewards();
             Console.ReadKey();
@@ -73,6 +120,18 @@ class BattleEvent
     }
 
 
+    public void Message()
+    {
+        Console.WriteLine($"이름 : {player.Name} ");
+        Console.WriteLine("------------------------------------------------------------\n");
+        foreach(var x in monsters)
+        {
+            Console.WriteLine(x.ToString());
+            Console.WriteLine("------------------------------------------------------------\n");
+        }
+    }
+
+
     public void CoinToss() //몬스터와 플레이어의 스피드값 비교후 선공 결정
     {
         if (player.Speed >= monster.Speed)
@@ -88,21 +147,38 @@ class BattleEvent
 
     public void PlayerTurn() // 플레이어의 행동을 입력받는 메소드
     {
-        Console.Clear();
-        Console.WriteLine("남은 몫숨" + life);
-        Console.WriteLine("플레이어의 남은 생명력 : " + player.Health);
-        Console.WriteLine($"{monster.Name}의 남은 생명력 : " + monster.Health);
-        Console.WriteLine("다음 행동을 입력해 주세요!\n");
+        //Console.Clear();
+        //Console.WriteLine("남은 몫숨" + life);
+        //Console.WriteLine("플레이어의 남은 생명력 : " + player.Health);
+        //Console.WriteLine($"{monster.Name}의 남은 생명력 : " + monster.Health);
+        //Console.WriteLine("다음 행동을 입력해 주세요!\n");
         Console.WriteLine("1.공격 2.방어 3.일격준비");
         Console.WriteLine("------------------------------------------------\n");
+
+
+
         String input = Console.ReadLine();
         switch (input)
         {
             case "1":
-                Console.WriteLine("공격하였습니다!");
-                MonsterResult();
-                playerT = false;
-                monsterT = true;
+                if (monsters.Count != 1)
+                {
+                    Console.WriteLine("공격 대상을 골라주세요");
+                    for (int i = 0; i < monsters.Count; i++)
+                    {
+                        Console.WriteLine($"{i+1}. {monsters[i].Name}");
+                    }
+                    int sel = int.Parse(Console.ReadLine());
+                    Console.WriteLine("공격하였습니다!");
+                    MonsterResult(monsters[sel-1]);
+                }
+                else
+                {
+                    Console.WriteLine("공격하였습니다!");
+                    MonsterResult();
+                    playerT = false;
+                    monsterT = true;
+                }
                 break;
 
             case "2":
@@ -184,6 +260,19 @@ class BattleEvent
     } //몬스터의 행동을 정하는 메소드
 
 
+
+    public void MonsterResult(Monster monster)
+    {
+        monster.TakeDamage((float)PlayerDmg());
+        if (monster.Health <= 0)
+        {
+            monster.IsDead = true;
+            monsters.Remove(monster);
+            Console.WriteLine($"{monster.Name}가 사망했습니다.");
+            this.monster = monsters[0] != null? monsters[0] : monster;
+            Console.ReadKey();
+        }
+    } //몬스터의 피격시 데미지 계산 및 사망처리
 
     public void MonsterResult()
     {
