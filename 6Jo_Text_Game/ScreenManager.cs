@@ -8,6 +8,7 @@ class ScreenManager
     PlayerInfo playerInfo;
     MainScreen mainScreen = new MainScreen();
     BattleScreen battleScreen;
+    bool skipcheck = false;
 
     public ScreenManager(Character player, BattleEvent battleEvent)
     {
@@ -34,8 +35,10 @@ class ScreenManager
 
             case "2":
                 Console.Clear();
+                skipcheck = false;
                 battleScreen.BattleStartSecen();
                 ShowMainScreen();
+
                 break;// 전투 화면으로 이동
 
             default:
@@ -118,6 +121,7 @@ class ScreenManager
 
         try
         {
+            Console.Clear();
             string getTxt = File.ReadAllText(readTxt);
             foreach (char c in getTxt)
             {
@@ -125,11 +129,13 @@ class ScreenManager
                 Thread.Sleep(100); // 출력 간격 조절 (밀리초 단위)
                 if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Enter)
                 {
-                    Console.Clear();
+                    Console.Clear() ;
+                    Console.WriteLine(getTxt);
+                    Console.ReadKey();
                     break;
                 } //플레이어가 Enter 입력시 바로 모든 문자열 출력
             }
-            Console.WriteLine(getTxt);
+            Console.ReadKey();
         }
         catch (Exception ex)
         {
@@ -184,26 +190,41 @@ class ScreenManager
 
     void ChapterPicker(string filename)
     {
-        string readTxt = Path.Combine($"../../../Story/{filename}.txt");
+
         try
         {
-            string getTxt = File.ReadAllText(readTxt);
+
+            string getTxt = File.ReadAllText($"../../../Story/{filename}.txt");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"[ {filename} ]");
+            Console.ResetColor();
             foreach (char c in getTxt)
             {
+                if (skipcheck == true)
+                {
+                    Console.WriteLine(getTxt);
+                    break;
+                }
                 Console.Write(c);
                 Thread.Sleep(100); // 출력 간격 조절 (밀리초 단위)
                 if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Enter)
                 {
+                    Console.Clear();
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($"[ {filename} ]");
+                    Console.ResetColor();
+                    Console.WriteLine(getTxt);
+                    skipcheck = true;
                     break;
                 }
             }
-            Console.WriteLine(getTxt);
         }
         catch (Exception ex)
         {
             Console.WriteLine($"파일을 읽어오는 중 오류 발생: {ex.Message}");
         }
     }
+
 
 
 

@@ -102,6 +102,7 @@ class BattleEvent
             Console.WriteLine("전투승리! 승리횟수: ");
             GetRewards();
             Console.ReadKey();
+            Console.ReadKey();
 
             //if (player.Wincount < monsters.Count)
             //{
