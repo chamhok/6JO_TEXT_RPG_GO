@@ -217,7 +217,10 @@ class ScreenManager
                     skipcheck = true;
                     break;
                 }
+
             }
+            Console.WriteLine(); // 문단 잘리는 현상 수정
+            skipcheck = true;
         }
         catch (Exception ex)
         {
