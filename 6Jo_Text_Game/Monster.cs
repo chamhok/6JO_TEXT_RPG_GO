@@ -85,7 +85,12 @@ public class Monster : ICharacter
         this.exp = exp;
     }
 
-    // 스테이지 별 몬스터
+    /// <summary>
+    /// 스테이지 별 몬스터
+    /// </summary>
+    /// <param name="stage"></param>
+    /// <returns></returns>
+
     public List<Monster> StageMonster(int stage)
     {
         List<Monster> monsters = new List<Monster>();

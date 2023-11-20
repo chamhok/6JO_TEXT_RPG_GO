@@ -9,9 +9,6 @@ class BattleEvent
     Character player;
     List<Monster> monsters;
 
-    bool playerT = false;
-    bool monsterT = false;
-
     int skillPguard = 1;
     int skillPsmash = 1;
 
@@ -31,24 +28,17 @@ class BattleEvent
 
     public void Battles()  // 배틀 시작
     {
-
+        if(monsters != null) this.monsters.Clear();
         this.monsters = monster.StageMonster(player.WinCount);
 
-
-        Console.WriteLine($"{this.player.WinCount}");
-        Console.WriteLine(monsters[0].Name);
-        Console.ReadKey();
         int i = 10;
-
-
-        Console.Clear();
-        Message();
-
-        //CoinToss();
+        
 
         // 턴제전투 (누구 하난 죽을때까지)
         do
         {
+            Console.Clear();
+            Message();
             if (player.Speed == i) PlayerTurn();
             else
             {
@@ -80,20 +70,6 @@ class BattleEvent
             player.WinCount++; //라이프와 동일
             Console.WriteLine("전투승리! 승리횟수: ");
             GetRewards();
-            Console.ReadKey();
-            Console.ReadKey();
-
-            //if (player.Wincount < monsters.Count)
-            //{
-            //    monster = monsters[player.Wincount];
-            //    Console.WriteLine("다음 몬스터: " + monster.Name);
-            //    Console.ReadKey();
-            //}
-
-            //else
-            //{
-            //    Console.WriteLine("게임 종료: 모든 몬스터를 이겼습니다!");
-            //}
         }
 
         Console.ReadKey();
@@ -112,26 +88,13 @@ class BattleEvent
     }
 
 
-    public void CoinToss() //몬스터와 플레이어의 스피드값 비교후 선공 결정
-    {
-        if (player.Speed >= monster.Speed)
-        {
-            playerT = true;
-        }
-        else
-        {
-            monsterT = true;
-        }
-    }
 
-
-    public void PlayerTurn() // 플레이어의 행동을 입력받는 메소드
+    public void PlayerTurn() // 플레이어의 행동을 입력받는 메소드 -------------------------------------------------------------------------------------------------------
     {
         //Console.Clear();
-        //Console.WriteLine("남은 몫숨" + life);
-        //Console.WriteLine("플레이어의 남은 생명력 : " + player.Health);
-        //Console.WriteLine($"{monster.Name}의 남은 생명력 : " + monster.Health);
-        //Console.WriteLine("다음 행동을 입력해 주세요!\n");
+        Console.WriteLine("남은 목숨" + life);
+        Console.WriteLine("플레이어의 남은 생명력 : " + player.Health);
+        Console.WriteLine("다음 행동을 입력해 주세요!\n");
         Console.WriteLine("1.공격 2.방어 3.일격준비");
         Console.WriteLine("------------------------------------------------\n");
 
@@ -148,7 +111,14 @@ class BattleEvent
                     {
                         Console.WriteLine($"{i+1}. {monsters[i].Name}");
                     }
-                    int sel = int.Parse(Console.ReadLine());
+
+                    int sel;
+                    while (true)
+                    {
+                        int.TryParse(Console.ReadLine(), out sel);
+                        if (sel > 0 && sel <= monsters.Count) break;
+                        else Console.WriteLine("다시 입력헤주세요");
+                    }
                     Console.WriteLine("공격하였습니다!");
                     MonsterResult(monsters[sel-1]);
                 }
@@ -156,8 +126,6 @@ class BattleEvent
                 {
                     Console.WriteLine("공격하였습니다!");
                     MonsterResult();
-                    playerT = false;
-                    monsterT = true;
                 }
                 break;
 
@@ -166,8 +134,6 @@ class BattleEvent
                 {
                     Console.WriteLine("방어자세를 취합니다.");
                     skillPguard = 2;
-                    playerT = false;
-                    monsterT = true;
                 }
                 else
                 {
@@ -181,8 +147,6 @@ class BattleEvent
                 {
                     Console.WriteLine("강력한 일격을 준비합니다!");
                     skillPsmash = 2;
-                    playerT = false;
-                    monsterT = true;
                 }
                 else
                 {
@@ -198,25 +162,21 @@ class BattleEvent
 
     }
 
-    public void MonsterTurn()
+    public void MonsterTurn()  // 몬스터의 행동을 입력받는 메소드 -------------------------------------------------------------------------------------------------------
     {
         Console.Clear();
         Random random = new Random();
-        Console.WriteLine($"{monster.Name}가 다음 행동을 준비중입니다....");
+        Console.WriteLine($"{monster.Name}이(가) 다음 행동을 준비중입니다....");
         switch (random.Next(1, 4))
         {
             case 1:
-                Console.WriteLine($"{monster.Name}가 공격합니다!");
+                Console.WriteLine($"{monster.Name}이(가) 공격합니다!");
                 PlayerResult();
-                monsterT = false;
-                playerT = true;
                 break;
             case 2:
                 if (skillMguard == 1)
                 {
-                    Console.WriteLine($"{monster.Name}가 방어 자세를 취합니다.");
-                    monsterT = false;
-                    playerT = true;
+                    Console.WriteLine($"{monster.Name}이(가) 방어 자세를 취합니다.");
                     skillMguard = 2;
                 }
                 Console.ReadKey();
@@ -224,9 +184,7 @@ class BattleEvent
             case 3:
                 if (skillMsmash == 1)
                 {
-                    Console.WriteLine($"{monster.Name}가 공격 자세를 취합니다.");
-                    monsterT = false;
-                    playerT = true;
+                    Console.WriteLine($"{monster.Name}이(가) 공격 자세를 취합니다.");
                     skillMsmash = 2;
                 }
                 Console.ReadKey();
@@ -237,46 +195,49 @@ class BattleEvent
         }
 
 
-    } //몬스터의 행동을 정하는 메소드
+    }
 
 
 
-    public void MonsterResult(Monster monster)
+    // 몬스터의 피격시 데미지 계산 및 사망처리 -------------------------------------------------------------------------------------------
+    public void MonsterResult(Monster monster) // 다수의 몬스터 처리
     {
         monster.TakeDamage((float)PlayerDmg());
         if (monster.Health <= 0)
         {
             monster.IsDead = true;
             monsters.Remove(monster);
-            Console.WriteLine($"{monster.Name}가 사망했습니다.");
+            Console.WriteLine($"{monster.Name}이(가) 사망했습니다.");
             this.monster = monsters[0] != null? monsters[0] : monster;
             Console.ReadKey();
         }
-    } //몬스터의 피격시 데미지 계산 및 사망처리
+    } 
 
-    public void MonsterResult()
+    public void MonsterResult() // 단일 몬스터 처리
     {
-        monster.TakeDamage((float)PlayerDmg());
-        if (monster.Health <= 0)
+        monsters[0].TakeDamage((float)PlayerDmg());
+        if (monsters[0].Health <= 0)
         {
-            monster.IsDead = true;
-            Console.WriteLine($"{monster.Name}가 사망했습니다.");
+            monsters[0].IsDead = true;
+            Console.WriteLine($"{monsters[0].Name}이(가) 사망했습니다.");
             Console.ReadKey();
         }
-    } //몬스터의 피격시 데미지 계산 및 사망처리
+    }
 
+    // 플레이어의 피격시 데미지 계산 및 사망처리 -------------------------------------------------------------------------------------------
     public void PlayerResult()
     {
         player.TakeDamage((float)MonsterDmg());
         if (player.Health <= 0)
         {
             player.IsDead = true;
-            Console.WriteLine($"{monster.Name}가 사망했습니다.");
+            Console.WriteLine($"{monster.Name}이(가) 사망했습니다.");
             Console.ReadKey();
         }
-    } // 플레이어의 피격시 데미지 계산 및 사망처리
+    }
 
 
+    // 몬스터의 공격과 공격 성공유무, 크리티컬 유무 판정( PlayerDmg 주석 참고) -------------------------------------------------------------
     public float MonsterDmg()
     {
         float damage = (monster.Attack * skillMsmash) - (player.Defense * skillPguard);
@@ -311,8 +272,9 @@ class BattleEvent
             Console.ReadKey();
             return 0;
         }
-    } // 몬스터의 공격과 공격 성공유무, 크리티컬 유무 판정( PlayerDmg 주석 참고)
+    }
 
+    // 플레이어의 공격과 공격 성공유무, 크리티컬 유무 판정 -----------------------------------------------------------------------------------
     public float PlayerDmg()
     {
         float damage = (player.Attack * skillPsmash) - (monster.Defense * skillMguard);
@@ -323,7 +285,7 @@ class BattleEvent
         {
             if (AvoidanceToss() <= monster.Avoidance) // 회피 성공 유무 체크
             {
-                Console.WriteLine($"{monster.Name}가 회피하였습니다!");
+                Console.WriteLine($"{monster.Name}이(가) 회피하였습니다!");
                 Console.ReadKey();
                 return 0;
             }
@@ -346,20 +308,22 @@ class BattleEvent
             Console.ReadKey();
             return 0;
         }
-    } // 플레이어의 공격과 공격 성공유무, 크리티컬 유무 판정
+    } 
 
-    public int AvoidanceToss() // 회피 성공 주사위
+
+    // 회피 및 크리티컬 주사위 ------------------------------------------------------------------------------------------------------------------
+    public int AvoidanceToss() // 회피
     {
         Random random = new Random();
         return random.Next(1, 100);
     }
-    public int CrtToss() //크리티컬 성공 주사위
+    public int CrtToss() //크리티컬
     {
         Random random = new Random();
         return random.Next(1, 100);
     }
 
-    // 보상 단계
+    // 보상 단계 ---------------------------------------------------------------------------------------------------------------------------------
     public void GetRewards()
     {
         Console.Clear();
