@@ -219,6 +219,9 @@ class ScreenManager
             case 10:
                 ChapterPicker("Ending");
                 break;
+            case 11:
+                ChapterPicker("Ending");
+                break;
             default:
                 Console.WriteLine("아직 스토리가 없습니다.");
                 break;
