@@ -122,7 +122,9 @@ class ScreenManager
         try
         {
             Console.Clear();
-            string getTxt = File.ReadAllText(readTxt);
+            string getTxt = File.ReadAllText(readTxt)
+                .Replace("주인공", $"\u001b[34m주인공\u001b[0m")
+                .Replace("왕:", $"\u001b[36m왕:\u001b[0m");
             foreach (char c in getTxt)
             {
                 Console.Write(c);
@@ -197,13 +199,16 @@ class ScreenManager
                 .Replace("주인공", $"\u001b[34m주인공\u001b[0m")
                 .Replace("경비병", $"\u001b[31m경비병\u001b[0m")
                 .Replace("기사", $"\u001b[31m기사\u001b[0m")
-                .Replace("기사단장", $"\u001b[31m기사단장\u001b[0m")
-                .Replace("마녀", $"\u001b[35m기사단장\u001b[0m")
-                .Replace("고블린", $"\u001b[32m고블린\"\u001b[0m")
-                .Replace("트롤", $"\u001b[32m트롤\"\u001b[0m")
-                .Replace("상어", $"\u001b[31;1m상어\u001b[0m")
-                .Replace(" 케르베로스", $"\u001b[31m케르베로스\u001b[0m")
-
+                .Replace("단장", $"\u001b[31m단장\u001b[0m")
+                .Replace("마녀", $"\u001b[35m마녀\u001b[0m")
+                .Replace("고블린", $"\u001b[32m고블린\u001b[0m")
+                .Replace("트롤", $"\u001b[32m트롤\u001b[0m")
+                .Replace("상어", $"\u001b[31m상어\u001b[0m")
+                .Replace("케르베로스", $"\u001b[31m케르베로스\u001b[0m")
+                .Replace("공허의 마스터", $"\u001b[35m공허의 마스터\u001b[0m")
+                .Replace("불의 여왕", $"\u001b[31m불의 여왕\u001b[0m")
+                .Replace("그림자 마법사", $"\u001b[30m그림자 마법사\u001b[0m")
+                .Replace("무자비한 검사", $"\u001b[31;무자비한 검사\u001b[0m")
                 ;
 
 
