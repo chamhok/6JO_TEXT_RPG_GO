@@ -149,6 +149,33 @@ class ScreenManager
             case 1:
                 ChapterPicker("Chapter2");
                 break;
+            case 2:
+                ChapterPicker("Chapter3");
+                break;
+            case 3:
+                ChapterPicker("Chapter4");
+                break;
+            case 4:
+                ChapterPicker("Chapter5");
+                break;
+            case 5:
+                ChapterPicker("Chapter6");
+                break;
+            case 6:
+                ChapterPicker("Chapter7");
+                break;
+            case 7:
+                ChapterPicker("Chapter8");
+                break;
+            case 8:
+                ChapterPicker("Chapter9");
+                break;
+            case 9:
+                ChapterPicker("Chapter10");
+                break;
+            case 10:
+                ChapterPicker("Ending");
+                break;
             default:
                 Console.WriteLine("아직 스토리가 없습니다.");
                 break;
