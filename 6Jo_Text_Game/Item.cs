@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-using System.Security.Cryptography.X509Certificates;
-using static Item;
+﻿using System.Security.Cryptography.X509Certificates;
 
 public class Item : IItem
 {
@@ -16,7 +14,6 @@ public class Item : IItem
     public float ItemAbility { get; set; }
 
     // 기본 생성자
-
     public Item()
     {
         GameData.I.AddItem(new Item("무쇠갑옷", 0, 2, "무쇠로 만들어져 튼튼한 갑옷입니다.", false, true, 200));
@@ -76,15 +73,23 @@ public class Item : IItem
         if (this.Name.Contains("Postion"))
         {
             Message = "을(를) 먹었습니다.";
+            Console.WriteLine($"\n{character.Name}이(가) {this.Name}{Message}");
         }
         else
         {
-            character.Inventory.Add(this); //인벤토리에 아이템 추가
-            Message = "을(를) 획득하였습니다.";
+            // 이미 가지고 있는 아이템이라면 가격만큼 골드로 되돌려받기
+            if (character.Inventory.Any(x => x.Name == this.Name))
+            {
+                character.Gold += this.Gold;
+                Console.WriteLine($"\n{character.Name}이(가) {this.Name}을(를) 이미 가지고 있습니다. 가격만큼 골드로 환불되었습니다.");
+            }
+            else
+            {
+                Message = "을(를) 획득하였습니다.";
+                Console.WriteLine($"\n{character.Name}이(가) {this.Name}{Message}");
+                character.Inventory.Add(this); //인벤토리에 아이템 추가
+            }    
         }
-
-
-        Console.WriteLine($"\n{character.Name}이(가) {this.Name}{Message}");
         Console.ReadKey(true);
     }
 
@@ -109,19 +114,20 @@ public class Item : IItem
                 character.Attack += this.ItemAbility;
                 break;
             case RewardItems.CrazyWood:
-                //GameData.I.AddItem(new Item("Crazy Wood", 0, 0, "미친 나뭇가지 입니다.", false, true, int.MaxValue));
-                Add(new Item("Crazy Wood", 100, 100, "미친 나뭇가지 입니다.", false, true, int.MaxValue));
-
                 break;
             case RewardItems.VeryCrazySword:
-                //GameData.I.AddItem(new Item("Very Crazy Sword", 0, 0, "매우 미친 검 입니다..", false, true, int.MaxValue));
                 break;
             case RewardItems.SuperCrazyHammer:
-                //GameData.I.AddItem(new Item("Super Crazy Hammer", 0, 0, "슈퍼 미친 망치 입니다.", false, true, int.MaxValue));
                 break;
             default:
                 break;
         }
+    }
+
+    // 아이템 제거 메서드
+    private void RemoveItem()
+    {
+        GameData.I.RemoveItem(this);
     }
 
     // 아이템 추가 메서드
@@ -129,11 +135,13 @@ public class Item : IItem
     {
         GameData.I.AddItem(item);
     }
+
     // 현재 인스턴스의 아이템 추가 메서드
     public void Add()
     {
         GameData.I.AddItem(this);
     }
+
     // 장착 여부 뒤집기 메서드
     public static void stallationReverse(Item item)
     {

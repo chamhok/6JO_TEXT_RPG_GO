@@ -222,7 +222,8 @@ class BattleEvent
         {
             monster.IsDead = true;
             monsters.Remove(monster);
-            Console.WriteLine($"{monster.Name}이(가) 사망했습니다.");
+            Console.WriteLine($"{monster.Name}가 사망했습니다.");
+            AcquireExp();
             this.monster = monsters[0] != null? monsters[0] : monster;
             Console.ReadKey();
         }
@@ -235,6 +236,7 @@ class BattleEvent
         {
             monsters[0].IsDead = true;
             Console.WriteLine($"{monsters[0].Name}이(가) 사망했습니다.");
+            AcquireExp();
             Console.ReadKey();
         }
     }
@@ -246,11 +248,23 @@ class BattleEvent
         if (player.Health <= 0)
         {
             player.IsDead = true;
-            Console.WriteLine($"{monster.Name}이(가) 사망했습니다.");
+            Console.WriteLine($"{player.Name}가 사망했습니다.");
             Console.ReadKey();
         }
     }
 
+    // 몬스터 처치 시, 경험치 획득
+    public void AcquireExp()
+    {
+        Console.WriteLine($"+{monster.Exp}경험치를 획득하였습니다.");
+        player.CurrentExp += monster.Exp;
+        if (player.CurrentExp >= player.MaxExp)
+        {
+            player.Level += 1;
+            player.CurrentExp = 0;
+            player.MaxExp += (float)(player.MaxExp * 0.2);
+        }
+    }
 
     // 몬스터의 공격과 공격 성공유무, 크리티컬 유무 판정( PlayerDmg 주석 참고) -------------------------------------------------------------
     public float MonsterDmg()
@@ -364,7 +378,7 @@ class BattleEvent
         Random random = new Random();
         rewardItems = rewardItems.OrderBy(x => random.Next()).ToList();
 
-        for (int i = 0; i < rewardItems.Count; i++) Console.WriteLine($"{i + 1}. {questionMark}");
+        for (int i = 0; i < rewardItems.Count; i++) Console.WriteLine($"{i + 1}. {rewardItems[i].Name}");
 
         Console.WriteLine("\n보상 아이템 번호를 입력하세요.");
         while (true)
@@ -381,6 +395,7 @@ class BattleEvent
                 }
                 IItem selectedReward = rewardItems[selectedNumber - 1];
                 selectedReward.Use(player);
+                
                 break;
             }
             else

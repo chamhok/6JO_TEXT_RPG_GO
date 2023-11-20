@@ -37,17 +37,25 @@ public class Character : ICharacter
                 }
         }
 
-        // 캐릭터의 이름, 레벨, 공격력, 방어력, 속도, 사망 여부, 골드 등의 속성
-        public string Name { get; set; }
-        public float Level { get; set; }
-        public float Attack { get; set; }
-        public float Defense { get; set; }
-        public float Speed { get; set; }
-        public bool IsDead { get; set; } = false;
-        public int Gold { get; set; }
-        public float Avoidance { get; set; }
-        public float Crt { get; set; }
-        public int WinCount { get; set; } = 0;
+    // 캐릭터의 이름, 레벨, 공격력, 방어력, 속도, 사망 여부, 골드 등의 속성
+    public string Name { get; set; }
+    public float Level { get; set; }
+
+
+    /////////////////////////////////////////////////////////////////
+    public float CurrentExp { get; set; }
+    public float MaxExp { get; set; }
+    /////////////////////////////////////////////////////////////////
+
+
+    public float Attack { get; set; }
+    public float Defense { get; set; }
+    public float Speed { get; set; }
+    public bool IsDead { get; set; } = false;
+    public int Gold { get; set; }
+    public float Avoidance { get; set; }
+    public float Crt { get; set; }
+    public int WinCount { get; set; } = 0;
 
 
         // 직업과 속성
@@ -59,21 +67,27 @@ public class Character : ICharacter
         {
         }
 
-        // 모든 속성을 초기화하는 생성자
-        public Character(string name, float level, float attack, float defense, float speed, float health, int gold, Job? job, float crt, float avoidance, Attribute attribute)
-        {
-                this.Name = name;
-                this.Level = level;
-                this.Attack = attack;
-                this.Defense = defense;
-                this.Speed = speed;
-                this.Health = health;
-                this.Gold = gold;
-                this.Avoidance = Avoidance;
-                this.Crt = Crt;
-                this.Job = job;
-                this.Attribute = attribute;
-        }
+    // 모든 속성을 초기화하는 생성자
+    public Character(string name, float level, float attack, float defense, float speed, float health, int gold, Job? job, float crt, float avoidance, Attribute attribute, float currentexp, float maxexp)
+    {
+        this.Name = name;
+        this.Level = level;
+
+        /////////////////////////////////////////////////////////////////
+        this.CurrentExp = currentexp;
+        this.MaxExp = maxexp;
+        /////////////////////////////////////////////////////////////////
+
+        this.Attack = attack;
+        this.Defense = defense;
+        this.Speed = speed;
+        this.Health = health;
+        this.Gold = gold;
+        this.Avoidance = avoidance;
+        this.Crt = Crt;
+        this.Job = job;
+        this.Attribute = attribute;
+    }
 
         // 데미지를 입는 메서드
         public void TakeDamage(float damage)

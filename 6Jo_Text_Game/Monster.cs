@@ -34,7 +34,7 @@ public class Monster : ICharacter
     public int Gold { get; set; }
     public float Avoidance { get; set; }
     public float Crt { get; set; }
-    public int exp {  get; set; }
+    public int Exp {  get; set; }
 
 
 
@@ -63,7 +63,7 @@ public class Monster : ICharacter
 
         this.Species = species;
         this.Attribute = attribute;
-        this.exp = exp;
+        this.Exp = exp;
     }
 
     /// <summary>
