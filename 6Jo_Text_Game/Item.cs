@@ -79,7 +79,7 @@ public class Item : IItem
         }
         else
         {
-            character.Inventory.Add(this);
+            character.Inventory.Add(this); //인벤토리에 아이템 추가
             Message = "을(를) 획득하였습니다.";
         }
 
