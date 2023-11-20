@@ -114,8 +114,7 @@ class ScreenManager
 
     public void Prologue()
     {
-        string currentDirectory = Directory.GetCurrentDirectory();
-        string readTxt = Path.Combine(currentDirectory,"Prologue.txt");
+        string readTxt = "../../../Prologue.txt";
 
         try
         {
@@ -158,9 +157,7 @@ class ScreenManager
 
     void ChapterPicker(string filename)
     {
-        string currentDirectory = Directory.GetCurrentDirectory();// 현재 프로세스가 실행중인 파일의 경로 불러오기
-
-        string readTxt = Path.Combine(currentDirectory, $"{filename}.txt");
+        string readTxt = Path.Combine($"../../../{filename}.txt");
         try
         {
             string getTxt = File.ReadAllText(readTxt);
