@@ -12,10 +12,13 @@
         // 인벤토리에 있는 아이템을 출력
         foreach (var item in Inventory)
         {
-            Console.WriteLine($"{item.Name}:");
+            Console.WriteLine($"{item.Name} - 공격력: {item.Akt}, 방어력: {item.Def}");
+            Console.WriteLine($"              설명: {item.ItemDescription}");
+            Console.WriteLine($"              장착 여부: {item.Stallation}, 구매 여부: {item.Buy}");
+            Console.WriteLine($"              가격: {item.Gold}");
+            Console.WriteLine();
         }
     }
-
 
     // 체력 속성
     private float health;

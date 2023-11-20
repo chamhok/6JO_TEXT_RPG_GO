@@ -1,4 +1,6 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.Numerics;
+using System.Security.Cryptography.X509Certificates;
+using static Item;
 
 public class Item : IItem
 {
@@ -14,6 +16,7 @@ public class Item : IItem
     public float ItemAbility { get; set; }
 
     // 기본 생성자
+
     public Item()
     {
         GameData.I.AddItem(new Item("무쇠갑옷", 0, 2, "무쇠로 만들어져 튼튼한 갑옷입니다.", false, true, 200));
@@ -76,8 +79,10 @@ public class Item : IItem
         }
         else
         {
+            character.Inventory.Add(this);
             Message = "을(를) 획득하였습니다.";
         }
+
 
         Console.WriteLine($"\n{character.Name}이(가) {this.Name}{Message}");
         Console.ReadKey(true);
@@ -105,7 +110,7 @@ public class Item : IItem
                 break;
             case RewardItems.CrazyWood:
                 //GameData.I.AddItem(new Item("Crazy Wood", 0, 0, "미친 나뭇가지 입니다.", false, true, int.MaxValue));
-                Add(new Item("Crazy Wood", 0, 0, "미친 나뭇가지 입니다.", false, true, int.MaxValue));
+                Add(new Item("Crazy Wood", 100, 100, "미친 나뭇가지 입니다.", false, true, int.MaxValue));
 
                 break;
             case RewardItems.VeryCrazySword:

@@ -34,6 +34,10 @@ class ScreenManager
                 break; //캐릭터 정보창 호출 ( 별도의 키지정없이 아무키 입력시 다시 메인 화면으로 이동되게 설정)
 
             case "2":
+                CallInventory();
+                break;
+
+            case "3":
                 Console.Clear();
                 skipcheck = false;
                 battleScreen.BattleStartSecen();
@@ -48,6 +52,36 @@ class ScreenManager
                 ShowMainScreen();
                 break; //1 과 2가 아닌 입력을 받을시 메인 화면으로 다시 로드
         }
+    }
+
+    void CallInventory()
+    {
+        do
+        {
+            Console.Clear();
+            player.DisplayInventory();
+            Console.WriteLine("1, 장착관리");
+            Console.WriteLine("2, 돌아가기");
+            Console.Write(">>");
+            int input = Console.Read();
+            char check = (char)input;
+            switch (check)
+            {
+                case '1':
+                    Console.WriteLine("장착관리모드 활성화");
+                    break;
+                case '2':
+                    ShowMainScreen();
+                    break;
+                default:
+                    Console.WriteLine("잘못된 입력입니다. 1과 2를 입력해주세요");
+                    CallInventory();
+                    break;
+
+            }
+
+        }
+        while (true);
     }
 
     class MainScreen
@@ -67,8 +101,9 @@ class ScreenManager
         public void Body()
         {
             Console.WriteLine("1. 정보창");
-            Console.WriteLine("2. 전투");
-            Console.WriteLine("3. 상점");
+            Console.WriteLine("2. 인벤토리");
+            Console.WriteLine("3. 전투");
+            Console.WriteLine("4. 상점");
         }
         private void Bottom()
         {

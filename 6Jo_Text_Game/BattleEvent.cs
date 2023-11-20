@@ -339,9 +339,9 @@ class BattleEvent
         {
             new Item("HealthPostion", 1),
             new Item("AttackPostion", 1),
-            new Item("CrazyWood", 1),
-            new Item("VeryCrazySword", 1),
-            new Item("SuperCrazyHammer", 1),
+            new Item("CrazyWood", 10,10,"dd",false,false,100),
+            new Item("VeryCrazySword", 10,10,"dd",false,false,100),
+            new Item("SuperCrazyHammer", 10,10,"dd",false,false,100),
         };
 
         string questionMark = "???";
