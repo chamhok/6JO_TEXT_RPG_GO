@@ -83,31 +83,39 @@ public class Item : IItem
         Console.ReadKey(true);
     }
 
+    public enum RewardItems
+    {
+        HealthPostion,
+        AttackPostion,
+        CrazyWood,
+        VeryCrazySword,
+        SuperCrazyHammer
+    }
+
     // 아이템마다 다르게 효과 적용
     public void Apply(Character character)
     {
-        if (this.Name == "Health Postion")
+        switch (Enum.Parse(typeof(RewardItems), this.Name))
         {
-            character.Health += this.ItemAbility;
-        }
-        else if (this.Name == "Attack Postion")
-        {
-            character.Attack += this.ItemAbility;
-        }
-        else if (this.Name == "Crazy Wood")
-        {
-            // Character 매개변수를 사용하지 않았음.
-            GameData.I.AddItem(new Item("Crazy Wood", 0, 0, "미친 나뭇가지 입니다.", false, true, int.MaxValue));
-        }
-        else if (this.Name == "Very Crazy Sword")
-        {
-            // Character 매개변수를 사용하지 않았음.
-            GameData.I.AddItem(new Item("Very Crazy Sword", 0, 0, "매우 미친 검 입니다..", false, true, int.MaxValue));
-        }
-        else if (this.Name == "Super Crazy Hammer")
-        {
-            // Character 매개변수를 사용하지 않았음.
-            GameData.I.AddItem(new Item("Super Crazy Hammer", 0, 0, "슈퍼 미친 망치 입니다.", false, true, int.MaxValue));
+            case RewardItems.HealthPostion:
+                character.Health += this.ItemAbility;
+                break;
+            case RewardItems.AttackPostion:
+                character.Attack += this.ItemAbility;
+                break;
+            case RewardItems.CrazyWood:
+                //GameData.I.AddItem(new Item("Crazy Wood", 0, 0, "미친 나뭇가지 입니다.", false, true, int.MaxValue));
+                Add(new Item("Crazy Wood", 0, 0, "미친 나뭇가지 입니다.", false, true, int.MaxValue));
+
+                break;
+            case RewardItems.VeryCrazySword:
+                //GameData.I.AddItem(new Item("Very Crazy Sword", 0, 0, "매우 미친 검 입니다..", false, true, int.MaxValue));
+                break;
+            case RewardItems.SuperCrazyHammer:
+                //GameData.I.AddItem(new Item("Super Crazy Hammer", 0, 0, "슈퍼 미친 망치 입니다.", false, true, int.MaxValue));
+                break;
+            default:
+                break;
         }
     }
 

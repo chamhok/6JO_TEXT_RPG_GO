@@ -35,8 +35,8 @@ class BattleEvent
 
     }
 
-// ------------------------------------------------------------------------
-    
+    // ------------------------------------------------------------------------
+
     public void Battles()  // 배틀 시작
     {
         this.monsters = new List<Monster>();
@@ -215,7 +215,7 @@ class BattleEvent
                 Console.WriteLine("다시입력해주세요!");
                 break;
         }
-        
+
     }
 
     public void MonsterTurn()
@@ -255,8 +255,8 @@ class BattleEvent
                 Console.ReadKey();
                 break;
         }
-        
-        
+
+
     } //몬스터의 행동을 정하는 메소드
 
 
@@ -368,8 +368,6 @@ class BattleEvent
         }
     } // 플레이어의 공격과 공격 성공유무, 크리티컬 유무 판정
 
-
-
     public int AvoidanceToss() // 회피 성공 주사위
     {
         Random random = new Random();
@@ -381,13 +379,11 @@ class BattleEvent
         return random.Next(1, 100);
     }
 
-
-// -------------------------------------------------------------------------
     // 보상 단계
     public void GetRewards()
     {
         Console.Clear();
-        Console.WriteLine("아래 항목 중에서 원하는 보상 아이템을 고를 수 있습니다.");
+        Console.WriteLine("아래 항목 중에서 원하는 보상 아이템을 고를 수 있습니다.\n");
         SelectRewardList();
     }
 
@@ -397,17 +393,33 @@ class BattleEvent
         // 리스트 생성
         List<IItem> rewardItems = new List<IItem>
         {
-            new Item("Health Postion", 1),
-            new Item("Attack Postion", 1),
+            new Item("HealthPostion", 1),
+            new Item("AttackPostion", 1),
+            new Item("CrazyWood", 1),
+            new Item("VeryCrazySword", 1),
+            new Item("SuperCrazyHammer", 1),
         };
 
-        for (int i = 0; i < rewardItems.Count; i++) Console.WriteLine($"{i + 1}. {rewardItems[i].Name}");
+        string questionMark = "???";
+        // 아이템 랜덤으로 섞기
+        Random random = new Random();
+        rewardItems = rewardItems.OrderBy(x => random.Next()).ToList();
 
-        Console.WriteLine("보상 아이템 번호를 입력하세요.");
+        for (int i = 0; i < rewardItems.Count; i++) Console.WriteLine($"{i + 1}. {questionMark}");
+
+        Console.WriteLine("\n보상 아이템 번호를 입력하세요.");
         while (true)
         {
             if (int.TryParse(Console.ReadLine(), out int selectedNumber) && selectedNumber >= 1 && selectedNumber <= rewardItems.Count)
             {
+                Console.Clear();
+                Console.WriteLine("과연 ... 보상 결과는 ?\n");
+                Thread.Sleep(500);
+                for (int i = 0; i < rewardItems.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1}. {rewardItems[i].Name}");
+                    Thread.Sleep(500);
+                }
                 IItem selectedReward = rewardItems[selectedNumber - 1];
                 selectedReward.Use(player);
                 break;
