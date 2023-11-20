@@ -114,7 +114,7 @@ class ScreenManager
 
     public void Prologue()
     {
-        string readTxt = "../../../Prologue.txt";
+        string readTxt = "../../../Story/Prologue.txt";
 
         try
         {
@@ -157,7 +157,7 @@ class ScreenManager
 
     void ChapterPicker(string filename)
     {
-        string readTxt = Path.Combine($"../../../{filename}.txt");
+        string readTxt = Path.Combine($"../../../Story/{filename}.txt");
         try
         {
             string getTxt = File.ReadAllText(readTxt);
