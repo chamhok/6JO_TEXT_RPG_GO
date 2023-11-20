@@ -4,6 +4,7 @@ using System.Text;
 using System.Linq;
 using static System.Net.Mime.MediaTypeNames;
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 
 
@@ -635,7 +636,7 @@ public class Table
 }
 public static class ConsoleHelper
 {
-        private const int FixedWidthTrueType = 13;
+        private const int FixedWidthTrueType = 54;
         private const int StandardOutputHandle = -11;
 
         [DllImport("kernel32.dll", SetLastError = true)]

@@ -8,6 +8,7 @@ class ScreenManager
     PlayerInfo playerInfo;
     MainScreen mainScreen = new MainScreen();
     BattleScreen battleScreen;
+    bool skipcheck = false;
 
     public ScreenManager(Character player, BattleEvent battleEvent)
     {
@@ -34,8 +35,10 @@ class ScreenManager
 
             case "2":
                 Console.Clear();
+                skipcheck = false;
                 battleScreen.BattleStartSecen();
                 ShowMainScreen();
+
                 break;// 전투 화면으로 이동
 
             default:
@@ -118,18 +121,23 @@ class ScreenManager
 
         try
         {
-            string getTxt = File.ReadAllText(readTxt);
+            Console.Clear();
+            string getTxt = File.ReadAllText(readTxt)
+                .Replace("주인공", $"\u001b[34m주인공\u001b[0m")
+                .Replace("왕:", $"\u001b[36m왕:\u001b[0m");
             foreach (char c in getTxt)
             {
                 Console.Write(c);
                 Thread.Sleep(100); // 출력 간격 조절 (밀리초 단위)
                 if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Enter)
                 {
-                    Console.Clear();
+                    Console.Clear() ;
+                    Console.WriteLine(getTxt);
+                    Console.ReadKey();
                     break;
                 } //플레이어가 Enter 입력시 바로 모든 문자열 출력
             }
-            Console.WriteLine(getTxt);
+            Console.ReadKey();
         }
         catch (Exception ex)
         {
@@ -149,6 +157,33 @@ class ScreenManager
             case 1:
                 ChapterPicker("Chapter2");
                 break;
+            case 2:
+                ChapterPicker("Chapter3");
+                break;
+            case 3:
+                ChapterPicker("Chapter4");
+                break;
+            case 4:
+                ChapterPicker("Chapter5");
+                break;
+            case 5:
+                ChapterPicker("Chapter6");
+                break;
+            case 6:
+                ChapterPicker("Chapter7");
+                break;
+            case 7:
+                ChapterPicker("Chapter8");
+                break;
+            case 8:
+                ChapterPicker("Chapter9");
+                break;
+            case 9:
+                ChapterPicker("Chapter10");
+                break;
+            case 10:
+                ChapterPicker("Ending");
+                break;
             default:
                 Console.WriteLine("아직 스토리가 없습니다.");
                 break;
@@ -157,26 +192,59 @@ class ScreenManager
 
     void ChapterPicker(string filename)
     {
-        string readTxt = Path.Combine($"../../../Story/{filename}.txt");
         try
         {
-            string getTxt = File.ReadAllText(readTxt);
+
+            string getTxt = File.ReadAllText($"../../../Story/{filename}.txt")
+                .Replace("주인공", $"\u001b[34m주인공\u001b[0m")
+                .Replace("경비병", $"\u001b[31m경비병\u001b[0m")
+                .Replace("기사", $"\u001b[31m기사\u001b[0m")
+                .Replace("단장", $"\u001b[31m단장\u001b[0m")
+                .Replace("마녀", $"\u001b[35m마녀\u001b[0m")
+                .Replace("고블린", $"\u001b[32m고블린\u001b[0m")
+                .Replace("트롤", $"\u001b[32m트롤\u001b[0m")
+                .Replace("상어", $"\u001b[31m상어\u001b[0m")
+                .Replace("케르베로스", $"\u001b[31m케르베로스\u001b[0m")
+                .Replace("공허의 마스터", $"\u001b[35m공허의 마스터\u001b[0m")
+                .Replace("불의 여왕", $"\u001b[31m불의 여왕\u001b[0m")
+                .Replace("그림자 마법사", $"\u001b[30m그림자 마법사\u001b[0m")
+                .Replace("무자비한 검사", $"\u001b[31;무자비한 검사\u001b[0m")
+                ;
+
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"[ {filename} ]");
+            Console.ResetColor();
             foreach (char c in getTxt)
             {
+                if (skipcheck == true)
+                {
+                    Console.WriteLine(getTxt);
+                    break;
+                }
                 Console.Write(c);
                 Thread.Sleep(100); // 출력 간격 조절 (밀리초 단위)
                 if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Enter)
                 {
+                    Console.Clear();
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($"[ {filename} ]");
+                    Console.ResetColor();
+                    Console.WriteLine(getTxt);
+                    skipcheck = true;
                     break;
                 }
+
             }
-            Console.WriteLine(getTxt);
+            Console.WriteLine(); // 문단 잘리는 현상 수정
+            skipcheck = true;
         }
         catch (Exception ex)
         {
             Console.WriteLine($"파일을 읽어오는 중 오류 발생: {ex.Message}");
         }
     }
+
 
 
 
