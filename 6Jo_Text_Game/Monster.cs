@@ -1,24 +1,5 @@
 ﻿
-public enum MonsterStage
-{
-    Guard = 0,
-    Knight = 1,
-    Commander = 2,
-
-    // stage 2
-    Witch = 3, 
-    Goblin = 4,
-    Troll = 4,
-    DesertShark = 5,
-    //new Assassin,
-
-    // stage 3
-    Cerberus = 6,
-    VoidMaster = 7,
-    FireQueen = 8,
-    ShadowWizard = 9,
-    CloudSpiter = 10
-}
+using System.Drawing;
 
 public class Monster : ICharacter
 {
@@ -98,50 +79,63 @@ public class Monster : ICharacter
         switch (stage)
         {
             // Stage 1 -------------------------
-            case 0:
+            case 0: // 경비병 * 3
                 monsters.Add(new Guard());
                 monsters.Add(new Guard());
                 monsters.Add(new Guard());
                 break;
 
-            case 1:
-                monsters.Add(new Guard());
-                monsters.Add(new Guard());
+            case 1: // 기사 * 3
+                monsters.Add(new Knight());
+                monsters.Add(new Knight());
                 monsters.Add(new Knight());
                 break;
 
-            case 2:
+            case 2: // 기사*2 + 기사단장
                 monsters.Add(new Knight());
                 monsters.Add(new Knight());
                 monsters.Add(new Commander());
                 break;
 
             // Stage 2 --------------------------
-            case 3:
+            case 3: // 마녀
                 monsters.Add(new Witch());
                 break;
 
-            case 4:
+            case 4: // 고블린 + 트롤
                 monsters.Add(new Troll());
                 monsters.Add(new Goblin());
                 break;
 
-            case 5:
+            case 5: // 자객 (기믹)
+                monsters.Add(new Assassin());
+                break;
+
+            case 6: // 상어
                 monsters.Add(new DesertShark());
                 break;
 
             // Stage 3 ----------------------------
-            case 6:
+            case 7: // 용암
                 monsters.Add(new Cerberus());
                 break;
 
-            case 7:
+            case 8: // 낭떠러지
+                monsters.Add(new Cerberus());
+                break;
+
+            case 9: // 케르베로스
+                monsters.Add(new Cerberus());
+                break;
+
+            case 10: // 사천왕
                 monsters.Add(new VoidMaster());
                 monsters.Add(new ShadowWizard());
                 monsters.Add(new FireQueen());
                 monsters.Add(new CloudSpiter());
                 break;
 
+            default: break;
         }
 
         return monsters;
@@ -149,7 +143,7 @@ public class Monster : ICharacter
 
 
     // 데미지를 입는 메서드
-    public void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage)
     {
         Health -= damage;
     }
@@ -264,16 +258,6 @@ public class DesertShark : Monster
     }
 }
 
-// stage 2 - (기믹) 자객
-//public class Assassin : Monster
-//{
-//    public Assassin()
-//        : base("Assassin", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수)
-//    {
-//        this.Add();
-//    }
-//}
-
 
 // --------------------------------------------------------------------------------
 // stage 3 - 용암
@@ -327,4 +311,174 @@ public class CloudSpiter : Monster
     }
 }
 
+
+
+
+// 기믹 전투 ==================================================================
+// stage 2 - (기믹) 자객
+public class Assassin : Monster
+{
+    public Assassin()
+        : base("자객", 1, 1, 1, 1, 10, 10, Species.기믹, 1, 1, Attribute.수, 20)
+    {
+        this.Add();
+    }
+
+    //---------------------------------------
+    enum Direction
+    {
+        LEFT,
+        RIGHT,
+        UP,
+        DOWN
+    }
+
+    Point player = new Point(10, 20, '@');
+    List<Point> enemy = new List<Point>();
+
+    Random rand = new Random();
+
+
+    public override void TakeDamage(float damage)
+    {
+        int score = 0;
+
+        Console.Clear();
+        DrawWall();
+        player.Draw();
+
+        enemy.Add(EnemySpawn());
+
+
+        while (true)
+        {
+            // 적 움직임
+            if (enemy.Count == 0 || rand.Next(0, 5) % 5 == 0) enemy.Add(EnemySpawn());
+
+            for (int i = 0; i < enemy.Count; i++)
+            {
+                enemy[i].Clear();
+                enemy[i].y++;
+                if (enemy[i].y > 20)
+                {
+                    score++;
+                    enemy.Remove(enemy[i]);
+                }
+                enemy[i].Draw();
+            }
+
+            // 플레이어 움직임
+            if (Console.KeyAvailable)
+            {
+                ConsoleKeyInfo key = Console.ReadKey();
+                if (key.Key == ConsoleKey.LeftArrow)
+                {
+                    player.direction = Direction.LEFT;
+                }
+                else if (key.Key == ConsoleKey.RightArrow)
+                {
+                    player.direction = Direction.RIGHT;
+                }
+                PlayerMove(ref player);
+            }
+
+            if (score == 10) break;
+            Thread.Sleep(100);
+        }
+
+        Console.SetCursorPosition(0, 22);
+        Console.WriteLine("end");
+        Console.ReadKey();
+        //Health -= damage;
+    }
+
+    void DrawWall()
+    {
+        // 상하 벽 그리기
+        for (int i = 0; i < 21; i++)
+        {
+            Console.SetCursorPosition(i, 0);
+            Console.Write("#");
+            Console.SetCursorPosition(i, 21);
+            Console.Write("#");
+        }
+
+        // 좌우 벽 그리기
+        for (int i = 0; i < 21; i++)
+        {
+            Console.SetCursorPosition(0, i);
+            Console.Write("#");
+            Console.SetCursorPosition(21, i);
+            Console.Write("#");
+        }
+    } // 벽 그리기
+
+    class Point
+    {
+        public int x { get; set; }
+        public int y { get; set; }
+        public char sym { get; set; }
+        public Direction direction { get; set; } = Direction.DOWN;
+
+        public Point(int x, int y, char sym)
+        {
+            this.x = x;
+            this.y = y;
+            this.sym = sym;
+        }
+
+        // 점을 그리는 메서드
+        public void Draw()
+        {
+            Console.SetCursorPosition(x, y);
+            Console.Write(sym);
+        }
+        public void Draw(char sym)
+        {
+            Console.SetCursorPosition(x, y);
+            Console.Write(sym);
+        }
+
+        // 점을 지우는 메서드
+        public void Clear()
+        {
+            Draw(' ');
+        }
+
+        // 두 점이 같은지 비교하는 메서드
+        public bool IsHit(Point p)
+        {
+            return p.x == x && p.y == y;
+        }
+
+    } // 위치 클래스
+
+    void PlayerMove(ref Point p)
+    {
+        switch (p.direction)
+        {
+            case Direction.LEFT:
+                p.Clear();
+                p.x--;
+                if (p.x < 1) p.x = 1;
+                p.Draw();
+                break;
+
+            case Direction.RIGHT:
+                p.Clear();
+                p.x++;
+                if (p.x > 20) p.x = 20;
+                p.Draw();
+                break;
+        }
+    } // 플레이어 움직이기 메서드
+
+    Point EnemySpawn()
+    {
+        int x = rand.Next(1, 20);
+
+        Point p = new Point(x, 2, '$');
+        return p;
+    } // 적 스폰 메서드
+}
 

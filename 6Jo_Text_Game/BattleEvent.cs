@@ -38,7 +38,22 @@ class BattleEvent
         do
         {
             Console.Clear();
+
+            //Console.WriteLine("==============================================");
+            //foreach(var x in GameData.I.GetMonsters())
+            //{
+            //    Console.WriteLine(x.Name);
+            //}
+            //Console.WriteLine("==============================================");
+
             Message();
+
+            if (monsters[0].Species == Species.기믹)
+            {
+                monsters[0].TakeDamage(5.12f);
+                break;
+            }
+
             if (player.Speed == i) PlayerTurn();
             else
             {

@@ -196,6 +196,7 @@ public enum Job
 // 종족을 나타내는 열거형
 public enum Species
 {
+        기믹,
         고블린,
         가고일,
         코볼트,
