@@ -223,7 +223,7 @@ class BattleEvent
             monster.IsDead = true;
             monsters.Remove(monster);
             Console.WriteLine($"{monster.Name}가 사망했습니다.");
-            AcquireExp();
+            AcquireExp(monster);
             this.monster = monsters[0] != null? monsters[0] : monster;
             Console.ReadKey();
         }
@@ -236,7 +236,7 @@ class BattleEvent
         {
             monsters[0].IsDead = true;
             Console.WriteLine($"{monsters[0].Name}이(가) 사망했습니다.");
-            AcquireExp();
+            AcquireExp(monsters[0]);
             Console.ReadKey();
         }
     }
@@ -254,7 +254,7 @@ class BattleEvent
     }
 
     // 몬스터 처치 시, 경험치 획득
-    public void AcquireExp()
+    public void AcquireExp(Monster monster)
     {
         Console.WriteLine($"+{monster.Exp}경험치를 획득하였습니다.");
         player.CurrentExp += monster.Exp;
