@@ -232,10 +232,10 @@ class Program
             screenManager.Prologue();
             Console.ReadKey();
             screenManager.ShowMainScreen();*/
-
+        SoundManager soundManager = new SoundManager();
+        soundManager.PlayBackgroundMusicAsync("Raindrop", 100);
         StartScreen startScreen = new StartScreen();
-
-        
+        soundManager.StopMusic();
         Character character = new Character("ㅇㅇ", 100, 100, 100, 10, 100, 200, Job.가디언, 10, 10, Attribute.풍, 0, 100);
         BattleEvent battleEvent = new BattleEvent(character);
         Store store = new Store();
@@ -255,14 +255,13 @@ public class StartScreen
 
         private void StartScreenText()
         {
-                /*
-                 . (점): 현재 디렉토리를 나타냅니다.
-                 ..(점 두 개): 상위 디렉토리를 나타냅니다.
-                 / (슬래시): 디렉토리를 구분합니다.
-                */
+        /*
+         . (점): 현재 디렉토리를 나타냅니다.
+         ..(점 두 개): 상위 디렉토리를 나타냅니다.
+         / (슬래시): 디렉토리를 구분합니다.
+        */
                 string directory = "../../../StartScreenText.txt";
                 string directory2 = "../../../StartScreenText(원본).txt";
-                soundManager.CallSound("driring",100);
                 try
                 {
                         ConsoleHelper.SetCurrentFont("EBS주시경 Medium", 100);

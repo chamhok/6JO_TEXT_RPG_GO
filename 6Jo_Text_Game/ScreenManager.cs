@@ -173,7 +173,7 @@ class ScreenManager
                 Thread.Sleep(100); // 출력 간격 조절 (밀리초 단위)
                 if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Enter)
                 {
-                    soundManager.CallSound("sound1", 100);
+                    soundManager.CallSound("sound1", 50);
                     Console.Clear() ;
                     Console.WriteLine(getTxt);
                     Console.ReadKey();
@@ -270,10 +270,10 @@ class ScreenManager
                     break;
                 }
                 Console.Write(c);
-                Thread.Sleep(50); // 출력 간격 조절 (밀리초 단위)
+                Thread.Sleep(100); // 출력 간격 조절 (밀리초 단위)
                 if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Enter)
                 {
-                    soundManager.CallSound("sound1",100);
+                    soundManager.CallSound("sound1",50);
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine($"[ {filename} ]");
