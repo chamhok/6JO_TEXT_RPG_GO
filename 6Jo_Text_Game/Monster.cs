@@ -66,6 +66,7 @@ public class Monster : ICharacter
         this.Exp = exp;
     }
 
+    //스테이지 몬스터 소환
     /// <summary>
     /// 스테이지 별 몬스터
     /// </summary>
@@ -78,64 +79,64 @@ public class Monster : ICharacter
 
         switch (stage)
         {
-            // Stage 1 -------------------------
-            //case 0: // 경비병 * 3
-            //    monsters.Add(new Guard());
-            //    monsters.Add(new Guard());
-            //    monsters.Add(new Guard());
-            //    break;
+        //Stage 1----------------------------
+        case 0: // 경비병 * 3
+            monsters.Add(new Guard());
+            monsters.Add(new Guard());
+            monsters.Add(new Guard());
+            break;
 
-            //case 1: // 기사 * 3
-            //    monsters.Add(new Knight());
-            //    monsters.Add(new Knight());
-            //    monsters.Add(new Knight());
-            //    break;
+        case 1: // 기사 * 3
+            monsters.Add(new Knight());
+            monsters.Add(new Knight());
+            monsters.Add(new Knight());
+            break;
 
-            //case 2: // 기사*2 + 기사단장
-            //    monsters.Add(new Knight());
-            //    monsters.Add(new Knight());
-            //    monsters.Add(new Commander());
-            //    break;
+        case 2: // 기사*2 + 기사단장
+            monsters.Add(new Knight());
+            monsters.Add(new Knight());
+            monsters.Add(new Commander());
+            break;
 
-            // Stage 2 --------------------------
-            case 0: // 마녀
-                monsters.Add(new Witch());
-                break;
+        // Stage 2 --------------------------
+        case 3: // 마녀
+            monsters.Add(new Witch());
+            break;
 
-            case 4: // 고블린 + 트롤
-                monsters.Add(new Troll());
-                monsters.Add(new Goblin());
-                break;
+        case 4: // 고블린 + 트롤
+            monsters.Add(new Troll());
+            monsters.Add(new Goblin());
+            break;
 
-            case 5: // 자객 (기믹)
-                monsters.Add(new Assassin());
-                break;
+        case 5: // 자객 (기믹)
+            monsters.Add(new Assassin());
+            break;
 
-            case 6: // 상어
-                monsters.Add(new DesertShark());
-                break;
+        case 6: // 상어
+            monsters.Add(new DesertShark());
+            break;
 
-            // Stage 3 ----------------------------
-            case 7: // 용암
-                monsters.Add(new Cerberus());
-                break;
+        // Stage 3 ----------------------------
+        case 7: // 용암
+            monsters.Add(new Cerberus());
+            break;
 
-            case 8: // 낭떠러지
-                monsters.Add(new Cerberus());
-                break;
+        case 8: // 낭떠러지
+            monsters.Add(new Cerberus());
+            break;
 
-            case 9: // 케르베로스
-                monsters.Add(new Cerberus());
-                break;
+        case 9: // 케르베로스
+            monsters.Add(new Cerberus());
+            break;
 
-            case 10: // 사천왕
-                monsters.Add(new VoidMaster());
-                monsters.Add(new ShadowWizard());
-                monsters.Add(new FireQueen());
-                monsters.Add(new CloudSpiter());
-                break;
+        case 10: // 사천왕
+            monsters.Add(new VoidMaster());
+            monsters.Add(new ShadowWizard());
+            monsters.Add(new FireQueen());
+            monsters.Add(new CloudSpiter());
+            break;
 
-            default: break;
+        default: break;
         }
 
         return monsters;
@@ -189,6 +190,7 @@ public class Monster : ICharacter
 
 
 
+// 몬스터 생성
 /// <summary>
 ///  몬스터 생성 클래스
 /// </summary>
