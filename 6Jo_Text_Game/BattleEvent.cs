@@ -9,16 +9,18 @@ class BattleEvent
     Character player;
     List<Monster> monsters;
     SoundManager soundManager = new SoundManager();
+    UiManager uiManager = new UiManager();
 
     int skillPguard = 1;
-    int skillPsmash = 1;
+    bool skillPsmash = false;
+    float skillPDamage = 1;
 
     int skillMguard = 1;
     int skillMsmash = 1;
 
     int life = 10;
-    
-    
+
+
 
     public BattleEvent(Character player)
     {
@@ -35,6 +37,7 @@ class BattleEvent
 
         int turnSpeed = 10;
 
+
         // 턴제전투 (누구 하난 죽을때까지)
         do
         {
@@ -44,14 +47,14 @@ class BattleEvent
 
             if (monsters[0].Species == Species.기믹)
             {
-                monsters[0].TakeDamage(5.12f);
+                player.IsDead = monsters[0].TakeDamage(0);
                 break;
             }
 
             if (player.Speed == turnSpeed) PlayerTurn();
             else
             {
-                for(int i=0; i < monsters.Count; i++)
+                for (int i = 0; i < monsters.Count; i++)
                 {
                     if (monsters[i].Speed == turnSpeed)
                     {
@@ -66,6 +69,7 @@ class BattleEvent
         }
         while (player.IsDead == false && monster.IsDead == false);
 
+
         // 플레이어 사망시
         if (player.IsDead == true)
         {
@@ -75,7 +79,6 @@ class BattleEvent
         // 플레이어 생존시
         else
         {
-            soundManager.StopMusic();
             player.WinCount++; //라이프와 동일
             Console.WriteLine("전투승리! 승리횟수: ");
             GetRewards();
@@ -89,7 +92,7 @@ class BattleEvent
     {
         Console.WriteLine($"이름 : {player.Name} ");
         Console.WriteLine("------------------------------------------------------------\n");
-        foreach(var x in monsters)
+        foreach (var x in monsters)
         {
             Console.WriteLine(x.ToString());
             Console.WriteLine("------------------------------------------------------------\n");
@@ -104,41 +107,24 @@ class BattleEvent
         //Console.WriteLine("남은 목숨" + life);
         Console.WriteLine("플레이어의 남은 생명력 : " + player.Health);
         Console.WriteLine("다음 행동을 입력해 주세요!\n");
-        Console.WriteLine("1.공격 2.방어 3.일격준비");
+        Console.WriteLine("1.공격 2.방어 3.스킬");
         Console.WriteLine("------------------------------------------------\n");
 
 
-
-        String input = Console.ReadLine();
+        int input;
+        while (true)
+        {
+            int.TryParse(Console.ReadLine(), out input);
+            if (input > 0 && input < 4) break;
+            else Console.WriteLine("다시 입력헤주세요");
+        }
         switch (input)
         {
-            case "1":
-                if (monsters.Count != 1)
-                {
-                    Console.WriteLine("공격 대상을 골라주세요");
-                    for (int i = 0; i < monsters.Count; i++)
-                    {
-                        Console.WriteLine($"{i+1}. {monsters[i].Name}");
-                    }
-
-                    int sel;
-                    while (true)
-                    {
-                        int.TryParse(Console.ReadLine(), out sel);
-                        if (sel > 0 && sel <= monsters.Count) break;
-                        else Console.WriteLine("다시 입력헤주세요");
-                    }
-                    Console.WriteLine("공격하였습니다!");
-                    MonsterResult(monsters[sel-1]);
-                }
-                else
-                {
-                    Console.WriteLine("공격하였습니다!");
-                    MonsterResult();
-                }
+            case 1: // 일반 공격
+                SelectMonster();
                 break;
 
-            case "2":
+            case 2: // 방어
                 if (skillPguard == 1)
                 {
                     Console.WriteLine("방어자세를 취합니다.");
@@ -151,18 +137,31 @@ class BattleEvent
                 Console.ReadKey();
                 break;
 
-            case "3":
-                if (skillPsmash == 1)
+            case 3: // 스킬 공격
+
+                if (player.SkillList.Count > 1)
                 {
-                    soundManager.CallSound("charge", 100);
-                    Console.WriteLine("강력한 일격을 준비합니다!");
-                    skillPsmash = 2;
+                    Console.WriteLine("스킬을 골라주세요");
+                    for (int i = 0; i < player.SkillList.Count; i++)
+                    {
+                        Console.WriteLine($"{i + 1}. {player.SkillList[i].Name}");
+                    }
+
+                    int sel;
+                    while (true)
+                    {
+                        int.TryParse(Console.ReadLine(), out sel);
+                        if (sel > 0 && sel < player.SkillList.Count) break;
+                        else Console.WriteLine("다시 입력헤주세요");
+                    }
+                    this.skillPDamage = player.SkillList[sel].Attack;
+                    this.skillPsmash = true;
                 }
-                else
-                {
-                    Console.WriteLine("일격 준비가 되었습니다!");
-                }
-                Console.ReadKey();
+
+                SelectMonster();
+                this.skillPDamage = 1;
+                this.skillPsmash = false;
+
                 break;
 
             default:
@@ -170,6 +169,33 @@ class BattleEvent
                 break;
         }
 
+    }
+
+    void SelectMonster()
+    {
+        if (monsters.Count > 1)
+        {
+            Console.WriteLine("공격 대상을 골라주세요");
+            for (int i = 0; i < monsters.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {monsters[i].Name}");
+            }
+
+            int sel;
+            while (true)
+            {
+                int.TryParse(Console.ReadLine(), out sel);
+                if (sel > 0 && sel <= monsters.Count) break;
+                else Console.WriteLine("다시 입력헤주세요");
+            }
+            Console.WriteLine("공격하였습니다!");
+            MonsterResult(monsters[sel - 1]);
+        }
+        else
+        {
+            Console.WriteLine("공격하였습니다!");
+            MonsterResult();
+        }
     }
 
     public void MonsterTurn()  // 몬스터의 행동을 입력받는 메소드 -------------------------------------------------------------------------------------------------------
@@ -185,7 +211,7 @@ class BattleEvent
                     Console.WriteLine($"{monster.Name}이(가) 공격합니다!");
                     PlayerResult();
                 }
-                
+
                 break;
             case 2:
                 if (skillMguard == 1)
@@ -223,10 +249,10 @@ class BattleEvent
             monsters.Remove(monster);
             Console.WriteLine($"{monster.Name}가 사망했습니다.");
             AcquireExp(monster);
-            this.monster = monsters[0] != null? monsters[0] : monster;
+            this.monster = monsters[0] != null ? monsters[0] : monster;
             Console.ReadKey();
         }
-    } 
+    }
 
     public void MonsterResult() // 단일 몬스터 처리
     {
@@ -311,8 +337,13 @@ class BattleEvent
     // 플레이어의 공격과 공격 성공유무, 크리티컬 유무 판정 -----------------------------------------------------------------------------------
     public float PlayerDmg()
     {
-        float damage = (player.Attack * skillPsmash) - (monster.Defense * skillMguard);
-        skillPsmash = 1;
+        float playerAttack = player.Attack;
+        if (skillPsmash) playerAttack *= skillPDamage;
+        float damage = (player.Attack) - (monster.Defense * skillMguard);
+        damage *= CompareAttribute(player.Attribute.Value, monster.Attribute);
+        damage = (float)Math.Round(damage, 2);
+
+        //skillPsmash = 1;
         skillMguard = 1;
 
         if (damage > 0) //데미지가 0과 같거나 작은지 체크
@@ -346,7 +377,35 @@ class BattleEvent
             Console.ReadKey();
             return 0;
         }
-    } 
+    }
+
+    public float CompareAttribute(Attribute a, Attribute b)
+    {
+        switch (a)
+        {
+            case Attribute.수:
+                if (b == Attribute.화) return 1.3f;
+                else if (b == Attribute.토) return 0.8f;
+                break;
+
+            case Attribute.화:
+                if (b == Attribute.풍) return 1.3f;
+                else if (b == Attribute.수) return 0.8f;
+                break;
+
+            case Attribute.풍:
+                if (b == Attribute.토) return 1.3f;
+                else if (b == Attribute.화) return 0.8f;
+                break;
+
+            case Attribute.토:
+                if (b == Attribute.수) return 1.3f;
+                else if (b == Attribute.풍) return 0.8f;
+                break;
+        }
+
+        return 1.0f;
+    }
 
 
     // 회피 및 크리티컬 주사위 ------------------------------------------------------------------------------------------------------------------
@@ -404,7 +463,7 @@ class BattleEvent
                 }
                 IItem selectedReward = rewardItems[selectedNumber - 1];
                 selectedReward.Use(player);
-                
+
                 break;
             }
             else
