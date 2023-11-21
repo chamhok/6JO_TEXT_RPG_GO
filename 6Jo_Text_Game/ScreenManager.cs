@@ -8,13 +8,15 @@ class ScreenManager
     PlayerInfo playerInfo;
     MainScreen mainScreen = new MainScreen();
     BattleScreen battleScreen;
+    Store Displaystore;
     bool skipcheck = false;
 
-    public ScreenManager(Character player, BattleEvent battleEvent)
+    public ScreenManager(Character player, BattleEvent battleEvent,Store store)
     {
         this.player = player;
         playerInfo = new PlayerInfo(player);
         battleScreen = new BattleScreen(battleEvent);
+        Displaystore = store;
     }
 
     public void ShowMainScreen()
@@ -44,6 +46,10 @@ class ScreenManager
                 ShowMainScreen();
 
                 break;// 전투 화면으로 이동
+            case "4":
+                Console.Clear();
+                Displaystore.DisplayStore();
+                break;
 
             default:
                 Console.WriteLine("잘못된입력입니다.");

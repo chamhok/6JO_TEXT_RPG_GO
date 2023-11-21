@@ -229,7 +229,8 @@ class Program
         new Monster();
         Character character = new Character("ㅇㅇ", 100, 100, 100, 10, 100, 200, Job.가디언, 10, 10, Attribute.풍, 0, 100);
         BattleEvent battleEvent = new BattleEvent(character);
-        ScreenManager screenManager = new ScreenManager(character, battleEvent);
+        Store store = new Store();
+        ScreenManager screenManager = new ScreenManager(character, battleEvent,store);
         character.Add();
         GameData.I.GetCharacters().Select(x => x.ToString()).ToList().ForEach(Console.WriteLine);
         screenManager.Prologue();
