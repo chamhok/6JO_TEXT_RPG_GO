@@ -238,9 +238,8 @@ class Program : UiManager
 
 
         SoundManager soundManager = new SoundManager();
-        soundManager.PlayBackgroundMusicAsync("Raindrop");
+        soundManager.PlayBackgroundMusicAsync("Title");
         StartScreen startScreen = new StartScreen();
-        soundManager.StopMusic();
         Character character = GameData.I.GetCharacters().First();
 
         BattleEvent battleEvent = new BattleEvent(character);
@@ -249,6 +248,7 @@ class Program : UiManager
         character.Add();
         GameData.I.GetCharacters().Select(x => x.ToString()).ToList().ForEach(Console.WriteLine);
         screenManager.Prologue();
+        soundManager.StopMusic();
         screenManager.ShowMainScreen();
 
 

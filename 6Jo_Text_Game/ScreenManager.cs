@@ -9,7 +9,7 @@ class ScreenManager
     PlayerInfo playerInfo;
     MainScreen mainScreen = new MainScreen();
     BattleScreen battleScreen;
-    Store storeinfo;
+    Store Displaystore;
     bool skipcheck = false;
     SoundManager soundManager = new SoundManager();
 
@@ -18,13 +18,13 @@ class ScreenManager
         this.player = player;
         playerInfo = new PlayerInfo(player);
         battleScreen = new BattleScreen(battleEvent);
-        storeinfo = store;
+        Displaystore = store;
     }
 
     public void ShowMainScreen()
     {
         Console.Clear();
-        ChapterPicker();
+        ChapterPicker(player.WinCount);
         Console.ReadKey();
         mainScreen.Display();
         string input = Console.ReadLine();
@@ -42,15 +42,24 @@ class ScreenManager
                 break;
 
             case "3":
+                Console.ReadKey();
+                soundManager.PlayBackgroundMusicAsync($"Battle{player.WinCount}");
                 Console.Clear();
                 skipcheck = false;
                 battleScreen.BattleStartSecen();
+                soundManager.StopMusic();
                 ShowMainScreen();
                 break;// 전투 화면으로 이동
             case "4":
                 Console.Clear();
-                storeinfo.DisplayStore();
-                
+                Displaystore.DisplayStore();
+                break;
+
+            case "end":
+                soundManager.StopMusic();
+                Console.Clear();
+                skipcheck = false;
+                ChapterPicker(11);
                 break;
 
             default:
@@ -190,10 +199,10 @@ class ScreenManager
     }
 
 
-    public void ChapterPicker() // 플레이어의 현재 승리 카운트에 따라 스토리 챕터를 불러오는 함수
+    public void ChapterPicker(int input) // 플레이어의 현재 승리 카운트에 따라 스토리 챕터를 불러오는 함수
     {
 
-        switch (player.WinCount)
+        switch (input)
         {
             case 0:
                 ChapterPicker("Chapter1");
@@ -226,11 +235,15 @@ class ScreenManager
                 ChapterPicker("Chapter10");
                 break;
             case 10:
-                ChapterPicker("Ending");
+                ChapterPicker("Chapter11");
                 break;
             case 11:
-                soundManager.CallSound("end",100);
                 ChapterPicker("Ending");
+                soundManager.PlayBackgroundMusicAsync("end");
+                ChapterPicker("Ending2");
+                Console.WriteLine("아무키를 누르면 종료됩니다!");
+                Console.ReadKey();
+                Environment.Exit(0);
                 break;
             default:
                 Console.WriteLine("아직 스토리가 없습니다.");
