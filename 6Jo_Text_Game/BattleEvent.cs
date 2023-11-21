@@ -129,13 +129,11 @@ class BattleEvent
                         if (sel > 0 && sel <= monsters.Count) break;
                         else Console.WriteLine("다시 입력헤주세요");
                     }
-                    soundManager.CallSound("atk", 100);
                     Console.WriteLine("공격하였습니다!");
                     MonsterResult(monsters[sel-1]);
                 }
                 else
                 {
-                    soundManager.CallSound("atk", 100);
                     Console.WriteLine("공격하였습니다!");
                     MonsterResult();
                 }
@@ -157,6 +155,7 @@ class BattleEvent
             case "3":
                 if (skillPsmash == 1)
                 {
+                    soundManager.CallSound("charge", 100);
                     Console.WriteLine("강력한 일격을 준비합니다!");
                     skillPsmash = 2;
                 }
@@ -281,18 +280,21 @@ class BattleEvent
             if (AvoidanceToss() <= player.Avoidance)
             {
                 Console.WriteLine("플레이어가 회피하였습니다!");
+                soundManager.CallSound("avod", 100);
                 Console.ReadKey();
                 return 0;
             }
             else if (CrtToss() <= monster.Crt)
             {
                 Console.WriteLine("치명적 일격! 피해량 : " + damage * 2);
+                soundManager.CallSound("atk2", 100);
                 Console.ReadKey();
                 return damage * 2;
             }
             else
             {
                 Console.WriteLine($"{monster.Name}의 공격을 받았다 피해량 : " + damage);
+                soundManager.CallSound("atk", 100);
                 Console.ReadKey();
                 return damage;
             }
@@ -301,6 +303,7 @@ class BattleEvent
         else
         {
             Console.WriteLine($"{monster.Name}의 공격이 너무 약하다!");
+            soundManager.CallSound("block", 100);
             Console.ReadKey();
             return 0;
         }
@@ -317,20 +320,22 @@ class BattleEvent
         {
             if (AvoidanceToss() <= monster.Avoidance) // 회피 성공 유무 체크
             {
-                soundManager.CallSound("avod", 100);
                 Console.WriteLine($"{monster.Name}이(가) 회피하였습니다!");
+                soundManager.CallSound("avod", 100);
                 Console.ReadKey();
                 return 0;
             }
             else if (CrtToss() <= player.Crt) // 크리티컬 유무 체크
             {
                 Console.WriteLine("치명적 일격! 피해량 : " + damage * 2);
+                soundManager.CallSound("atk2", 100);
                 Console.ReadKey();
                 return damage * 2;
             }
             else //위 조건문 모두 false시 기본 피해량만 타격
             {
                 Console.WriteLine("공격 성공! 피해량 : " + damage);
+                soundManager.CallSound("atk", 100);
                 Console.ReadKey();
                 return damage;
             }
@@ -338,6 +343,7 @@ class BattleEvent
         else // 데미지가 0과 같거나 작을경우 0으로 데미지 리턴 ( 음수가 될경우 생명력이 회복되는 현상을 막기위한 로직)
         {
             Console.WriteLine("상대가 너무 단단하다!");
+            soundManager.CallSound("block", 100);
             Console.ReadKey();
             return 0;
         }

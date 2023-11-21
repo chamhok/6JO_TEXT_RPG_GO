@@ -391,7 +391,8 @@ public class StartScreen
                         ConsoleKeyInfo key = Console.ReadKey();
                         if (key.KeyChar == 'x' || key.KeyChar == 'ㅌ')
                         {
-                                break;
+                            soundManager.CallSound("sound1", 100);
+                            break;
                         }
                 }
                 Console.Clear();
@@ -480,10 +481,11 @@ public class StartScreen
                         }
 
                 }
+                soundManager.CallSound("driring", 100);
 
 
 
-        }
+    }
         public StartScreen()
         {
                 /* var info = ConsoleHelper.GetCurrentFont();
