@@ -10,7 +10,7 @@ public class Item : IItem
     public bool Stallation { get; set; }
     public bool Buy { get; set; }
     public int Gold { get; set; }
-
+    public static List<Item> Store = new List<Item>();
     public float ItemAbility { get; set; }
 
     // 기본 생성자

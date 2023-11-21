@@ -8,7 +8,7 @@ class ScreenManager
     PlayerInfo playerInfo;
     MainScreen mainScreen = new MainScreen();
     BattleScreen battleScreen;
-    Store Displaystore;
+    Store storeinfo;
     bool skipcheck = false;
 
     public ScreenManager(Character player, BattleEvent battleEvent,Store store)
@@ -16,7 +16,7 @@ class ScreenManager
         this.player = player;
         playerInfo = new PlayerInfo(player);
         battleScreen = new BattleScreen(battleEvent);
-        Displaystore = store;
+        storeinfo = store;
     }
 
     public void ShowMainScreen()
@@ -48,7 +48,8 @@ class ScreenManager
                 break;// 전투 화면으로 이동
             case "4":
                 Console.Clear();
-                Displaystore.DisplayStore();
+                storeinfo.DisplayStore();
+                
                 break;
 
             default:

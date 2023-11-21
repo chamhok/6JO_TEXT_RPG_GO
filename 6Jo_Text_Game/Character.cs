@@ -10,8 +10,9 @@ public class Character : ICharacter
         {
 
                 Console.WriteLine("인벤토리:");
+                Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
 
-                // 인벤토리에 있는 아이템을 출력
+        // 인벤토리에 있는 아이템을 출력
                 foreach (var item in Inventory)
                 {
                 Console.WriteLine($"{item.Name} - 공격력: {item.Akt}, 방어력: {item.Def}");
@@ -20,10 +21,15 @@ public class Character : ICharacter
                 Console.WriteLine($"              가격: {item.Gold}");
                 Console.WriteLine();
                 }
-        }
+        Console.WriteLine();
+        Console.WriteLine("0. 나가기");
+        Console.WriteLine("원하시는 행동을 입력해주세요.");
+        Console.Write(">>");
+
+    }
 
     // 체력 속성
-        private float health;
+    private float health;
 
         // 체력 프로퍼티
         public float Health
