@@ -5,9 +5,10 @@ using System.Linq;
 
 class BattleEvent
 {
-    Monster monster = new Monster();
+    Monster monster;
     Character player;
     List<Monster> monsters;
+    SoundManager soundManager = new SoundManager();
 
     int skillPguard = 1;
     int skillPsmash = 1;
@@ -28,23 +29,17 @@ class BattleEvent
 
     public void Battles()  // 배틀 시작
     {
-        if(monsters != null) this.monsters.Clear();
-        this.monsters = monster.StageMonster(player.WinCount);
+        if (monsters != null) this.monsters.Clear();
+        this.monsters = GameData.I.GetMonsters(player);
+        this.monster = monsters[0];
 
-        int i = 10;
+        int turnSpeed = 10;
         
 
         // 턴제전투 (누구 하난 죽을때까지)
         do
         {
             Console.Clear();
-
-            //Console.WriteLine("==============================================");
-            //foreach(var x in GameData.I.GetMonsters())
-            //{
-            //    Console.WriteLine(x.Name);
-            //}
-            //Console.WriteLine("==============================================");
 
             Message();
 
@@ -54,21 +49,21 @@ class BattleEvent
                 break;
             }
 
-            if (player.Speed == i) PlayerTurn();
+            if (player.Speed == turnSpeed) PlayerTurn();
             else
             {
-                foreach(var x in monsters)
+                for(int i=0; i < monsters.Count; i++)
                 {
-                    if (x.Speed == i)
+                    if (monsters[i].Speed == turnSpeed)
                     {
-                        monster = x;
+                        monster = monsters[i];
                         MonsterTurn();
                     }
                 }
             }
 
-            i--;
-            i = i == 0 ? 10 : i;
+            turnSpeed--;
+            turnSpeed = turnSpeed == 0 ? 10 : turnSpeed;
         }
         while (player.IsDead == false && monster.IsDead == false);
 
@@ -107,7 +102,7 @@ class BattleEvent
     public void PlayerTurn() // 플레이어의 행동을 입력받는 메소드 -------------------------------------------------------------------------------------------------------
     {
         //Console.Clear();
-        Console.WriteLine("남은 목숨" + life);
+        //Console.WriteLine("남은 목숨" + life);
         Console.WriteLine("플레이어의 남은 생명력 : " + player.Health);
         Console.WriteLine("다음 행동을 입력해 주세요!\n");
         Console.WriteLine("1.공격 2.방어 3.일격준비");
@@ -160,6 +155,7 @@ class BattleEvent
             case "3":
                 if (skillPsmash == 1)
                 {
+                    soundManager.CallSound("charge", 100);
                     Console.WriteLine("강력한 일격을 준비합니다!");
                     skillPsmash = 2;
                 }
@@ -185,8 +181,12 @@ class BattleEvent
         switch (random.Next(1, 4))
         {
             case 1:
-                Console.WriteLine($"{monster.Name}이(가) 공격합니다!");
-                PlayerResult();
+                if (!monster.isAction())
+                {
+                    Console.WriteLine($"{monster.Name}이(가) 공격합니다!");
+                    PlayerResult();
+                }
+                
                 break;
             case 2:
                 if (skillMguard == 1)
@@ -256,8 +256,8 @@ class BattleEvent
     // 몬스터 처치 시, 경험치 획득
     public void AcquireExp(Monster monster)
     {
-        player.CurrentExp += monster.Exp;
         Console.WriteLine($"\n+{monster.Exp}경험치를 획득하였습니다.");
+        player.CurrentExp += monster.Exp;
         if (player.CurrentExp >= player.MaxExp)
         {
             player.Level += 1;
@@ -280,18 +280,21 @@ class BattleEvent
             if (AvoidanceToss() <= player.Avoidance)
             {
                 Console.WriteLine("플레이어가 회피하였습니다!");
+                soundManager.CallSound("avod", 100);
                 Console.ReadKey();
                 return 0;
             }
             else if (CrtToss() <= monster.Crt)
             {
                 Console.WriteLine("치명적 일격! 피해량 : " + damage * 2);
+                soundManager.CallSound("atk2", 100);
                 Console.ReadKey();
                 return damage * 2;
             }
             else
             {
                 Console.WriteLine($"{monster.Name}의 공격을 받았다 피해량 : " + damage);
+                soundManager.CallSound("atk", 100);
                 Console.ReadKey();
                 return damage;
             }
@@ -300,6 +303,7 @@ class BattleEvent
         else
         {
             Console.WriteLine($"{monster.Name}의 공격이 너무 약하다!");
+            soundManager.CallSound("block", 100);
             Console.ReadKey();
             return 0;
         }
@@ -317,18 +321,21 @@ class BattleEvent
             if (AvoidanceToss() <= monster.Avoidance) // 회피 성공 유무 체크
             {
                 Console.WriteLine($"{monster.Name}이(가) 회피하였습니다!");
+                soundManager.CallSound("avod", 100);
                 Console.ReadKey();
                 return 0;
             }
             else if (CrtToss() <= player.Crt) // 크리티컬 유무 체크
             {
                 Console.WriteLine("치명적 일격! 피해량 : " + damage * 2);
+                soundManager.CallSound("atk2", 100);
                 Console.ReadKey();
                 return damage * 2;
             }
             else //위 조건문 모두 false시 기본 피해량만 타격
             {
                 Console.WriteLine("공격 성공! 피해량 : " + damage);
+                soundManager.CallSound("atk", 100);
                 Console.ReadKey();
                 return damage;
             }
@@ -336,6 +343,7 @@ class BattleEvent
         else // 데미지가 0과 같거나 작을경우 0으로 데미지 리턴 ( 음수가 될경우 생명력이 회복되는 현상을 막기위한 로직)
         {
             Console.WriteLine("상대가 너무 단단하다!");
+            soundManager.CallSound("block", 100);
             Console.ReadKey();
             return 0;
         }
