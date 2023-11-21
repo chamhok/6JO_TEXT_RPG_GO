@@ -12,11 +12,19 @@ public class Item : IItem
     public int Gold { get; set; }
     public static List<Item> Store = new List<Item>();
     public float ItemAbility { get; set; }
+    public string Description { get; }
+    public bool Equipped { get; set; }
+    public Item(string name, string description)
+    {
+        Name = name;
+        Description = description;
+        Equipped = false; 
+    }
 
     // 기본 생성자
     public Item()
     {
-        GameData.I.AddItem(new Item("무쇠갑옷", 0, 2, "무쇠로 만들어져 튼튼한 갑옷입니다.", false, true, 200));
+        GameData.I.AddItem(new Item("북쪽갑옷", 0, 2, "north에서 만든 비싼 갑옷입니다.", false, true, 200));
         GameData.I.AddItem(new Item("낡은검", 2, 0, "쉽게 볼 수 있는 낡은 검 입니다.", false, true, 200));
         GameData.I.AddItem(new Item("청동 도끼", 0, 5, "어디선가 사용됐던거 같은 도끼입니다.", false, false, 1500));
         GameData.I.AddItem(new Item("스파르타의 창", 0, 7, "스파르타의 전사들이 사용했다는 전설의 창입니다.", false, false, 0));
