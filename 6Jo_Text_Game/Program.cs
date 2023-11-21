@@ -531,20 +531,20 @@ class Program
         SoundManager soundManager = new SoundManager();
         soundManager.PlayBackgroundMusicAsync("Raindrop");
         StartScreen startScreen = new StartScreen();
-        soundManager.StopMusic();
-        Character character = new Character("ㅇㅇ", 100, 100, 100, 10, 100, 200, Job.가디언, 10, 10, Attribute.풍, 0, 100);
-        BattleEvent battleEvent = new BattleEvent(character);
-        Store store = new Store();
-        ScreenManager screenManager = new ScreenManager(character, battleEvent, store);
-        character.Add();
-        GameData.I.GetCharacters().Select(x => x.ToString()).ToList().ForEach(Console.WriteLine);
-        screenManager.Prologue();
-        screenManager.ShowMainScreen();
-        
+                /*      soundManager.StopMusic();
+                      Character character = new Character("ㅇㅇ", 100, 100, 100, 10, 100, 200, Job.가디언, 10, 10, Attribute.풍, 0, 100);
+                      BattleEvent battleEvent = new BattleEvent(character);
+                      Store store = new Store();
+                      ScreenManager screenManager = new ScreenManager(character, battleEvent, store);
+                      character.Add();
+                      GameData.I.GetCharacters().Select(x => x.ToString()).ToList().ForEach(Console.WriteLine);
+                      screenManager.Prologue();
+                      screenManager.ShowMainScreen();*/
 
 
-    }
-    public class StartScreen
+
+        }
+        public class StartScreen
     {
         SoundManager soundManager = new SoundManager();
         int y = 1;
@@ -662,7 +662,7 @@ class Program
                 }
             }
         }
-        public void CharJob(out Job? job)
+        public void CharJob(out Job? job,out Attribute? attribute)
         {
             int y = 1;
             Console.Clear();
@@ -756,38 +756,43 @@ class Program
                 Renderer.DrawTable(table, 5, currentSelection);
                 Renderer.DrawInputArea();
 
-                ConsoleKeyInfo key = Console.ReadKey();
-                if (key.Key == ConsoleKey.UpArrow && currentSelection > 0)
-                {
-                    currentSelection--;
-                }
-                if (key.Key == ConsoleKey.DownArrow && currentSelection < table.GetDataCount() - 1)
-                {
-                    currentSelection++;
-                }
-                if (key.Key == ConsoleKey.Enter)
-                {
-                    // 여기서 선택된 행에 대한 처리를 수행합니다.
-                    switch (currentSelection)
-                    {
-                        case 0:
-                            job = Job.가디언;
-                            break;
-                        case 1:
-                            job = Job.위자드;
-                            break;
-                        case 2:
-                            job = Job.레인저;
-                            break;
-                        case 3:
-                            job = Job.성직자;
-                            break;
-                        default:
-                            job = null;
-                            break;
-                    }
-                    break;
-                }
+                        ConsoleKeyInfo key = Console.ReadKey();
+                        if (key.Key == ConsoleKey.UpArrow && currentSelection > 0)
+                        {
+                                currentSelection--;
+                        }
+                        if (key.Key == ConsoleKey.DownArrow && currentSelection < table.GetDataCount() - 1)
+                        {
+                                currentSelection++;
+                        }
+                        if (key.Key == ConsoleKey.Enter)
+                        {
+                                // 여기서 선택된 행에 대한 처리를 수행합니다.
+                                switch (currentSelection)
+                                {
+                                        case 0:
+                                                job = Job.가디언;
+                                                attribute = Attribute.토;
+                                                break;
+                                        case 1:
+                                                job = Job.위자드;
+                                                attribute = Attribute.화;
+                                                break;
+                                        case 2:
+                                                job = Job.레인저;
+                                                attribute = Attribute.풍;
+                                                break;
+                                        case 3:
+                                                job = Job.성직자;
+                                                attribute = Attribute.수;
+                                                break;
+                                        default:
+                                                job = null;
+                                                attribute = null;
+                                                break;
+                                }
+                                break;
+                        }
 
             }
             soundManager.CallSound("driring", 100);
@@ -803,39 +808,50 @@ class Program
 
              Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
 
-                     // Set the console buffer size to the same dimensions
-                     Console.SetBufferSize(Console.LargestWindowWidth, Console.LargestWindowHeight);*/
+                 // Set the console buffer size to the same dimensions
+                 Console.SetBufferSize(Console.LargestWindowWidth, Console.LargestWindowHeight);*/
+/*
+                ss();
+                Console.ReadLine();*/
 
-            ss();
-            Console.ReadLine();
-
-            string charName;
-            Job? charJob;
-            StartScreenText();
+                string charName;
+                Job? charJob;
+                Attribute? attribute;
+                StartScreenText();
 
             CharName(out charName);
 
-            CharJob(out charJob);
+                CharJob(out charJob,out attribute);
 
-            Console.Clear();
-            Character character = new Character(charName, 1, 10, 10, 10, 100, 500, charJob, 10, 10, Attribute.풍, 0, 10);
-            character.Add();
-
-            // 게임 화면 초기화 및 테이블 설정
-            Renderer.Initialize("게임 제목");
-            // 테두리와 테이블 그리기
-            Renderer.DrawBorder("캐릭터 선택");
-            Renderer.Print(3, "플레이할 캐릭터를 선택해주세요!");
-            // 입력 영역 그리기
-            Renderer.DrawInputArea();
-            // 테이블에 데이터 추가
-            Table table = new Table();
-            table.AddType("index", 7, false);
-            table.AddType("name", 20, false);
-            table.AddType("class", 20, false);
-            table.AddType("hp", 15, false);
-            table.AddType("damage", 15, false);
-            table.AddType("defense", 15, false);
+                Console.Clear();
+                Character character = new Character(charName, 1, 10, 10, 10, 100, 500, charJob, 10, 10, attribute, 0,10);
+                character.Add();
+                Skill skill = new Skill();
+                skill.Add();
+                foreach (var var in GameData.I.GetSkill())
+                {
+                        if (character.Job == var.Job)
+                        {
+                                character.SetSkill(var);
+                        }
+                }
+                Console.WriteLine(character.SkillList[0].Name);
+/*
+                // 게임 화면 초기화 및 테이블 설정
+                Renderer.Initialize("게임 제목");
+                // 테두리와 테이블 그리기
+                Renderer.DrawBorder("캐릭터 선택");
+                Renderer.Print(3, "플레이할 캐릭터를 선택해주세요!");
+                // 입력 영역 그리기
+                Renderer.DrawInputArea();
+                // 테이블에 데이터 추가
+                Table table = new Table();
+                table.AddType("index", 7, false);
+                table.AddType("name", 20, false);
+                table.AddType("class", 20, false);
+                table.AddType("hp", 15, false);
+                table.AddType("damage", 15, false);
+                table.AddType("defense", 15, false);
 
             table.AddData("index", "1");
             table.AddData("name", $"{character.Name}");
@@ -851,27 +867,27 @@ class Program
                 Renderer.DrawTable(table, 5, currentSelection);
                 Renderer.DrawInputArea();
 
-                ConsoleKeyInfo key = Console.ReadKey();
-                if (key.Key == ConsoleKey.UpArrow && currentSelection > 0)
-                {
-                    currentSelection--;
+                        ConsoleKeyInfo key = Console.ReadKey();
+                        if (key.Key == ConsoleKey.UpArrow && currentSelection > 0)
+                        {
+                                currentSelection--;
+                        }
+                        else if (key.Key == ConsoleKey.DownArrow && currentSelection < table.GetDataCount() - 1)
+                        {
+                                currentSelection++;
+                        }
+                        else if (key.Key == ConsoleKey.Enter)
+                        {
+                                // 여기서 선택된 행에 대한 처리를 수행합니다.
+                                break;
+                        }
                 }
-                else if (key.Key == ConsoleKey.DownArrow && currentSelection < table.GetDataCount() - 1)
-                {
-                    currentSelection++;
-                }
-                else if (key.Key == ConsoleKey.Enter)
-                {
-                    // 여기서 선택된 행에 대한 처리를 수행합니다.
-                    break;
-                }
-            }
-            Console.Clear();
-            ConsoleHelper.SetCurrentFont("EBS주시경 Medium", 30);
-            Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
-            Console.SetBufferSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
-            Console.WindowWidth = Console.LargestWindowWidth;
-            Console.WindowHeight = Console.LargestWindowHeight;
+                Console.Clear();
+                ConsoleHelper.SetCurrentFont("EBS주시경 Medium", 30);
+                Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
+                Console.SetBufferSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
+                Console.WindowWidth = Console.LargestWindowWidth;
+                Console.WindowHeight = Console.LargestWindowHeight;*/
 
         }
         static int CheckValidInput(int min, int max)

@@ -60,7 +60,7 @@ public class Character : ICharacter
 
         // 직업과 속성
         public Job? Job { get; set; }
-        public Attribute Attribute { get; set; }
+        public Attribute? Attribute { get; set; }
 
         // 기본 생성자
         public Character()
@@ -68,7 +68,7 @@ public class Character : ICharacter
         }
 
     // 모든 속성을 초기화하는 생성자
-    public Character(string name, float level, float attack, float defense, float speed, float health, int gold, Job? job, float crt, float avoidance, Attribute attribute, float currentexp, float maxexp)
+    public Character(string name, float level, float attack, float defense, float speed, float health, int gold, Job? job, float crt, float avoidance, Attribute? attribute, float currentexp, float maxexp)
     {
         this.Name = name;
         this.Level = level;
