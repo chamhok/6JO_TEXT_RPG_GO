@@ -34,7 +34,6 @@ class BattleEvent
         this.monster = monsters[0];
 
         int turnSpeed = 10;
-        soundManager.PlayBackgroundMusicAsync("battle");
 
         // 턴제전투 (누구 하난 죽을때까지)
         do
@@ -66,7 +65,6 @@ class BattleEvent
             turnSpeed = turnSpeed == 0 ? 10 : turnSpeed;
         }
         while (player.IsDead == false && monster.IsDead == false);
-        soundManager.StopMusic();
 
         // 플레이어 사망시
         if (player.IsDead == true)

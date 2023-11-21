@@ -12,6 +12,7 @@ class ScreenManager
     Store Displaystore;
     bool skipcheck = false;
     SoundManager soundManager = new SoundManager();
+    SoundManager soundManager2 = new SoundManager();
 
     public ScreenManager(Character player, BattleEvent battleEvent,Store store)
     {
@@ -23,56 +24,57 @@ class ScreenManager
 
     public void ShowMainScreen()
     {
-        Console.Clear();
-        ChapterPicker(player.WinCount);
-        Console.ReadKey();
-        mainScreen.Display();
-        string input = Console.ReadLine();
-        switch (input)
+
+        do
         {
-            case "1":
-                Console.Clear();
-                playerInfo.Display();
-                Console.ReadKey();
-                ShowMainScreen();
-                break; //캐릭터 정보창 호출 ( 별도의 키지정없이 아무키 입력시 다시 메인 화면으로 이동되게 설정)
+            soundManager2.PlayBackgroundMusicAsync("BaseBgm");
+            Console.Clear();
+            ChapterPicker(player.WinCount);
+            Console.ReadKey();
+            mainScreen.Display();
+            string input = Console.ReadLine();
+            switch (input)
+            {
+                case "1":
+                    Console.Clear();
+                    playerInfo.Display();
+                    Console.ReadKey();
+                    break; //캐릭터 정보창 호출 ( 별도의 키지정없이 아무키 입력시 다시 메인 화면으로 이동되게 설정)
 
-            case "2":
-                CallInventory();
-                break;
+                case "2":
+                    CallInventory();
+                    break;
 
-            case "3":
-                Console.ReadKey();
-                soundManager.PlayBackgroundMusicAsync($"Battle{player.WinCount}");
-                Console.Clear();
-                skipcheck = false;
-                battleScreen.BattleStartSecen();
-                soundManager.StopMusic();
-                ShowMainScreen();
-                break;// 전투 화면으로 이동
-            case "4":
-                Console.Clear();
-                Displaystore.DisplayStore();
-                break;
+                case "3":
+                    soundManager2.StopMusic();
+                    Console.Clear();
+                    skipcheck = false;
+                    soundManager.PlayBackgroundMusicAsync($"battle{player.WinCount}");
+                    battleScreen.BattleStartSecen();
+                    soundManager.StopMusic();
+                    break;// 전투 화면으로 이동
+                case "4":
+                    Console.Clear();
+                    Displaystore.DisplayStore();
+                    break;
 
-            case "end":
-                soundManager.StopMusic();
-                Console.Clear();
-                skipcheck = false;
-                ChapterPicker(11);
-                break;
+                case "end":
+                    Console.Clear();
+                    skipcheck = false;
+                    ChapterPicker(11);
+                    break;
 
-            default:
-                Console.WriteLine("잘못된입력입니다.");
-                Console.Clear();
-                mainScreen.Display();
-                ShowMainScreen();
-                break; //1 과 2가 아닌 입력을 받을시 메인 화면으로 다시 로드
-        }
+                default:
+                    Console.WriteLine("잘못된입력입니다.");
+                    break; //1 과 2가 아닌 입력을 받을시 메인 화면으로 다시 로드
+
+            }
+        } while (true);
     }
 
-    void CallInventory()
+    public async Task CallInventory()
     {
+        bool outcheck = true;
         do
         {
             Console.Clear();
@@ -88,17 +90,16 @@ class ScreenManager
                     Console.WriteLine("장착관리모드 활성화");
                     break;
                 case '2':
-                    ShowMainScreen();
+                    outcheck = false;
                     break;
                 default:
                     Console.WriteLine("잘못된 입력입니다. 1과 2를 입력해주세요");
-                    CallInventory();
                     break;
 
             }
 
         }
-        while (true);
+        while (outcheck);
     }
 
     class MainScreen
@@ -253,6 +254,7 @@ class ScreenManager
 
     void ChapterPicker(string filename)
     {
+
         try
         {
 
@@ -305,6 +307,7 @@ class ScreenManager
         {
             Console.WriteLine($"파일을 읽어오는 중 오류 발생: {ex.Message}");
         }
+        soundManager.StopMusic();
     }
 
 

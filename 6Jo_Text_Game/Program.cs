@@ -505,7 +505,7 @@ class Program : UiManager
                 }
 
             }
-            soundManager.CallSound("driring", 100);
+            soundManager.CallSound("sound1", 100);
 
 
 
