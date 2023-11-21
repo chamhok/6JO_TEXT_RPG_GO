@@ -239,7 +239,13 @@ class ScreenManager
                 ChapterPicker("Chapter11");
                 break;
             case 11:
+                skipcheck = false;
                 ChapterPicker("Ending");
+                skipcheck = false;
+                Console.ReadKey();
+                Console.Clear();
+                soundManager2.StopMusic();
+                soundManager.StopMusic();
                 soundManager.PlayBackgroundMusicAsync("end");
                 ChapterPicker("Ending2");
                 Console.WriteLine("아무키를 누르면 종료됩니다!");
@@ -273,11 +279,12 @@ class ScreenManager
                 .Replace("그림자 마법사", $"\u001b[30m그림자 마법사\u001b[0m")
                 .Replace("무자비한 검사", $"\u001b[31;무자비한 검사\u001b[0m")
                 ;
-
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"[ {filename} ]");
-            Console.ResetColor();
-
+            if (filename != "Ending2")
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine($"[ {filename} ]");
+                Console.ResetColor();
+            }
             foreach (char c in getTxt)
             {
                 if (skipcheck == true)
