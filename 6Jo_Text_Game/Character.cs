@@ -40,14 +40,8 @@ public class Character : ICharacter
     // 캐릭터의 이름, 레벨, 공격력, 방어력, 속도, 사망 여부, 골드 등의 속성
     public string Name { get; set; }
     public float Level { get; set; }
-
-
-    /////////////////////////////////////////////////////////////////
     public float CurrentExp { get; set; }
     public float MaxExp { get; set; }
-    /////////////////////////////////////////////////////////////////
-
-
     public float Attack { get; set; }
     public float Defense { get; set; }
     public float Speed { get; set; }
@@ -72,12 +66,8 @@ public class Character : ICharacter
     {
         this.Name = name;
         this.Level = level;
-
-        /////////////////////////////////////////////////////////////////
         this.CurrentExp = currentexp;
         this.MaxExp = maxexp;
-        /////////////////////////////////////////////////////////////////
-
         this.Attack = attack;
         this.Defense = defense;
         this.Speed = speed;

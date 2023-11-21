@@ -256,14 +256,16 @@ class BattleEvent
     // 몬스터 처치 시, 경험치 획득
     public void AcquireExp(Monster monster)
     {
-        Console.WriteLine($"+{monster.Exp}경험치를 획득하였습니다.");
         player.CurrentExp += monster.Exp;
+        Console.WriteLine($"\n+{monster.Exp}경험치를 획득하였습니다.");
         if (player.CurrentExp >= player.MaxExp)
         {
             player.Level += 1;
-            player.CurrentExp = 0;
+            Console.WriteLine($"레벨업! Lv.{player.Level}");
+            player.CurrentExp -= player.MaxExp;
             player.MaxExp += (float)(player.MaxExp * 0.2);
         }
+        Console.WriteLine($"현재 경험치: {player.CurrentExp}, 다음 레벨업 까지 남은 경험치: {player.MaxExp - player.CurrentExp}");
     }
 
     // 몬스터의 공격과 공격 성공유무, 크리티컬 유무 판정( PlayerDmg 주석 참고) -------------------------------------------------------------
@@ -378,7 +380,7 @@ class BattleEvent
         Random random = new Random();
         rewardItems = rewardItems.OrderBy(x => random.Next()).ToList();
 
-        for (int i = 0; i < rewardItems.Count; i++) Console.WriteLine($"{i + 1}. {rewardItems[i].Name}");
+        for (int i = 0; i < rewardItems.Count; i++) Console.WriteLine($"{i + 1}. {questionMark}");
 
         Console.WriteLine("\n보상 아이템 번호를 입력하세요.");
         while (true)
