@@ -90,22 +90,16 @@ class BattleEvent
 
     public void Message()
     {
-        Console.WriteLine($"이름 : {player.Name} ");
-        Console.WriteLine("------------------------------------------------------------\n");
-        foreach (var x in monsters)
-        {
-            Console.WriteLine(x.ToString());
-            Console.WriteLine("------------------------------------------------------------\n");
-        }
+        uiManager.MakeTab(0, 5, 120, 20);
+        uiManager.PrintHp();
+        uiManager.ShowMonsterCard(monsters);
     }
 
 
 
     public void PlayerTurn() // 플레이어의 행동을 입력받는 메소드 -------------------------------------------------------------------------------------------------------
     {
-        //Console.Clear();
-        //Console.WriteLine("남은 목숨" + life);
-        Console.WriteLine("플레이어의 남은 생명력 : " + player.Health);
+        Console.SetCursorPosition(0, 30);
         Console.WriteLine("다음 행동을 입력해 주세요!\n");
         Console.WriteLine("1.공격 2.방어 3.스킬");
         Console.WriteLine("------------------------------------------------\n");
@@ -257,25 +251,32 @@ class BattleEvent
     public void MonsterResult() // 단일 몬스터 처리
     {
         monsters[0].TakeDamage((float)PlayerDmg());
-        if (monsters[0].Health <= 0)
+        monsters[0].SetChangedCallback(health =>
         {
-            monsters[0].IsDead = true;
-            Console.WriteLine($"{monsters[0].Name}이(가) 사망했습니다.");
-            AcquireExp(monsters[0]);
-            Console.ReadKey();
-        }
+            if (monsters[0].Health <= 0)
+            {
+                monsters[0].IsDead = true;
+                Console.WriteLine($"{monsters[0].Name}이(가) 사망했습니다.");
+                AcquireExp(monsters[0]);
+            }
+        });
+        Console.ReadKey();
     }
 
     // 플레이어의 피격시 데미지 계산 및 사망처리 -------------------------------------------------------------------------------------------
     public void PlayerResult()
     {
+        
         player.TakeDamage((float)MonsterDmg());
-        if (player.Health <= 0)
+        player.SetChangedCallback(health =>
         {
-            player.IsDead = true;
-            Console.WriteLine($"{player.Name}가 사망했습니다.");
-            Console.ReadKey();
-        }
+            if (player.Health <= 0)
+            {
+                player.IsDead = true;
+                Console.WriteLine($"{player.Name}가 사망했습니다.");
+            }
+        });
+        Console.ReadKey();
     }
 
     // 몬스터 처치 시, 경험치 획득
@@ -459,7 +460,6 @@ class BattleEvent
                 for (int i = 0; i < rewardItems.Count; i++)
                 {
                     Console.WriteLine($"{i + 1}. {rewardItems[i].Name}");
-                    soundManager.CallSound("sound1", 1);
                     Thread.Sleep(500);
                 }
                 IItem selectedReward = rewardItems[selectedNumber - 1];
