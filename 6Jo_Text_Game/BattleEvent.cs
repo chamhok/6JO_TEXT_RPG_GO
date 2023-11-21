@@ -45,7 +45,7 @@ class BattleEvent
 
             if (monsters[0].Species == Species.기믹)
             {
-                monsters[0].TakeDamage(5.12f);
+                player.IsDead = monsters[0].TakeDamage(0);
                 break;
             }
 
@@ -109,11 +109,16 @@ class BattleEvent
         Console.WriteLine("------------------------------------------------\n");
 
 
-
-        String input = Console.ReadLine();
+        int input;
+        while (true)
+        {
+            int.TryParse(Console.ReadLine(), out input);
+            if (input > 0 && input < 4) break;
+            else Console.WriteLine("다시 입력헤주세요");
+        }
         switch (input)
         {
-            case "1":
+            case 1:
                 if (monsters.Count != 1)
                 {
                     Console.WriteLine("공격 대상을 골라주세요");
@@ -139,7 +144,7 @@ class BattleEvent
                 }
                 break;
 
-            case "2":
+            case 2:
                 if (skillPguard == 1)
                 {
                     Console.WriteLine("방어자세를 취합니다.");
@@ -152,7 +157,7 @@ class BattleEvent
                 Console.ReadKey();
                 break;
 
-            case "3":
+            case 3:
                 if (skillPsmash == 1)
                 {
                     soundManager.CallSound("charge", 100);

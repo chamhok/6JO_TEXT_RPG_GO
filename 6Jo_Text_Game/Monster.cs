@@ -79,7 +79,7 @@ public class Monster : ICharacter
 
         switch (stage)
         {
-        //Stage 1----------------------------
+        // Stage 1----------------------------
         case 0: // 경비병 * 3
             monsters.Add(new Guard());
             monsters.Add(new Guard());
@@ -144,9 +144,10 @@ public class Monster : ICharacter
 
 
     // 데미지를 입는 메서드
-    public virtual void TakeDamage(float damage)
+    public virtual bool TakeDamage(float damage)
     {
         Health -= damage;
+        return false;
     }
 
     // 체력 변경 콜백 설정 메서드
@@ -363,62 +364,111 @@ public class Assassin : Monster
         DOWN
     }
 
-    Point player = new Point(10, 20, '@');
+    SoundManager soundManager = new SoundManager();
+    Point player = new Point(10, 20, '▲');
     List<Point> enemy = new List<Point>();
+    ConsoleKeyInfo key;
+    string[] hp = new string[2] {"♥", "♥" };
+    int hpCount = 2;
+    int score = 0;
 
     Random rand = new Random();
 
 
-    public override void TakeDamage(float damage)
+    public override bool TakeDamage(float damage)
     {
-        int score = 0;
-
         Console.Clear();
         DrawWall();
         player.Draw();
 
         enemy.Add(EnemySpawn());
 
+        while (true)
+        {
+            Console.SetCursorPosition(5, 5);
+            Console.Write("자객을 피하라");
+            Console.SetCursorPosition(2, 7);
+            Console.Write("x를 눌러 시작하세요");
+            if (Console.ReadKey().KeyChar == 'x') break; ;
+        }
+        Console.Clear();
+        DrawWall();
+        player.Draw();
+        DrawInfo();
 
         while (true)
         {
+            // 플레이어 움직임
+            if (Console.KeyAvailable)
+            {
+                key = Console.ReadKey(true);
+            }
+            switch (key.Key)
+            {
+                case ConsoleKey.LeftArrow:
+                    player.direction = Direction.LEFT;
+                    PlayerMove(ref player);
+                    break;
+                case ConsoleKey.RightArrow:
+                    player.direction = Direction.RIGHT;
+                    PlayerMove(ref player);
+                    break;
+            }
+            
+            
+
             // 적 움직임
-            if (enemy.Count == 0 || rand.Next(0, 5) % 5 == 0) enemy.Add(EnemySpawn());
+            if (enemy.Count == 0 || rand.Next(0, 3) % 3 == 0) enemy.Add(EnemySpawn());
 
             for (int i = 0; i < enemy.Count; i++)
             {
                 enemy[i].Clear();
                 enemy[i].y++;
-                if (enemy[i].y > 20)
+                if (enemy[i].y == 20 && (enemy[i].x == player.x))
+                {
+                    hp[--hpCount] = "♡";
+                    enemy.Remove(enemy[i]);
+                    soundManager.CallSound("sound2", 300);
+                    Thread.Sleep(500);
+                }
+                else if (enemy[i].y > 20)
                 {
                     score++;
                     enemy.Remove(enemy[i]);
                 }
-                enemy[i].Draw();
+                else enemy[i].Draw();
             }
 
-            // 플레이어 움직임
-            if (Console.KeyAvailable)
-            {
-                ConsoleKeyInfo key = Console.ReadKey();
-                if (key.Key == ConsoleKey.LeftArrow)
-                {
-                    player.direction = Direction.LEFT;
-                }
-                else if (key.Key == ConsoleKey.RightArrow)
-                {
-                    player.direction = Direction.RIGHT;
-                }
-                PlayerMove(ref player);
-            }
 
-            if (score == 10) break;
-            Thread.Sleep(100);
+            DrawInfo();
+            if (score == 30 || hpCount == 0) break;
+            Thread.Sleep(50);
         }
 
-        Console.SetCursorPosition(0, 22);
-        Console.WriteLine("end");
-        Console.ReadKey();
+
+        if(hpCount == 0)
+        {
+            soundManager.CallSound("atk2", 1000);
+            Console.SetCursorPosition(0, 22);
+            Console.WriteLine("Fail");
+            Console.WriteLine("Enter키를 눌러주세요");
+            while (true) {
+                if (Console.ReadKey().Key == ConsoleKey.Enter) break;
+            }
+            return true;
+        }
+        else
+        {
+            soundManager.CallSound("driring", 1000);
+            Console.SetCursorPosition(0, 22);
+            Console.WriteLine("Clear");
+            Console.WriteLine("Enter키를 눌러주세요");
+            while (true)
+            {
+                if (Console.ReadKey().Key == ConsoleKey.Enter) break;
+            }
+            return false;
+        }
         //Health -= damage;
     }
 
@@ -443,6 +493,17 @@ public class Assassin : Monster
         }
     } // 벽 그리기
 
+    void DrawInfo()
+    {
+        Console.SetCursorPosition(30, 7);
+        for(int i=0; i<2; i++)
+        {
+            Console.Write(hp[i] + " ");
+        }
+        Console.SetCursorPosition (30, 9);
+        Console.WriteLine($"회피 한 자객 수 : {score} / 30");
+    }
+
     class Point
     {
         public int x { get; set; }
@@ -460,11 +521,14 @@ public class Assassin : Monster
         // 점을 그리는 메서드
         public void Draw()
         {
+            Console.CursorVisible = false;
             Console.SetCursorPosition(x, y);
             Console.Write(sym);
+
         }
-        public void Draw(char sym)
+        public void Draw(string sym)
         {
+            Console.CursorVisible = false;
             Console.SetCursorPosition(x, y);
             Console.Write(sym);
         }
@@ -472,7 +536,7 @@ public class Assassin : Monster
         // 점을 지우는 메서드
         public void Clear()
         {
-            Draw(' ');
+            Draw("  ");
         }
 
         // 두 점이 같은지 비교하는 메서드
@@ -507,7 +571,7 @@ public class Assassin : Monster
     {
         int x = rand.Next(1, 20);
 
-        Point p = new Point(x, 2, '$');
+        Point p = new Point(x, 2, '★');
         return p;
     } // 적 스폰 메서드
 }
