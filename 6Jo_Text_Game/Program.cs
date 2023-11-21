@@ -233,7 +233,7 @@ class Program
             Console.ReadKey();
             screenManager.ShowMainScreen();*/
         SoundManager soundManager = new SoundManager();
-        soundManager.PlayBackgroundMusicAsync("Raindrop", 100);
+        soundManager.PlayBackgroundMusicAsync("Raindrop");
         StartScreen startScreen = new StartScreen();
         soundManager.StopMusic();
         Character character = new Character("ㅇㅇ", 100, 100, 100, 10, 100, 200, Job.가디언, 10, 10, Attribute.풍, 0, 100);

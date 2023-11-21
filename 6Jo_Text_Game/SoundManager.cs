@@ -33,7 +33,7 @@ class SoundManager
             using (var audioFile = new AudioFileReader($"../../../Sound/{filename}.mp3"))
             {
                 outputDevice = new WaveOutEvent();
-                outputDevice.Volume = 50.0f;
+                outputDevice.Volume = 0.5f;
 
                 outputDevice.Init(audioFile);
                 outputDevice.Play();
