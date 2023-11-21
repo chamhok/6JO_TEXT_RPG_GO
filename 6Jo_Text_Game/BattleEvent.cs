@@ -5,7 +5,7 @@ using System.Linq;
 
 class BattleEvent
 {
-    Monster monster = new Monster();
+    Monster monster;
     Character player;
     List<Monster> monsters;
 
@@ -28,23 +28,17 @@ class BattleEvent
 
     public void Battles()  // 배틀 시작
     {
-        if(monsters != null) this.monsters.Clear();
-        this.monsters = monster.StageMonster(player.WinCount);
+        if (monsters != null) this.monsters.Clear();
+        this.monsters = GameData.I.GetMonsters(player);
+        this.monster = monsters[0];
 
-        int i = 10;
+        int turnSpeed = 10;
         
 
         // 턴제전투 (누구 하난 죽을때까지)
         do
         {
             Console.Clear();
-
-            //Console.WriteLine("==============================================");
-            //foreach(var x in GameData.I.GetMonsters())
-            //{
-            //    Console.WriteLine(x.Name);
-            //}
-            //Console.WriteLine("==============================================");
 
             Message();
 
@@ -54,21 +48,21 @@ class BattleEvent
                 break;
             }
 
-            if (player.Speed == i) PlayerTurn();
+            if (player.Speed == turnSpeed) PlayerTurn();
             else
             {
-                foreach(var x in monsters)
+                for(int i=0; i < monsters.Count; i++)
                 {
-                    if (x.Speed == i)
+                    if (monsters[i].Speed == turnSpeed)
                     {
-                        monster = x;
+                        monster = monsters[i];
                         MonsterTurn();
                     }
                 }
             }
 
-            i--;
-            i = i == 0 ? 10 : i;
+            turnSpeed--;
+            turnSpeed = turnSpeed == 0 ? 10 : turnSpeed;
         }
         while (player.IsDead == false && monster.IsDead == false);
 
@@ -107,7 +101,7 @@ class BattleEvent
     public void PlayerTurn() // 플레이어의 행동을 입력받는 메소드 -------------------------------------------------------------------------------------------------------
     {
         //Console.Clear();
-        Console.WriteLine("남은 목숨" + life);
+        //Console.WriteLine("남은 목숨" + life);
         Console.WriteLine("플레이어의 남은 생명력 : " + player.Health);
         Console.WriteLine("다음 행동을 입력해 주세요!\n");
         Console.WriteLine("1.공격 2.방어 3.일격준비");
@@ -185,8 +179,12 @@ class BattleEvent
         switch (random.Next(1, 4))
         {
             case 1:
-                Console.WriteLine($"{monster.Name}이(가) 공격합니다!");
-                PlayerResult();
+                if (!monster.isAction())
+                {
+                    Console.WriteLine($"{monster.Name}이(가) 공격합니다!");
+                    PlayerResult();
+                }
+                
                 break;
             case 2:
                 if (skillMguard == 1)
@@ -256,8 +254,8 @@ class BattleEvent
     // 몬스터 처치 시, 경험치 획득
     public void AcquireExp(Monster monster)
     {
-        player.CurrentExp += monster.Exp;
         Console.WriteLine($"\n+{monster.Exp}경험치를 획득하였습니다.");
+        player.CurrentExp += monster.Exp;
         if (player.CurrentExp >= player.MaxExp)
         {
             player.Level += 1;

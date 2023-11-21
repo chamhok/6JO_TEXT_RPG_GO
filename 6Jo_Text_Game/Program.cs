@@ -5,6 +5,7 @@ using System.Linq;
 using static System.Net.Mime.MediaTypeNames;
 using System.Runtime.CompilerServices;
 using static ConsoleHelper;
+using System.Numerics;
 
 
 
@@ -14,6 +15,7 @@ public class GameData
     private static GameData Instance;
 
     // 몬스터 및 캐릭터를 저장하는 데이터 구조
+    private Monster monster;
     private List<Monster> monsters;
     private List<Character> characters;
     private List<IItem> items;
@@ -22,6 +24,7 @@ public class GameData
     // 인스턴스 생성을 위한 private 생성자
     private GameData()
     {
+        monster = new Monster();
         monsters = new List<Monster>();
         characters = new List<Character>();
         items = new List<IItem>();
@@ -54,6 +57,12 @@ public class GameData
         monsters.RemoveAll(x => x.Name == monster.Name);
     }
 
+    public List<Monster> GetMonsters(Character player)
+    {
+        monsters.Clear();
+        monster.StageMonster(player.WinCount);
+        return monsters;
+    }
     public List<Monster> GetMonsters()
     {
         return monsters;
@@ -226,7 +235,7 @@ class Program
 
         StartScreen startScreen = new StartScreen();
 
-        new Monster();
+        
         Character character = new Character("ㅇㅇ", 100, 100, 100, 10, 100, 200, Job.가디언, 10, 10, Attribute.풍, 0, 100);
         BattleEvent battleEvent = new BattleEvent(character);
         ScreenManager screenManager = new ScreenManager(character, battleEvent);
@@ -489,7 +498,7 @@ public class StartScreen
         CharJob(out charJob);
 
                 Console.Clear();
-                Character character = new Character(charName, 1, 10, 10, 10, 100, 500, charJob, 10, 10, Attribute.풍,0,115);
+                Character character = new Character(charName, 1, 10, 10, 10, 100, 500, charJob, 10, 10, Attribute.풍, 0, 100);
                 character.Add();
 
                 // 게임 화면 초기화 및 테이블 설정

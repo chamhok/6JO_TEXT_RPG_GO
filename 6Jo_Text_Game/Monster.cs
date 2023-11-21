@@ -79,26 +79,26 @@ public class Monster : ICharacter
         switch (stage)
         {
             // Stage 1 -------------------------
-            case 0: // 경비병 * 3
-                monsters.Add(new Guard());
-                monsters.Add(new Guard());
-                monsters.Add(new Guard());
-                break;
+            //case 0: // 경비병 * 3
+            //    monsters.Add(new Guard());
+            //    monsters.Add(new Guard());
+            //    monsters.Add(new Guard());
+            //    break;
 
-            case 1: // 기사 * 3
-                monsters.Add(new Knight());
-                monsters.Add(new Knight());
-                monsters.Add(new Knight());
-                break;
+            //case 1: // 기사 * 3
+            //    monsters.Add(new Knight());
+            //    monsters.Add(new Knight());
+            //    monsters.Add(new Knight());
+            //    break;
 
-            case 2: // 기사*2 + 기사단장
-                monsters.Add(new Knight());
-                monsters.Add(new Knight());
-                monsters.Add(new Commander());
-                break;
+            //case 2: // 기사*2 + 기사단장
+            //    monsters.Add(new Knight());
+            //    monsters.Add(new Knight());
+            //    monsters.Add(new Commander());
+            //    break;
 
             // Stage 2 --------------------------
-            case 3: // 마녀
+            case 0: // 마녀
                 monsters.Add(new Witch());
                 break;
 
@@ -139,7 +139,7 @@ public class Monster : ICharacter
         }
 
         return monsters;
-    }
+    } 
 
 
     // 데미지를 입는 메서드
@@ -164,6 +164,12 @@ public class Monster : ICharacter
     public void Add()
     {
         GameData.I.AddMonster(this);
+    }
+
+    public virtual bool isAction()
+    {
+        // 각 몬스터 별 특수한 공격일경우
+        return false;
     }
 
     // 객체를 문자열로 표현하는 메서드
@@ -226,6 +232,28 @@ public class Witch : Monster
     {
         this.Add();
     }
+
+    public override bool isAction()
+    {
+        if (GameData.I.GetMonsters().Count() < 3)
+        {
+            Console.WriteLine("마녀가 서브드래곤을 소환했습니다.");
+            new Chick();
+        }
+        else
+        {
+            Console.WriteLine("서브드래곤 소환에 실패했습니다.");
+        }
+        Console.ReadKey();
+        return true;
+    }
+}
+
+public class Chick : Monster
+{
+    public Chick()
+        : base("서브 드래곤", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수, 20)
+    { this.Add(); }
 }
 
 // stage 2 - 고블린
