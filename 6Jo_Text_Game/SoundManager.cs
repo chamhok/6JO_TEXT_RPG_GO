@@ -63,11 +63,11 @@ class SoundManager
                 outputDevice.Init(audioFile);
                 outputDevice.Play();
 
-                // 여기서 원하는 조건에 따라 재생을 멈출 수 있습니다.
-                // 아래는 일정 시간 동안 재생하는 예시입니다.
-                Thread.Sleep(time);
+                while (outputDevice.PlaybackState == PlaybackState.Playing)
+                {
+                    Thread.Sleep(time);
+                }
 
-                // 재생이 끝나면 정리
                 outputDevice.Dispose();
             }
         }
