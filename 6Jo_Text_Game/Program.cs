@@ -489,7 +489,7 @@ public class StartScreen
         CharJob(out charJob);
 
                 Console.Clear();
-                Character character = new Character(charName, 1, 10, 10, 10, 100, 500, charJob, 10, 10, Attribute.풍);
+                Character character = new Character(charName, 1, 10, 10, 10, 100, 500, charJob, 10, 10, Attribute.풍,0,115);
                 character.Add();
 
                 // 게임 화면 초기화 및 테이블 설정
