@@ -163,7 +163,7 @@ class ScreenManager
             foreach (char c in getTxt)
             {
                 Console.Write(c);
-                Thread.Sleep(100); // 출력 간격 조절 (밀리초 단위)
+                Thread.Sleep(50); // 출력 간격 조절 (밀리초 단위)
                 if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Enter)
                 {
                     Console.Clear() ;
@@ -261,7 +261,7 @@ class ScreenManager
                     break;
                 }
                 Console.Write(c);
-                Thread.Sleep(100); // 출력 간격 조절 (밀리초 단위)
+                Thread.Sleep(50); // 출력 간격 조절 (밀리초 단위)
                 if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Enter)
                 {
                     Console.Clear();
