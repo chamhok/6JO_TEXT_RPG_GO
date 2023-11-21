@@ -8,6 +8,7 @@ class BattleEvent
     Monster monster = new Monster();
     Character player;
     List<Monster> monsters;
+    SoundManager soundManager = new SoundManager();
 
     int skillPguard = 1;
     int skillPsmash = 1;
@@ -134,11 +135,13 @@ class BattleEvent
                         if (sel > 0 && sel <= monsters.Count) break;
                         else Console.WriteLine("다시 입력헤주세요");
                     }
+                    soundManager.CallSound("atk", 100);
                     Console.WriteLine("공격하였습니다!");
                     MonsterResult(monsters[sel-1]);
                 }
                 else
                 {
+                    soundManager.CallSound("atk", 100);
                     Console.WriteLine("공격하였습니다!");
                     MonsterResult();
                 }
@@ -316,6 +319,7 @@ class BattleEvent
         {
             if (AvoidanceToss() <= monster.Avoidance) // 회피 성공 유무 체크
             {
+                soundManager.CallSound("avod", 100);
                 Console.WriteLine($"{monster.Name}이(가) 회피하였습니다!");
                 Console.ReadKey();
                 return 0;

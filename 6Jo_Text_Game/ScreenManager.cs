@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using System.IO;
+using NAudio.Wave;
 
 class ScreenManager
 {
@@ -9,6 +10,7 @@ class ScreenManager
     MainScreen mainScreen = new MainScreen();
     BattleScreen battleScreen;
     bool skipcheck = false;
+    SoundManager soundManager = new SoundManager();
 
     public ScreenManager(Character player, BattleEvent battleEvent)
     {
@@ -42,7 +44,6 @@ class ScreenManager
                 skipcheck = false;
                 battleScreen.BattleStartSecen();
                 ShowMainScreen();
-
                 break;// 전투 화면으로 이동
 
             default:
@@ -163,9 +164,10 @@ class ScreenManager
             foreach (char c in getTxt)
             {
                 Console.Write(c);
-                Thread.Sleep(50); // 출력 간격 조절 (밀리초 단위)
+                Thread.Sleep(100); // 출력 간격 조절 (밀리초 단위)
                 if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Enter)
                 {
+                    soundManager.CallSound("sound1", 100);
                     Console.Clear() ;
                     Console.WriteLine(getTxt);
                     Console.ReadKey();
@@ -187,7 +189,7 @@ class ScreenManager
         switch (player.WinCount)
         {
             case 0:
-                ChapterPicker("Chapter1"); ;
+                ChapterPicker("Chapter1");
                 break;
             case 1:
                 ChapterPicker("Chapter2");
@@ -220,6 +222,7 @@ class ScreenManager
                 ChapterPicker("Ending");
                 break;
             case 11:
+                soundManager.CallSound("end",100);
                 ChapterPicker("Ending");
                 break;
             default:
@@ -249,10 +252,10 @@ class ScreenManager
                 .Replace("무자비한 검사", $"\u001b[31;무자비한 검사\u001b[0m")
                 ;
 
-
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"[ {filename} ]");
             Console.ResetColor();
+
             foreach (char c in getTxt)
             {
                 if (skipcheck == true)
@@ -264,6 +267,7 @@ class ScreenManager
                 Thread.Sleep(50); // 출력 간격 조절 (밀리초 단위)
                 if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Enter)
                 {
+                    soundManager.CallSound("sound1",100);
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine($"[ {filename} ]");
@@ -282,6 +286,7 @@ class ScreenManager
             Console.WriteLine($"파일을 읽어오는 중 오류 발생: {ex.Message}");
         }
     }
+
 
 
 

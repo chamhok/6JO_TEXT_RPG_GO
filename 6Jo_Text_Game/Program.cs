@@ -239,6 +239,7 @@ class Program
 }
 public class StartScreen
 {
+        SoundManager soundManager = new SoundManager();
         int y = 1;
         FontInfo originalFont = ConsoleHelper.GetCurrentFont();
 
@@ -251,6 +252,7 @@ public class StartScreen
                 */
                 string directory = "../../../StartScreenText.txt";
                 string directory2 = "../../../StartScreenText(원본).txt";
+                soundManager.CallSound("driring",100);
                 try
                 {
                         ConsoleHelper.SetCurrentFont("EBS주시경 Medium", 100);
@@ -276,7 +278,8 @@ public class StartScreen
                                 ConsoleKeyInfo key = Console.ReadKey();
                                 if (key.KeyChar == 'x' || key.KeyChar == 'ㅌ')
                                 {
-                                        break;
+                                soundManager.CallSound("sound1", 100);
+                                 break;
                                 }
                         }
                         Console.Clear();
@@ -309,7 +312,8 @@ public class StartScreen
                         ConsoleKeyInfo key = Console.ReadKey();
                         if (key.KeyChar == 'x' || key.KeyChar == 'ㅌ')
                         {
-                                break;
+                        soundManager.CallSound("sound1", 100);
+                        break;
                         }
                 }
 
@@ -334,7 +338,8 @@ public class StartScreen
                         charName = Console.ReadLine();
                         if (!(charName == ""))
                         {
-                                break;
+                        soundManager.CallSound("sound1", 100);
+                        break;
                         }
                 }
         }
@@ -489,7 +494,7 @@ public class StartScreen
         CharJob(out charJob);
 
                 Console.Clear();
-                Character character = new Character(charName, 1, 10, 10, 10, 100, 500, charJob, 10, 10, Attribute.풍);
+                Character character = new Character(charName, 1, 10, 10, 10, 100, 500, charJob, 10, 10, Attribute.풍,0,10);
                 character.Add();
 
                 // 게임 화면 초기화 및 테이블 설정
