@@ -459,6 +459,7 @@ class BattleEvent
                 for (int i = 0; i < rewardItems.Count; i++)
                 {
                     Console.WriteLine($"{i + 1}. {rewardItems[i].Name}");
+                    soundManager.CallSound("sound1", 1);
                     Thread.Sleep(500);
                 }
                 IItem selectedReward = rewardItems[selectedNumber - 1];

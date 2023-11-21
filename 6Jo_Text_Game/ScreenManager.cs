@@ -27,18 +27,20 @@ class ScreenManager
 
         do
         {
-            soundManager2.PlayBackgroundMusicAsync("BaseBgm");
             Console.Clear();
+            soundManager2.PlayBackgroundMusicAsync("BaseBgm");
             ChapterPicker(player.WinCount);
             Console.ReadKey();
             mainScreen.Display();
             string input = Console.ReadLine();
+            soundManager.CallSound("sound1",1);
             switch (input)
             {
                 case "1":
                     Console.Clear();
                     playerInfo.Display();
                     Console.ReadKey();
+                    soundManager.CallSound("sound1",1);
                     break; //캐릭터 정보창 호출 ( 별도의 키지정없이 아무키 입력시 다시 메인 화면으로 이동되게 설정)
 
                 case "2":
@@ -75,15 +77,16 @@ class ScreenManager
     public async Task CallInventory()
     {
         bool outcheck = true;
+        Console.Clear();
         do
         {
-            Console.Clear();
             player.DisplayInventory();
             Console.WriteLine("1, 장착관리");
             Console.WriteLine("2, 돌아가기");
             Console.Write(">>");
             int input = Console.Read();
             char check = (char)input;
+            soundManager.CallSound("sound1", 1);
             switch (check)
             {
                 case '1':
@@ -94,6 +97,8 @@ class ScreenManager
                     break;
                 default:
                     Console.WriteLine("잘못된 입력입니다. 1과 2를 입력해주세요");
+                    Console.ReadKey();
+                    Console.Clear();
                     break;
 
             }
@@ -184,7 +189,7 @@ class ScreenManager
                 Thread.Sleep(100); // 출력 간격 조절 (밀리초 단위)
                 if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Enter)
                 {
-                    soundManager.CallSound("sound1", 50);
+                    soundManager.CallSound("sound1", 1);
                     Console.Clear() ;
                     Console.WriteLine(getTxt);
                     Console.ReadKey();
@@ -296,7 +301,7 @@ class ScreenManager
                 Thread.Sleep(100); // 출력 간격 조절 (밀리초 단위)
                 if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Enter)
                 {
-                    soundManager.CallSound("sound1",50);
+                    soundManager.CallSound("sound1",1);
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine($"[ {filename} ]");

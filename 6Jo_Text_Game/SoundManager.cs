@@ -65,7 +65,15 @@ class SoundManager
 
                 while (outputDevice.PlaybackState == PlaybackState.Playing)
                 {
-                    Thread.Sleep(time);
+                    Thread.Sleep(1);
+                    if (Console.KeyAvailable)
+                    {
+                        // 키 입력이 감지되면 사운드 재생 중지
+                        outputDevice.Stop();
+                        outputDevice.Dispose();
+                        Console.ReadKey();
+                        break;
+                    }
                 }
 
                 outputDevice.Dispose();

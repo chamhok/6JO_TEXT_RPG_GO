@@ -307,7 +307,7 @@ class Program : UiManager
                     ConsoleKeyInfo key = Console.ReadKey();
                     if (key.KeyChar == 'x' || key.KeyChar == 'ㅌ')
                     {
-                        soundManager.CallSound("sound1", 100);
+                        soundManager.CallSound("sound1", 1);
                         break;
                     }
                 }
@@ -341,7 +341,7 @@ class Program : UiManager
                 ConsoleKeyInfo key = Console.ReadKey();
                 if (key.KeyChar == 'x' || key.KeyChar == 'ㅌ')
                 {
-                    soundManager.CallSound("sound1", 100);
+                    soundManager.CallSound("sound1", 1);
                     break;
                 }
             }
@@ -367,7 +367,7 @@ class Program : UiManager
                 charName = Console.ReadLine();
                 if (!(charName == ""))
                 {
-                    soundManager.CallSound("sound1", 100);
+                    soundManager.CallSound("sound1", 1);
                     break;
                 }
             }
@@ -410,7 +410,7 @@ class Program : UiManager
                 ConsoleKeyInfo key = Console.ReadKey();
                 if (key.KeyChar == 'x' || key.KeyChar == 'ㅌ')
                 {
-                    soundManager.CallSound("sound1", 100);
+                    soundManager.CallSound("sound1", 1);
                     break;
                 }
             }
@@ -505,7 +505,7 @@ class Program : UiManager
                 }
 
             }
-            soundManager.CallSound("sound1", 100);
+            soundManager.CallSound("sound1", 1);
 
 
 

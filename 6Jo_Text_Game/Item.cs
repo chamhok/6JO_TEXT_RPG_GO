@@ -2,6 +2,7 @@
 
 public class Item : IItem
 {
+    SoundManager soundManager = new SoundManager();
     //아이템 속성 커밋테스트
     public string Name { get; set; }
     public float Akt { get; set; }
@@ -73,6 +74,7 @@ public class Item : IItem
         if (this.Name.Contains("Postion"))
         {
             Message = "을(를) 먹었습니다.";
+            soundManager.CallSound("sound2", 1);
             Console.WriteLine($"\n{character.Name}이(가) {this.Name}{Message}");
         }
         else
@@ -86,6 +88,7 @@ public class Item : IItem
             else
             {
                 Message = "을(를) 획득하였습니다.";
+                soundManager.CallSound("sound2", 1);
                 Console.WriteLine($"\n{character.Name}이(가) {this.Name}{Message}");
                 character.Inventory.Add(this); //인벤토리에 아이템 추가
             }    
