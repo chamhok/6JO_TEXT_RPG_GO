@@ -5,6 +5,7 @@ using System.Linq;
 using static System.Net.Mime.MediaTypeNames;
 using System.Runtime.CompilerServices;
 using static ConsoleHelper;
+using System.Numerics;
 using System.Collections;
 
 
@@ -14,19 +15,21 @@ public class GameData
 {
         private static GameData Instance;
 
-        // 몬스터 및 캐릭터를 저장하는 데이터 구조
-        private List<Monster> monsters;
-        private List<Character> characters;
-        private List<IItem> items;
-        private List<Skill> skills;
+    // 몬스터 및 캐릭터를 저장하는 데이터 구조
+    private Monster monster;
+    private List<Monster> monsters;
+    private List<Character> characters;
+    private List<IItem> items;
+    private List<Skill> skills;
 
-        // 인스턴스 생성을 위한 private 생성자
-        private GameData()
-        {
-                monsters = new List<Monster>();
-                characters = new List<Character>();
-                items = new List<IItem>();
-                skills = new List<Skill>();
+    // 인스턴스 생성을 위한 private 생성자
+    private GameData()
+    {
+        monster = new Monster();
+        monsters = new List<Monster>();
+        characters = new List<Character>();
+        items = new List<IItem>();
+        skills = new List<Skill>();
 
                 InitializeData(); // 필요시 데이터 초기화 가능
         }
@@ -55,10 +58,16 @@ public class GameData
                 monsters.RemoveAll(x => x.Name == monster.Name);
         }
 
-        public List<Monster> GetMonsters()
-        {
-                return monsters;
-        }
+    public List<Monster> GetMonsters(Character player)
+    {
+        monsters.Clear();
+        monster.StageMonster(player.WinCount);
+        return monsters;
+    }
+    public List<Monster> GetMonsters()
+    {
+        return monsters;
+    }
 
         public void AddCharacter(Character character)
         {
@@ -503,36 +512,38 @@ class Program
                 //ShowMonsterCard();
               
 
-                /*  // 캐릭터 생성 및 게임 데이터에 추가 후 목록 출력
-                    Character character = new Character("ㅇㅇ", 100, 100, 100, 100, 100, 200, Job.가디언,10,10, Attribute.풍);
-                    character.Add(new Character("ㅇㅇ", 100, 100, 100, 100, 100, 200, Job.가디언, 10, 10, Attribute.풍));
-                    Monster monster = new Monster("Test", 1, 1, 1, 1, 1, 1, Species.고블린,1,1, Attribute.풍);
-                    monster.Add(new Monster("Test", 1, 1, 1, 1, 1, 1, Species.고블린, 1, 1, Attribute.풍));
-                    Monster monsterb = new Monster("Test2", 1000, 1000, 1000, 1000, 1000, 1000, Species.고블린,1,1, Attribute.풍);
-                    monster.Add(new Monster("Test2", 1000, 1000, 1000, 1000, 1000, 1000, Species.고블린, 1, 1, Attribute.풍));
-                    BattleEvent battleEvent = new BattleEvent(character);
-                    ScreenManager screenManager = new ScreenManager(character, battleEvent);
-                    character.Add();
-                    GameData.I.GetCharacters().Select(x => x.ToString()).ToList().ForEach(Console.WriteLine);
-                    screenManager.Prologue();
-                    Console.ReadKey();
-                    screenManager.ShowMainScreen();*/
-
-                /*   StartScreen startScreen = new StartScreen();
-
-           new Monster();
-           Character character = new Character("ㅇㅇ", 100, 100, 100, 10, 100, 200, Job.가디언, 10, 10, Attribute.풍, 0, 100);
-           BattleEvent battleEvent = new BattleEvent(character);
-           ScreenManager screenManager = new ScreenManager(character, battleEvent);
-           character.Add();
-           GameData.I.GetCharacters().Select(x => x.ToString()).ToList().ForEach(Console.WriteLine);
-           screenManager.Prologue();
-           screenManager.ShowMainScreen();*/
+        /*  // 캐릭터 생성 및 게임 데이터에 추가 후 목록 출력
+            Character character = new Character("ㅇㅇ", 100, 100, 100, 100, 100, 200, Job.가디언,10,10, Attribute.풍);
+            character.Add(new Character("ㅇㅇ", 100, 100, 100, 100, 100, 200, Job.가디언, 10, 10, Attribute.풍));
+            Monster monster = new Monster("Test", 1, 1, 1, 1, 1, 1, Species.고블린,1,1, Attribute.풍);
+            monster.Add(new Monster("Test", 1, 1, 1, 1, 1, 1, Species.고블린, 1, 1, Attribute.풍));
+            Monster monsterb = new Monster("Test2", 1000, 1000, 1000, 1000, 1000, 1000, Species.고블린,1,1, Attribute.풍);
+            monster.Add(new Monster("Test2", 1000, 1000, 1000, 1000, 1000, 1000, Species.고블린, 1, 1, Attribute.풍));
+            BattleEvent battleEvent = new BattleEvent(character);
+            ScreenManager screenManager = new ScreenManager(character, battleEvent);
+            character.Add();
+            GameData.I.GetCharacters().Select(x => x.ToString()).ToList().ForEach(Console.WriteLine);
+            screenManager.Prologue();
+            Console.ReadKey();
+            screenManager.ShowMainScreen();*/
+        SoundManager soundManager = new SoundManager();
+        soundManager.PlayBackgroundMusicAsync("Raindrop");
+        StartScreen startScreen = new StartScreen();
+        soundManager.StopMusic();
+        Character character = new Character("ㅇㅇ", 100, 100, 100, 10, 100, 200, Job.가디언, 10, 10, Attribute.풍, 0, 100);
+        BattleEvent battleEvent = new BattleEvent(character);
+        Store store = new Store();
+        ScreenManager screenManager = new ScreenManager(character, battleEvent,store);
+        character.Add();
+        GameData.I.GetCharacters().Select(x => x.ToString()).ToList().ForEach(Console.WriteLine);
+        screenManager.Prologue();
+        screenManager.ShowMainScreen();
 
         }
 }
 public class StartScreen
 {
+        SoundManager soundManager = new SoundManager();
         int y = 1;
         FontInfo originalFont = ConsoleHelper.GetCurrentFont();
 
@@ -551,11 +562,11 @@ public class StartScreen
 
         private void StartScreenText()
         {
-                /*
-                 . (점): 현재 디렉토리를 나타냅니다.
-                 ..(점 두 개): 상위 디렉토리를 나타냅니다.
-                 / (슬래시): 디렉토리를 구분합니다.
-                */
+        /*
+         . (점): 현재 디렉토리를 나타냅니다.
+         ..(점 두 개): 상위 디렉토리를 나타냅니다.
+         / (슬래시): 디렉토리를 구분합니다.
+        */
                 string directory = "../../../StartScreenText.txt";
                 string directory2 = "../../../StartScreenText(원본).txt";
                 try
@@ -583,7 +594,8 @@ public class StartScreen
                                 ConsoleKeyInfo key = Console.ReadKey();
                                 if (key.KeyChar == 'x' || key.KeyChar == 'ㅌ')
                                 {
-                                        break;
+                                soundManager.CallSound("sound1", 100);
+                                 break;
                                 }
                         }
                         Console.Clear();
@@ -616,7 +628,8 @@ public class StartScreen
                         ConsoleKeyInfo key = Console.ReadKey();
                         if (key.KeyChar == 'x' || key.KeyChar == 'ㅌ')
                         {
-                                break;
+                        soundManager.CallSound("sound1", 100);
+                        break;
                         }
                 }
 
@@ -641,7 +654,8 @@ public class StartScreen
                         charName = Console.ReadLine();
                         if (!(charName == ""))
                         {
-                                break;
+                        soundManager.CallSound("sound1", 100);
+                        break;
                         }
                 }
         }
@@ -683,7 +697,8 @@ public class StartScreen
                         ConsoleKeyInfo key = Console.ReadKey();
                         if (key.KeyChar == 'x' || key.KeyChar == 'ㅌ')
                         {
-                                break;
+                            soundManager.CallSound("sound1", 100);
+                            break;
                         }
                 }
                 Console.Clear();
@@ -772,10 +787,11 @@ public class StartScreen
                         }
 
                 }
+                soundManager.CallSound("driring", 100);
 
 
 
-        }
+    }
         public StartScreen()
         {
                 /* var info = ConsoleHelper.GetCurrentFont();
@@ -798,7 +814,7 @@ public class StartScreen
                 CharJob(out charJob);
 
                 Console.Clear();
-                Character character = new Character(charName, 1, 10, 10, 10, 100, 500, charJob, 10, 10, Attribute.풍, 0, 115);
+                Character character = new Character(charName, 1, 10, 10, 10, 100, 500, charJob, 10, 10, Attribute.풍,0,10);
                 character.Add();
 
                 // 게임 화면 초기화 및 테이블 설정
