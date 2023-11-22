@@ -158,7 +158,7 @@ public class Item : IItem
     // 장착 여부 관리 문자열 반환 메서드
     public static string stallationManagement(Item item)
     {
-        return item.Stallation == true ? "[E]" : "   ";
+        return item.Stallation == true ? "[장착중]" : "[장착해제]";
     }
     // 구매 여부 관리 문자열 반환 메서드
     public static string BuyManagement(Item item)

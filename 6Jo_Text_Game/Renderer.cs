@@ -122,4 +122,10 @@ public static class Renderer
                 Console.SetCursorPosition(printMargin, height - inputAreaHeight - 1);
                 Console.Write(inputAreaString);
         }
+        // 화면에 입력 영역을 그리는 메서드입니다.
+        public static void DrawInputInventoryArea()
+        {
+                Console.SetCursorPosition(printMargin, height - inputAreaHeight - 1);
+                Console.Write("        Z를 누르면 나갑니다.");
+        }
 }

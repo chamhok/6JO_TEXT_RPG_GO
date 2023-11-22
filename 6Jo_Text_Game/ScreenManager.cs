@@ -6,66 +6,76 @@ using System.Text;
 
 class ScreenManager
 {
-    Character player;
-    PlayerInfo playerInfo;
-    MainScreen mainScreen = new MainScreen();
-    BattleScreen battleScreen;
-    Store Displaystore;
-    bool skipcheck = false;
-    SoundManager soundManager = new SoundManager();
-    SoundManager soundManager2 = new SoundManager();
+        Character player;
+        PlayerInfo playerInfo;
+        MainScreen mainScreen = new MainScreen();
+        BattleScreen battleScreen;
+        QuestScreen questScreen;
+        Store Displaystore;
+        bool skipcheck = false;
+        SoundManager soundManager = new SoundManager();
+        SoundManager soundManager2 = new SoundManager();
 
-    public ScreenManager(Character player, BattleEvent battleEvent, Store store)
-    {
-        this.player = player;
-        playerInfo = new PlayerInfo(player);
-        battleScreen = new BattleScreen(battleEvent);
-        Displaystore = store;
-    }
-
-    public void ShowMainScreen()
-    {
-
-        do
+        public ScreenManager()
         {
-            Console.Clear();
-            soundManager2.PlayBackgroundMusicAsync("BaseBgm");
-            ChapterPicker(player.WinCount);
-            Console.ReadKey();
-            mainScreen.Display();
-            string input = Console.ReadLine();
-            soundManager.CallSound("sound1", 1);
-            switch (input)
-            {
-                case "1":
-                    Console.Clear();
-                    playerInfo.Display();
-                    Console.ReadKey();
-                    soundManager.CallSound("sound1", 1);
-                    break; //캐릭터 정보창 호출 ( 별도의 키지정없이 아무키 입력시 다시 메인 화면으로 이동되게 설정)
 
-                case "2":
-                    CallInventory();
-                    break;
+        }
 
-                case "3":
-                    soundManager2.StopMusic();
-                    Console.Clear();
-                    skipcheck = false;
-                    soundManager.PlayBackgroundMusicAsync($"battle{player.WinCount}");
-                    battleScreen.BattleStartSecen();
-                    soundManager.StopMusic();
-                    break;// 전투 화면으로 이동
-                case "4":
-                    Console.Clear();
-                    Displaystore.DisplayStore();
-                    break;
+        public ScreenManager(Character player, BattleEvent battleEvent, Store store, Quest quest)
+        {
+                this.player = player;
+                playerInfo = new PlayerInfo(player);
+                battleScreen = new BattleScreen(battleEvent);
+                Displaystore = store;
+                questScreen = new QuestScreen(quest);
+        }
 
-                case "end":
-                    Console.Clear();
-                    skipcheck = false;
-                    ChapterPicker(11);
-                    break;
+        public void ShowMainScreen()
+        {
+
+                do
+                {
+                        Console.Clear();
+                        soundManager2.PlayBackgroundMusicAsync("BaseBgm");
+                        ChapterPicker(player.WinCount);
+                        Console.ReadKey();
+                        mainScreen.Display();
+                        string input = Console.ReadLine();
+                        soundManager.CallSound("sound1", 1);
+                        switch (input)
+                        {
+                                case "1":
+                                        Console.Clear();
+                                        playerInfo.Display();
+                                        Console.ReadKey();
+                                        soundManager.CallSound("sound1", 1);
+                                        break; //캐릭터 정보창 호출 ( 별도의 키지정없이 아무키 입력시 다시 메인 화면으로 이동되게 설정)
+
+                                case "2":
+                                        CallInventory();
+                                        break;//인벤토리
+
+                                case "3":
+                                        soundManager2.StopMusic();
+                                        Console.Clear();
+                                        skipcheck = false;
+                                        soundManager.PlayBackgroundMusicAsync($"battle{player.WinCount}");
+                                        battleScreen.BattleStartSecen();
+                                        soundManager.StopMusic();
+                                        break;// 전투 화면으로 이동
+                                case "4":
+                                        Console.Clear();
+                                        Displaystore.DisplayStore();
+                                        break;
+                                case "5":
+                                        Console.Clear();
+                                        questScreen.DisplayQuestList();
+                                        break;
+                                case "end":
+                                        Console.Clear();
+                                        skipcheck = false;
+                                        ChapterPicker(11);
+                                        break;
 
                                 case "n":
                                         player.WinCount += 1;
@@ -75,127 +85,226 @@ class ScreenManager
                                         Console.WriteLine("잘못된입력입니다.");
                                         break; //1 과 2가 아닌 입력을 받을시 메인 화면으로 다시 로드
 
-            }
-        } while (true);
-    }
-
-    public async Task CallInventory()
-    {
-        bool outcheck = true;
-        do
-        {
-            Console.Clear();
-            player.DisplayInventory();
-            Console.WriteLine("1, 장착관리");
-            Console.WriteLine("2, 돌아가기");
-            Console.Write(">>");
-            int input = Console.Read();
-            char check = (char)input;
-            soundManager.CallSound("sound1", 1);
-            switch (check)
-            {
-                case '1':
-                    Console.WriteLine("장착관리모드 활성화");
-                    break;
-                case '2':
-                    outcheck = false;
-                    break;
-                default:
-                    Console.WriteLine("잘못된 입력입니다. 1과 2를 입력해주세요");
-                    Console.ReadKey();
-                    break;
-
-            }
-
-        }
-        while (outcheck);
-    }
-
-    class MainScreen
-    {
-        public void Display()
-        {
-            Head();
-            Body();
-            Bottom();
+                        }
+                } while (true);
         }
 
-        private void Head()
+        public void CallInventory()
         {
-            Console.WriteLine("================================================");
+                // 게임 화면 초기화 및 테이블 설정
+                Renderer.Initialize("");
+                // 테두리와 테이블 그리기
+                Renderer.DrawBorder("인벤토리");
+                Renderer.Print(3, "당신의 아이템을 확인하시고 장착하세요!");
+                Renderer.Print(4, $"당신의 소지금: {player.Gold}GOLD");
+                // 입력 영역 그리기
+                Renderer.DrawInputInventoryArea();
+                // 테이블에 데이터 추가
+                Table table = new Table();
+                table.AddType("Index", 5, false);
+                table.AddType("Name", 15, false);
+                table.AddType("Description", 40, false);
+                table.AddType("Stallation", 10, false);
+                table.AddType("Akt", 5, false);
+                table.AddType("Def", 5, false);
+
+                foreach (var item in player.Inventory)
+                {
+
+                        table.AddData("Index", (player.Inventory.IndexOf(item) + 1).ToString());
+                        table.AddData("Name", item.Name);
+                        table.AddData("Description", item.ItemDescription);// 무기 1 추가
+                        table.AddData("Stallation", Item.stallationManagement(item));
+                        table.AddData("Akt", item.Akt.ToString());
+                        table.AddData("Def", item.Def.ToString());
+                }
+
+
+
+                int currentSelection = 0;
+
+                while (true)
+                {
+                        Renderer.DrawTable(table, 5, currentSelection);
+                        Renderer.DrawInputArea();
+
+                        ConsoleKeyInfo key = Console.ReadKey();
+                        if (key.Key == ConsoleKey.Z)
+                        {
+                                break;
+                        }
+                        if (key.Key == ConsoleKey.UpArrow && currentSelection > 0)
+                        {
+                                currentSelection--;
+                        }
+                        if (key.Key == ConsoleKey.DownArrow && currentSelection < table.GetDataCount() - 1)
+                        {
+                                currentSelection++;
+                        }
+                        if (key.Key == ConsoleKey.Enter)
+                        {
+                                Item.stallationReverse(player.Inventory[currentSelection]);
+                                if (player.Inventory[currentSelection].Stallation == true)
+                                {
+                                        player.Attack += player.Inventory[currentSelection].Akt;
+                                        player.Defense += player.Inventory[currentSelection].Def;
+
+                                }
+                                else
+                                {
+                                        player.Attack -= player.Inventory[currentSelection].Akt;
+                                        player.Defense -= player.Inventory[currentSelection].Def;
+                                }
+                                break;
+                        }
+                }
+
+
+                soundManager.CallSound("sound1", 1);
+
+
+
+                /*      bool outcheck = true;
+              do
+              {
+                  Console.Clear();
+                  player.DisplayInventory();
+                  Console.WriteLine("1, 장착관리");
+                  Console.WriteLine("2, 돌아가기");
+                  Console.Write(">>");
+                  int input = Console.Read();
+                  char check = (char)input;
+                  soundManager.CallSound("sound1", 1);
+                  switch (check)
+                  {
+                      case '1':
+                          Console.WriteLine("장착관리모드 활성화");
+                          break;
+                      case '2':
+                          outcheck = false;
+                          break;
+                      default:
+                          Console.WriteLine("잘못된 입력입니다. 1과 2를 입력해주세요");
+                          Console.ReadKey();
+                          break;
+
+                  }
+
+              }
+              while (outcheck);*/
         }
 
-        public void Body()
+        class MainScreen
         {
-            Console.WriteLine("1. 정보창");
-            Console.WriteLine("2. 인벤토리");
-            Console.WriteLine("3. 전투");
-            Console.WriteLine("4. 상점");
-        }
-        private void Bottom()
-        {
-            Console.WriteLine("================================================");
-        }
-    } // 메인 화면
+                public void Display()
+                {
+                        Head();
+                        Body();
+                        Bottom();
+                }
 
-    class PlayerInfo
-    {
-        Character player;
-        public PlayerInfo(Character player)
-        {
-            this.player = player;
-        }
+                private void Head()
+                {
+                        Console.WriteLine("================================================");
+                }
 
-        public void Display()
-        {
-            Head();
-            Body(player);
-            Bottom();
-        }
+                public void Body()
+                {
+                        Console.WriteLine("1. 정보창");
+                        Console.WriteLine("2. 인벤토리");
+                        Console.WriteLine("3. 전투");
+                        Console.WriteLine("4. 상점");
+                        Console.WriteLine("5. 퀘스트");
+                }
+                private void Bottom()
+                {
+                        Console.WriteLine("================================================");
+                }
+        } // 메인 화면
 
-        private void Head()
+        class PlayerInfo
         {
-            Console.WriteLine("================================================");
-        }
+                Character player;
+                public PlayerInfo(Character player)
+                {
+                        this.player = player;
+                }
 
-        public void Body(Character player)
+                public void Display()
+                {
+                        Head();
+                        Body(player);
+                        Bottom();
+                }
+
+                private void Head()
+                {
+                        Console.WriteLine("================================================");
+                }
+
+                public void Body(Character player)
+                {
+                        Console.WriteLine("이름 : " + player.Name);
+                        Console.WriteLine("직업 : " + player.Job);
+                        Console.WriteLine("레벨 : " + player.Level);
+                        Console.WriteLine("공격력 : " + player.Attack);
+                        Console.WriteLine("방어력 : " + player.Defense);
+                        Console.WriteLine("직업 : " + player.Speed);
+                        Console.WriteLine("치명타 : " + player.Crt);
+                        Console.WriteLine("회피 : " + player.Avoidance);
+                        Console.WriteLine("Gold : " + player.Gold);
+                        CurrentExp();
+                }
+
+                private void CurrentExp()
+                {
+                        // 현재 경험치 퍼센트 계산
+                        double expPercentage = (player.CurrentExp / player.MaxExp * 100) / 2;
+
+                        Console.Write("[");
+                        Console.ForegroundColor = ConsoleColor.Green;
+
+                        // 변수에 경험치를 표시
+                        for (int i = 0; i < (int)expPercentage; i++)
+                        {
+                                Console.Write("█");
+                        }
+
+                        Console.ForegroundColor = ConsoleColor.Gray;
+
+                        // 남은 부분은 공백으로 채우기
+                        for (int i = (int)expPercentage; i < 50; i++)
+                        {
+                                Console.Write(" ");
+                        }
+                        Console.WriteLine($"] {player.CurrentExp}/{player.MaxExp} Exp");
+                }
+
+                private void Bottom()
+                {
+                        Console.WriteLine("================================================");
+                }
+        } // 플레이어 정보 화면
+
+        public void Prologue()
         {
-            Console.WriteLine("이름 : " + player.Name);
-            Console.WriteLine("직업 : " + player.Job);
-            Console.WriteLine("레벨 : " + player.Level);
-            Console.WriteLine("공격력 : " + player.Attack);
-            Console.WriteLine("방어력 : " + player.Defense);
-            Console.WriteLine("직업 : " + player.Speed);
-            Console.WriteLine("치명타 : " + player.Crt);
-            Console.WriteLine("회피 : " + player.Avoidance);
-            Console.WriteLine("Gold : " + player.Gold);
-        }
+                ConsoleHelper.SetCurrentFont("빛의 계승자 Bold", 30);
+                Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
+                Console.SetBufferSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
+                Console.WindowWidth = Console.LargestWindowWidth;
+                Console.WindowHeight = Console.LargestWindowHeight;
+                string readTxt = "../../../Story/Prologue.txt";
+                int yCount = 0;
+                try
+                {
+                        Console.Clear();
 
-        private void Bottom()
-        {
-            Console.WriteLine("================================================");
-        }
-    } // 플레이어 정보 화면
-
-    public void Prologue()
-    {
-        ConsoleHelper.SetCurrentFont("빛의 계승자 Bold", 30);
-        Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
-        Console.SetBufferSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
-        Console.WindowWidth = Console.LargestWindowWidth;
-        Console.WindowHeight = Console.LargestWindowHeight;
-        string readTxt = "../../../Story/Prologue.txt";
-        int yCount = 0;
-        try
-        {
-            Console.Clear();
-
-            try
-            {
-                string[] fileContents = File.ReadAllLines(readTxt, Encoding.UTF8)
-                                                 .Select(x =>
-                                               x.Replace("주인공:", $"\u001b[94m주인공:\u001b[0m")
-                                                 .Replace("왕:", $"\u001b[36m왕:\u001b[0m")).ToArray();
+                        try
+                        {
+                                string[] fileContents = File.ReadAllLines(readTxt, Encoding.UTF8)
+                                                                 .Select(x =>
+                                                               x.Replace("주인공:", $"\u001b[94m주인공:\u001b[0m")
+                                                                 .Replace("왕:", $"\u001b[36m왕:\u001b[0m")).ToArray();
 
                                 foreach (string line in fileContents)
                                 {
@@ -212,30 +321,30 @@ class ScreenManager
                                 Console.WriteLine("x를 누르십시오");
 
 
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error reading the file: {ex.Message}");
-            }
-            while (true)
-            {
-                ConsoleKeyInfo key = Console.ReadKey();
-                if (key.KeyChar == 'x' || key.KeyChar == 'ㅌ')
-                {
-                    soundManager.CallSound("sound1", 1);
-                    break;
+                        }
+                        catch (Exception ex)
+                        {
+                                Console.WriteLine($"Error reading the file: {ex.Message}");
+                        }
+                        while (true)
+                        {
+                                ConsoleKeyInfo key = Console.ReadKey();
+                                if (key.KeyChar == 'x' || key.KeyChar == 'ㅌ')
+                                {
+                                        soundManager.CallSound("sound1", 1);
+                                        break;
+                                }
+                        }
                 }
-            }
+                catch (Exception ex)
+                {
+                        Console.WriteLine($"파일을 읽어오는 중 오류 발생: {ex.Message}");
+                }
         }
-        catch (Exception ex)
+
+
+        public void ChapterPicker(int input) // 플레이어의 현재 승리 카운트에 따라 스토리 챕터를 불러오는 함수
         {
-            Console.WriteLine($"파일을 읽어오는 중 오류 발생: {ex.Message}");
-        }
-    }
-
-
-    public void ChapterPicker(int input) // 플레이어의 현재 승리 카운트에 따라 스토리 챕터를 불러오는 함수
-    {
 
                 switch (input)
                 {
@@ -303,12 +412,12 @@ class ScreenManager
                 }
         }
 
-    void ChapterPicker(string filename)
-    {
-        int yCount = 3;
-
-        try
+        void ChapterPicker(string filename)
         {
+                int yCount = 3;
+
+                try
+                {
 
 
                         string[] readTxt = File.ReadAllLines($"../../../Story/{filename}.txt")
@@ -402,26 +511,38 @@ class ScreenManager
                 }
         }
 
-
-
-
-
-
-    class BattleScreen // 전투 진행 화면
-    {
-        BattleEvent battleEvent;
-
-        public BattleScreen(BattleEvent battleEvent)
+        class BattleScreen // 전투 진행 화면
         {
-            this.battleEvent = battleEvent;
+                BattleEvent battleEvent;
+
+                public BattleScreen(BattleEvent battleEvent)
+                {
+                        this.battleEvent = battleEvent;
+                }
+
+                public void BattleStartSecen()
+                {
+                        Console.WriteLine("전투시작.");
+                        battleEvent.Battles();
+                }
         }
 
-        public void BattleStartSecen()
+        // 퀘스트 디스플레이 화면
+        class QuestScreen
         {
-            Console.WriteLine("전투시작.");
-            battleEvent.Battles();
+                Quest quest;
+
+                public QuestScreen(Quest quest)
+                {
+                        this.quest = quest;
+                }
+
+                public void DisplayQuestList()
+                {
+                        Console.Clear();
+                        quest.DisplayQuest();
+                }
         }
-    }
 }
 
 

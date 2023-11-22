@@ -46,8 +46,8 @@ public class Character : ICharacter
     // 캐릭터의 이름, 레벨, 공격력, 방어력, 속도, 사망 여부, 골드 등의 속성
     public string Name { get; set; }
     public float Level { get; set; }
-    public float CurrentExp { get; set; }
-    public float MaxExp { get; set; }
+    public double CurrentExp { get; set; }
+    public double MaxExp { get; set; }
     public float Attack { get; set; }
     public float Defense { get; set; }
     public float Speed { get; set; }
@@ -56,6 +56,7 @@ public class Character : ICharacter
     public float Avoidance { get; set; }
     public float Crt { get; set; }
     public int WinCount { get; set; } = 0;
+    public bool IsQuest { get; set; }
 
 
         // 직업과 속성
@@ -68,7 +69,7 @@ public class Character : ICharacter
         }
 
     // 모든 속성을 초기화하는 생성자
-    public Character(string name, float level, float attack, float defense, float speed, float health, int gold, Job? job, float crt, float avoidance, Attribute? attribute, float currentexp, float maxexp)
+    public Character(string name, float level, float attack, float defense, float speed, float health, int gold, Job? job, float crt, float avoidance, Attribute? attribute, double currentexp, double maxexp, bool isquest = false)
     {
         this.Name = name;
         this.Level = level;
@@ -83,6 +84,7 @@ public class Character : ICharacter
         this.Crt = Crt;
         this.Job = job;
         this.Attribute = attribute;
+        this.IsQuest = isquest;
     }
 
         // 데미지를 입는 메서드
