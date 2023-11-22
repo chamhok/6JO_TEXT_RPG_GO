@@ -94,6 +94,7 @@ public class GameData
         items.RemoveAll(x => x.Name == item.Name);
     }
 
+
     public List<Item> GetItem()
     {
         return items;
@@ -151,26 +152,30 @@ public class Skill
     public float Attack { get; set; }
     public Job Job { get; set; }
     public Attribute Attribute { get; private set; }
+    public int SkillCost;
+    public string SkillSound;
     // public int Level { get; set; }
 
     public Skill()
     {
-        Add(new Skill("스킬1", 1.3f, Job.가디언, Attribute.토));
-        Add(new Skill("스킬2", 1.3f, Job.가디언, Attribute.풍));
-        Add(new Skill("스킬3", 1.3f, Job.레인저, Attribute.수));
-        Add(new Skill("스킬4", 1.3f, Job.레인저, Attribute.화));
-        Add(new Skill("스킬5", 1.3f, Job.성직자, Attribute.수));
-        Add(new Skill("스킬6", 1.3f, Job.성직자, Attribute.토));
-        Add(new Skill("스킬7", 1.3f, Job.위자드, Attribute.화));
-        Add(new Skill("스킬8", 1.3f, Job.위자드, Attribute.풍));
+        Add(new Skill("찌르기", 2.0f, Job.가디언, Attribute.토, 2, "skill1"));
+        Add(new Skill("강타", 3.0f, Job.가디언, Attribute.풍,3, "skill2"));
+        Add(new Skill("파워 샷", 2.0f, Job.레인저, Attribute.수,2, "skill1"));
+        Add(new Skill("불 화살", 3.0f, Job.레인저, Attribute.화, 3, "skill2"));
+        Add(new Skill("홀리 에로우", 2.0f, Job.성직자, Attribute.수, 2, "skill1"));
+        Add(new Skill("신의 심판", 3.0f, Job.성직자, Attribute.토, 3, "skill2"));
+        Add(new Skill("파이어 볼", 2.0f, Job.위자드, Attribute.화, 2, "skill1"));
+        Add(new Skill("윈드 커터", 3.0f, Job.위자드, Attribute.풍, 3, "skill2"));
     }
 
-    public Skill(string name, float attack, Job job, Attribute attribute)//, int level
+    public Skill(string name, float attack, Job job, Attribute attribute, int skillCost,string skillSound)//, int level
     {
         this.Name = name;
         this.Attack = attack;
         this.Job = job;
         this.Attribute = attribute;
+        this.SkillCost = skillCost;
+        this.SkillSound= skillSound;
         //this.Level = level;
     }
 

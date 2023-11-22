@@ -18,7 +18,11 @@ class BattleEvent
     int skillMguard = 1;
     int skillMsmash = 1;
 
+    int batleCost = 0;
+
     int life = 10;
+
+    string getSkillSound;
 
 
 
@@ -111,6 +115,7 @@ class BattleEvent
     public void PlayerTurn() // 플레이어의 행동을 입력받는 메소드 -------------------------------------------------------------------------------------------------------
     {
         int input;
+        batleCost = batleCost + 1;
         while (true)
         {
             Console.SetCursorPosition(0, 23);
@@ -158,28 +163,49 @@ class BattleEvent
                         Message();
 
                         Console.SetCursorPosition(0, 23);
-                        Console.WriteLine("스킬을 골라주세요");
+                        Console.WriteLine($"현재 자원:{batleCost}, 스킬을 골라주세요");
                         for (int i = 0; i < player.SkillList.Count; i++)
                         {
-                            Console.WriteLine($"{i + 1}. {player.SkillList[i].Name}");
+                            if(i==2)
+                            {
+                                break;
+                            }
+                            Console.WriteLine($"{i + 1}. {player.SkillList[i].Name}, 필요 자원:{player.SkillList[i].SkillCost} 피해량:{player.SkillList[i].Attack*player.Attack}");
+                        }
+                        Console.WriteLine($"3. 일반 공격 페이지 진행");
+                        int.TryParse(Console.ReadLine(), out sel);
+                        if (sel > 0 && sel <= player.SkillList.Count)
+                        {
+                            if (sel == 3)
+                            {
+                                break;
+                            }
+                            if (player.SkillList[sel - 1].SkillCost <= batleCost)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                Console.SetCursorPosition(64, 23);
+                                Console.WriteLine("자원이 모자랍니다.");
+                                Console.ReadKey();
+                            }
                         }
 
-                        int.TryParse(Console.ReadLine(), out sel);
-                        if (sel > 0 && sel <= player.SkillList.Count) break;
                         else
                         {
                             Console.SetCursorPosition(64, 23);
                             Console.WriteLine("다시 입력헤주세요");
                         }
                     }
+                    getSkillSound = player.SkillList[sel - 1].SkillSound;
+                    batleCost -= player.SkillList[sel - 1].SkillCost;
                     this.skillPDamage = player.SkillList[sel-1].Attack;
                     this.skillPsmash = true;
                 }
 
                 SelectMonster();
-                this.skillPDamage = 1;
                 this.skillPsmash = false;
-
                 break;
 
             default:
@@ -405,11 +431,11 @@ class BattleEvent
     {
         float playerAttack = player.Attack;
         if (skillPsmash) playerAttack *= skillPDamage;
-        float attack = (player.Attack) - (monster.Defense * skillMguard);
+        float attack = (playerAttack) - (monster.Defense * skillMguard);
         attack *= CompareAttribute(player.Attribute.Value, monster.Attribute);
         int damage = (int)attack;
 
-        skillPsmash = false;
+
         skillMguard = 1;
 
         if (damage > 0) //데미지가 0과 같거나 작은지 체크
@@ -420,6 +446,7 @@ class BattleEvent
                 Console.WriteLine($"{monster.Name}이(가) 회피하였습니다!");
                 soundManager.CallSound("avod", 100);
                 Console.ReadKey();
+                skillPsmash = false;
                 return 0;
             }
             else if (CrtToss() <= player.Crt) // 크리티컬 유무 체크
@@ -427,12 +454,23 @@ class BattleEvent
                 Console.WriteLine("치명적 일격! 피해량 : " + damage * 2);
                 soundManager.CallSound("atk2", 100);
                 Console.ReadKey();
+                skillPsmash = false;
                 return damage * 2;
             }
             else //위 조건문 모두 false시 기본 피해량만 타격
             {
                 Console.WriteLine("공격 성공! 피해량 : " + damage);
-                soundManager.CallSound("atk", 100);
+                if (skillPsmash)
+                {
+                    soundManager.CallSound(getSkillSound, 1);
+                    Console.WriteLine(getSkillSound);
+                    Console.ReadKey();
+                    skillPsmash = false;
+                }
+                else
+                {
+                    soundManager.CallSound("atk", 100);
+                }
                 Console.ReadKey();
                 return damage;
             }
@@ -443,8 +481,10 @@ class BattleEvent
             Console.WriteLine("상대가 너무 단단하다!");
             soundManager.CallSound("block", 100);
             Console.ReadKey();
+            skillPsmash = false;
             return 0;
         }
+
     }
 
     public float CompareAttribute(Attribute a, Attribute b)
