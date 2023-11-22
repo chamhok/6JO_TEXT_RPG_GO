@@ -281,6 +281,7 @@ class BattleEvent
                 Console.SetCursorPosition(64, 27);
                 Console.WriteLine($"{monster.Name}가 사망했습니다.");
                 AcquireExp(monster);
+                Addmoney(monster);
                 this.monster = monsters.Count != 0 ? monsters[0] : monster;
                 Console.ReadKey();
             }
@@ -298,6 +299,7 @@ class BattleEvent
                 Console.SetCursorPosition(64, 27);
                 Console.WriteLine($"{monsters[0].Name}이(가) 사망했습니다.");
                 AcquireExp(monsters[0]);
+                Addmoney(monsters[0]);
             }
         //});
         Console.ReadKey();
@@ -337,6 +339,14 @@ class BattleEvent
 
         Console.SetCursorPosition(64, 31);
         Console.WriteLine($"현재 경험치: {player.CurrentExp}/{player.MaxExp}, 다음 레벨업 까지 남은 경험치: {player.MaxExp - player.CurrentExp }");
+        Console.ReadKey();
+    }
+    public void Addmoney(Monster monster)
+    {
+        Console.SetCursorPosition(64, 30);
+        Console.WriteLine($"\n+{monster.Gold}Gold를 획득하였습니다.");
+        player.Gold += monster.Gold;
+        Console.ReadKey();
     }
 
 

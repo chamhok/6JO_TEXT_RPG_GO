@@ -243,7 +243,7 @@ class Program : UiManager
         Character character = GameData.I.GetCharacters().First();
 
         BattleEvent battleEvent = new BattleEvent(character);
-        Store store = new Store();
+        Store store = new Store(character);
         ScreenManager screenManager = new ScreenManager(character, battleEvent, store);
         character.Add();
         GameData.I.GetCharacters().Select(x => x.ToString()).ToList().ForEach(Console.WriteLine);

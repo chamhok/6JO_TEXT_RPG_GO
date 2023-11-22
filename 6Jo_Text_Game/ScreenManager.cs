@@ -58,7 +58,7 @@ class ScreenManager
                                         break;// 전투 화면으로 이동
                                 case "4":
                                         Console.Clear();
-                                        Displaystore.DisplayStore(player.Gold);
+                                        Displaystore.DisplayStore();
                                         break;
 
                                 case "end":

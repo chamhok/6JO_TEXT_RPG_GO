@@ -10,7 +10,14 @@
     public bool Buy { get; set; }  // 구매 여부를 나타내는 속성
     public int RemainingQuantity { get; set; } //만약 수량이 필요한 아이템을 만들면 사용 
 
-    public void DisplayStore(int gold)
+    Character player;
+
+    public Store(Character player)
+    {
+        this.player = player;
+    }
+
+    public void DisplayStore()
     {
         Console.WriteLine("상점에 오신 것을 환영합니다!");
 
@@ -25,11 +32,11 @@
         switch (input)
         {
             case 1:
-                BuyItem(gold);
+                BuyItem();
                 break;
 
             case 2:
-                SellItem(gold);
+                SellItem();
                 break;
 
             case 3:
@@ -38,14 +45,14 @@
         }
     }
     //아이템을 구매
-    public void BuyItem(int gold)
+    public void BuyItem()
     {
         Console.Clear();
 
         Console.WriteLine("구매하기");
         Console.WriteLine("판매 중인 아이템을 구매할 수 있습니다.");
         Console.WriteLine();
-        Console.WriteLine($"[보유 골드 : {gold}골드 ]");
+        Console.WriteLine($"[보유 골드 : {player.Gold}골드 ]");
         Console.WriteLine();
         Console.WriteLine($"[아이템 목록]");
         Console.WriteLine();
@@ -72,19 +79,19 @@
         {
             case 0:
                 Console.Clear();
-                DisplayStore(gold);
+                DisplayStore();
                 break;
         }
     }
     //아이템을 판매
-    public void SellItem(int gold)
+    public void SellItem()
     {
         Console.Clear();
 
         Console.WriteLine("판매하기");
         Console.WriteLine("판매 중인 아이템을 판매할 수 있습니다.");
         Console.WriteLine();
-        Console.WriteLine($"[보유 골드 : {gold}골드 ]");
+        Console.WriteLine($"[보유 골드 : {player.Gold}골드 ]");
         Console.WriteLine();
         Console.WriteLine($"[아이템 목록]");
         Console.WriteLine();
@@ -110,7 +117,7 @@
         {
             case 0:
                 Console.Clear();
-                DisplayStore(gold);
+                DisplayStore();
                 break;
         }
     }
