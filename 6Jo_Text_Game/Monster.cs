@@ -1,5 +1,7 @@
 ﻿
+using NAudio.Codecs;
 using System.Drawing;
+using static System.Formats.Asn1.AsnWriter;
 
 public class Monster : ICharacter
 {
@@ -74,14 +76,14 @@ public class Monster : ICharacter
 
         switch (stage)
         {
-        // Stage 1----------------------------
+            // Stage 1----------------------------
         case 0: // 경비병 * 3
             monsters.Add(new Guard());
             monsters.Add(new Guard());
             monsters.Add(new Guard());
             break;
 
-        case 1: // 기사 * 3
+            case 1: // 기사 * 3
             monsters.Add(new Knight());
             monsters.Add(new Knight());
             monsters.Add(new Knight());
@@ -113,7 +115,7 @@ public class Monster : ICharacter
 
         // Stage 3 ----------------------------
         case 7: // 용암
-            monsters.Add(new Cerberus());
+            //monsters.Add(new Rava());
             break;
 
         case 8: // 낭떠러지
@@ -283,8 +285,6 @@ public class DesertShark : Monster
 
 
 // --------------------------------------------------------------------------------
-// stage 3 - 용암
-
 // stage 3 - 낭떠러지
 
 // stage 3 - 케르베로스 (Cerberus)
@@ -338,7 +338,7 @@ public class CloudSpiter : Monster
 
 
 // 기믹 전투 ==================================================================
-// stage 2 - (기믹) 자객
+#region stage 2 - (기믹) 자객
 public class Assassin : Monster
 {
     public Assassin()
@@ -567,4 +567,161 @@ public class Assassin : Monster
         return p;
     } // 적 스폰 메서드
 }
+#endregion
+
+// stage 3 - 용암
+//public class Rava : Monster
+//{
+//    public Rava()
+//        : base("용암", 1, 1, 1, 1, 10, 10, Species.기믹, 1, 1, Attribute.수, 20)
+//    {
+//        this.Add();
+//    }
+
+//    // -------------------------------------------------------------------------------
+//    enum Direction
+//    {
+//        LEFT,
+//        RIGHT
+//    }
+//    //Timer time = new System.Timers.Timer(cycleTime);
+//    //float time = 0.00f;
+//    Point player = new Point(10, 10, '▲');
+
+//    public override bool TakeDamage(float damage)
+//    {
+//        DrawWall();
+
+//        while (true)
+//        {
+//            Console.SetCursorPosition(2, 5);
+//            Console.Write("용암주의! 중심잡기");
+//            Console.SetCursorPosition(2, 7);
+//            Console.Write("x를 눌러 시작하세요");
+//            if (Console.ReadKey().KeyChar == 'x') break; ;
+//        }
+
+//        Console.ReadKey();
+//        return base.TakeDamage(damage);
+//    }
+
+//    // -------------------------------------------------------------------------------
+//    void DrawWall()
+//    {
+//        // 상하 벽 그리기
+//        for (int i = 0; i < 21; i++)
+//        {
+//            Console.SetCursorPosition(i, 0);
+//            Console.Write("#");
+//            Console.SetCursorPosition(i, 21);
+//            Console.Write("#");
+//        }
+
+//        // 좌우 벽 그리기
+//        for (int i = 0; i < 21; i++)
+//        {
+//            Console.SetCursorPosition(0, i);
+//            Console.Write("#");
+//            Console.SetCursorPosition(21, i);
+//            Console.Write("#");
+//        }
+
+//        // 중간선 그리기
+//        for (int i = 1; i < 21; i++)
+//        {
+//            Console.SetCursorPosition(10, i);
+//            Console.Write("│");
+//        }
+
+//        // 한계선 그리기
+//        for (int i = 1; i < 21; i++)
+//        {
+//            Console.SetCursorPosition(7, i);
+//            Console.Write("┃");
+//            Console.SetCursorPosition(12, i);
+//            Console.Write("┃");
+//        }
+
+//    } // 벽 그리기
+
+//    void DrawInfo()
+//    {
+//        Console.SetCursorPosition(10, 2);
+//        //Console.Write(time);
+
+//        Console.SetCursorPosition(30, 7);
+//        Console.WriteLine($"현재 위치 : {player.x} / 30");
+
+//        Console.SetCursorPosition(30, 9);
+//        Console.WriteLine($"한계 위치 : 8 ~ 12");
+//    }
+
+
+//    class Point
+//    {
+//        public int x { get; set; }
+//        public int y { get; set; }
+//        public char sym { get; set; }
+//        public Direction direction { get; set; }
+
+//        public Point(int x, int y, char sym)
+//        {
+//            this.x = x;
+//            this.y = y;
+//            this.sym = sym;
+//        }
+
+//        // 점을 그리는 메서드
+//        public void Draw()
+//        {
+//            Console.CursorVisible = false;
+//            Console.SetCursorPosition(x, y);
+//            Console.Write(sym);
+
+//        }
+//        public void Draw(string sym)
+//        {
+//            Console.CursorVisible = false;
+//            Console.SetCursorPosition(x, y);
+//            Console.Write(sym);
+//        }
+
+//        // 점을 지우는 메서드
+//        public void Clear()
+//        {
+//            Draw("  ");
+//        }
+
+//        // 두 점이 같은지 비교하는 메서드
+//        public bool IsHit(Point p)
+//        {
+//            return p.x == x && p.y == y;
+//        }
+
+//    } // 위치 클래스
+
+//    void PlayerMove(ref Point p)
+//    {
+//        switch (p.direction)
+//        {
+//            case Direction.LEFT:
+//                p.Clear();
+//                p.x--;
+//                if (p.x < 1) p.x = 1;
+//                p.Draw();
+//                break;
+
+//            case Direction.RIGHT:
+//                p.Clear();
+//                p.x++;
+//                if (p.x > 20) p.x = 20;
+//                p.Draw();
+//                break;
+//        }
+//    } // 플레이어 움직이기 메서드
+
+    
+
+
+//}
 #endregion

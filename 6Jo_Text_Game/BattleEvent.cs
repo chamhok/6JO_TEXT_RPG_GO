@@ -53,16 +53,15 @@ class BattleEvent
         // 턴제전투 (누구 하난 죽을때까지)
         do
         {
-            //Console.Clear();
-
-            Message();
-
+            Console.Clear();
             if (monsters[0].Species == Species.기믹)
             {
                 player.IsDead = monsters[0].TakeDamage(0);
                 break;
             }
 
+
+            Message();
             if (player.Speed == turnSpeed) PlayerTurn();
             else
             {
@@ -233,6 +232,7 @@ class BattleEvent
                 {
                     Console.SetCursorPosition(64, 24);
                     Console.WriteLine($"{monster.Name}이(가) 공격합니다!");
+                    soundManager.CallSound("sound1", 100);
                     PlayerResult();
                 }
 
@@ -242,6 +242,7 @@ class BattleEvent
                 {
                     Console.SetCursorPosition(64, 24);
                     Console.WriteLine($"{monster.Name}이(가) 방어 자세를 취합니다.");
+                    soundManager.CallSound("sound1", 100);
                     skillMguard = 2;
                 }
                 Console.ReadKey();
@@ -251,6 +252,7 @@ class BattleEvent
                 {
                     Console.SetCursorPosition(64, 24);
                     Console.WriteLine($"{monster.Name}이(가) 공격 자세를 취합니다.");
+                    soundManager.CallSound("sound1", 100);
                     skillMsmash = 2;
                 }
                 Console.ReadKey();
@@ -260,7 +262,7 @@ class BattleEvent
                 break;
         }
 
-        soundManager.CallSound("sound1", 100);
+        
     }
 
 
@@ -269,16 +271,19 @@ class BattleEvent
     public void MonsterResult(Monster monster) // 다수의 몬스터 처리
     {
         monster.TakeDamage((float)PlayerDmg());
-        if (monster.Health <= 0)
+        monster.SetChangedCallback(health =>
         {
-            monster.IsDead = true;
-            monsters.Remove(monster);
-            Console.SetCursorPosition(64, 27);
-            Console.WriteLine($"{monster.Name}가 사망했습니다.");
-            AcquireExp(monster);
-            this.monster = monsters[0] != null ? monsters[0] : monster;
-            Console.ReadKey();
-        }
+            if (monster.Health <= 0)
+            {
+                monster.IsDead = true;
+                monsters.Remove(monster);
+                Console.SetCursorPosition(64, 27);
+                Console.WriteLine($"{monster.Name}가 사망했습니다.");
+                AcquireExp(monster);
+                this.monster = monsters[0] != null ? monsters[0] : monster;
+                Console.ReadKey();
+            }
+        });
     }
 
     public void MonsterResult() // 단일 몬스터 처리
