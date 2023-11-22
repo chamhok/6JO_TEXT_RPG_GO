@@ -77,9 +77,9 @@ class ScreenManager
     public async Task CallInventory()
     {
         bool outcheck = true;
-        Console.Clear();
         do
         {
+            Console.Clear();
             player.DisplayInventory();
             Console.WriteLine("1, 장착관리");
             Console.WriteLine("2, 돌아가기");
@@ -98,7 +98,6 @@ class ScreenManager
                 default:
                     Console.WriteLine("잘못된 입력입니다. 1과 2를 입력해주세요");
                     Console.ReadKey();
-                    Console.Clear();
                     break;
 
             }
@@ -319,7 +318,6 @@ class ScreenManager
         {
             Console.WriteLine($"파일을 읽어오는 중 오류 발생: {ex.Message}");
         }
-        soundManager.StopMusic();
     }
 
 
