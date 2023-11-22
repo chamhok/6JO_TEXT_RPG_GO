@@ -197,6 +197,7 @@ class BattleEvent
             int sel;
             while (true)
             {
+                Console.SetCursorPosition(0, 27);
                 Console.WriteLine("공격 대상을 골라주세요");
                 for (int i = 0; i < monsters.Count; i++)
                 {
@@ -329,8 +330,8 @@ class BattleEvent
     // 몬스터 처치 시, 경험치 획득
     public void AcquireExp(Monster monster)
     {
-        Console.SetCursorPosition(64, 29);
-        Console.WriteLine($"\n+{monster.Exp}경험치를 획득하였습니다.");
+        Console.SetCursorPosition(64, 28);
+        Console.WriteLine($"{monster.Exp}경험치를 획득하였습니다.");
         player.CurrentExp += monster.Exp;
         while (player.CurrentExp >= player.MaxExp)
         {
@@ -347,8 +348,8 @@ class BattleEvent
     }
     public void Addmoney(Monster monster)
     {
-        Console.SetCursorPosition(64, 30);
-        Console.WriteLine($"\n+{monster.Gold}Gold를 획득하였습니다.");
+        Console.SetCursorPosition(64, 29);
+        Console.WriteLine($"{monster.Gold}Gold를 획득하였습니다.");
         player.Gold += monster.Gold;
         Console.ReadKey();
     }
