@@ -7,12 +7,32 @@
 
     private static int _goldTopPostion = 3;
     private static int _itemsTopPostion = 7;
-    public static void MakeTab()
+
+    private char[,] buffer;
+
+    public void MakeTab()
     {
         var currentCursor = Console.GetCursorPosition();
 
         int left = 2, top = 1, right = 90, bottom = 28;
         MakeUIContainer(left, top, right, bottom);
+
+        Console.SetCursorPosition(currentCursor.Left, currentCursor.Top);
+    }
+    public void BattleMakeTab(int left, int top, int right, int bottom)
+    {
+        var currentCursor = Console.GetCursorPosition();
+
+        MakeBattleContainer(left, top, right, bottom);
+
+        Console.SetCursorPosition(currentCursor.Left, currentCursor.Top);
+    }
+
+    public void BattleClearTab(int left, int top, int right, int bottom)
+    {
+        var currentCursor = Console.GetCursorPosition();
+
+        ClearBattleContainer(left, top, right, bottom);
 
         Console.SetCursorPosition(currentCursor.Left, currentCursor.Top);
     }
@@ -176,7 +196,45 @@
         }
         Console.SetCursorPosition(currentCursor.Left, currentCursor.Top);
     }
-    public static void ShowMonsterCard(List<Monster> monsters)
+
+    public void PrintHp()
+    {
+        var currentCursor = Console.GetCursorPosition();
+        var player = GameData.I.GetCharacters().First();
+
+        int rate = 20;
+        int fillExpBar = (int)(rate * (float)player.Health / 100);
+        if (fillExpBar >= rate) fillExpBar = rate;
+
+        Console.SetCursorPosition(0, _goldTopPostion);
+        Console.Write("┌──────┬───────────────┬───────┬──────────────────┬─────────┐");
+        Console.SetCursorPosition(0, _goldTopPostion + 1);
+        Console.Write($"│ 이 름│{player.Name, 14} │ 직 업 │{player.Job, 14} │ {player.Attribute,2}속성 │");
+        Console.SetCursorPosition(0, _goldTopPostion + 2);
+        Console.Write("├──────┴───────────────┴───────┴──────────────────┴─────────┴");
+
+
+
+        Console.SetCursorPosition(64, _goldTopPostion);
+        Console.Write("┌──────┬──────────────────────────────────────────┐");
+        Console.SetCursorPosition(64, _goldTopPostion + 1);
+        Console.Write($"│ 체 력│  ");
+        Console.BackgroundColor = ConsoleColor.Red;
+        Console.Write("".PadRight(fillExpBar, '　'));
+        Console.BackgroundColor = ConsoleColor.DarkRed;
+        Console.Write("".PadRight(rate - fillExpBar, '　'));
+        Console.BackgroundColor = ConsoleColor.Black;
+        Console.Write("│");
+        Console.SetCursorPosition(64, _goldTopPostion + 2);
+        Console.Write("┴──────┴──────────────────────────────────────────┴");
+
+        Console.SetCursorPosition(currentCursor.Left, currentCursor.Top);
+    }
+
+
+
+
+    public void ShowMonsterCard(List<Monster> monsters)
     {
         var currentCursor = Console.GetCursorPosition();
         int size = monsters.Count;
@@ -227,7 +285,7 @@
                 paddingSize++;
             Console.Write("".PadLeft(paddingSize, ' ') + monster.Name);
 
-            int fillHpBar = (int)(7 * (float)monster.Health / monster.Health + 0.9f);//현재 체력과 최대 체력이 필요한데 그냥 이렇게함
+            int fillHpBar = (int)(7 * (float)monster.Health / monster.maxHealth + 0.9f);//현재 체력과 최대 체력이 필요한데 그냥 이렇게함
             if (fillHpBar >= 7) fillHpBar = 7;
 
             Console.SetCursorPosition(leftPosition[i] + 2, top + 4);
@@ -239,9 +297,15 @@
             paddingSize = (17 - (defString.Length + 3)) / 2;
             Console.Write("".PadLeft(paddingSize, ' ') + defString);
             Console.SetCursorPosition(leftPosition[i] + 2, top + 10);
-            string hpString = $"체력 : {monsters[i].Health}/{monsters[i].Health}";//현재 체력과 최대 체력이 필요한데 그냥 이렇게함
+            Console.SetCursorPosition(leftPosition[i] + 2, top + 6);
+            string attributeString = $"속성 : {monsters[i].Attribute}속성";
+            paddingSize = (17 - (attributeString.Length + 3)) / 2;
+            Console.Write("".PadLeft(paddingSize, ' ') + attributeString);
+            Console.SetCursorPosition(leftPosition[i] + 2, top + 10);
+            string hpString = $"체력 : {monsters[i].Health}/{monsters[i].maxHealth}";//현재 체력과 최대 체력이 필요한데 그냥 이렇게함
             paddingSize = (17 - (hpString.Length + 2)) / 2;
-            Console.Write("".PadLeft(paddingSize, ' ') + hpString);
+            Console.Write("".PadLeft(Math.Max(paddingSize, 0), ' ') + hpString);
+
 
             if (monsters[i].IsDead)
             {
@@ -291,4 +355,44 @@
         Console.Write("┗".PadRight(right - left - 1, '━'));
         Console.Write("┛");
     }
+
+    private static void MakeBattleContainer(int left, int top, int right, int bottom)
+    {   //┌ ─ ┐ └ ┘ │
+        if (left < 0 || top < 0 || --right > Console.WindowWidth || --bottom > Console.WindowHeight) return;
+
+        Console.SetCursorPosition(left, top);
+        Console.Write("┌".PadRight(right - left - 1, '─'));
+        Console.Write("┐");
+
+        for (int i = top + 1; i < bottom; i++)
+        {
+            Console.SetCursorPosition(left, i);
+            Console.Write("│".PadRight(right - left - 1, ' '));
+
+            Console.SetCursorPosition(right - 1, i);
+            Console.Write("│");
+        }
+
+
+        Console.SetCursorPosition(left, bottom);
+        Console.Write("└".PadRight(right - left - 1, '─'));
+        Console.Write("┘");
+    }
+
+    private static void ClearBattleContainer(int left, int top, int right, int bottom)
+    {   //┌ ─ ┐ └ ┘ │
+        if (left < 0 || top < 0 || --right > Console.WindowWidth || --bottom > Console.WindowHeight) return;
+
+        Console.SetCursorPosition(left, top);
+
+        for(int i = top+1; i < bottom; i++)
+        {
+            for(int j = left; j < right ; j++)
+            {
+                Console.SetCursorPosition(j, i);
+                Console.Write(' ');
+            }
+        }
+    }
+
 }

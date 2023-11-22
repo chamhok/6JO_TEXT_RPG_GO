@@ -27,7 +27,19 @@ class BattleEvent
         this.player = player;
     }
 
+
     // ------------------------------------------------------------------------
+    public void Message()
+    {
+        Console.SetCursorPosition(0, 0);
+        uiManager.BattleMakeTab(0, 5, 120, 20);
+        uiManager.PrintHp();
+        uiManager.ShowMonsterCard(monsters);
+
+        uiManager.BattleClearTab(0, 20, 120, Console.WindowHeight);
+    }
+
+
 
     public void Battles()  // 배틀 시작
     {
@@ -41,7 +53,7 @@ class BattleEvent
         // 턴제전투 (누구 하난 죽을때까지)
         do
         {
-            Console.Clear();
+            //Console.Clear();
 
             Message();
 
@@ -59,7 +71,7 @@ class BattleEvent
                     if (monsters[i].Speed == turnSpeed)
                     {
                         monster = monsters[i];
-                        MonsterTurn();
+                        MonsterTurn(i);
                     }
                 }
             }
@@ -87,30 +99,29 @@ class BattleEvent
         Console.ReadKey();
     }
 
-
-    public void Message()
-    {
-        uiManager.MakeTab(0, 5, 120, 20);
-        uiManager.PrintHp();
-        uiManager.ShowMonsterCard(monsters);
-    }
+    
+            
 
 
 
     public void PlayerTurn() // 플레이어의 행동을 입력받는 메소드 -------------------------------------------------------------------------------------------------------
     {
-        Console.SetCursorPosition(0, 30);
-        Console.WriteLine("다음 행동을 입력해 주세요!\n");
-        Console.WriteLine("1.공격 2.방어 3.스킬");
-        Console.WriteLine("------------------------------------------------\n");
-
-
         int input;
         while (true)
         {
+            Console.SetCursorPosition(0, 23);
+            Console.WriteLine("다음 행동을 입력해 주세요!\n");
+            Console.WriteLine("1.공격 2.방어 3.스킬");
+            Console.WriteLine("------------------------------------------------\n");
+
             int.TryParse(Console.ReadLine(), out input);
             if (input > 0 && input < 4) break;
-            else Console.WriteLine("다시 입력헤주세요");
+            else
+            {
+                Console.SetCursorPosition(0, 26);
+                Console.WriteLine("다시 입력헤주세요");
+                Message();
+            }
         }
         switch (input)
         {
@@ -121,11 +132,13 @@ class BattleEvent
             case 2: // 방어
                 if (skillPguard == 1)
                 {
+                    Console.SetCursorPosition(64, 23);
                     Console.WriteLine("방어자세를 취합니다.");
                     skillPguard = 2;
                 }
                 else
                 {
+                    Console.SetCursorPosition(64, 23);
                     Console.WriteLine("다음 공격을 방어할 준비가 되었습니다!");
                 }
                 Console.ReadKey();
@@ -135,20 +148,27 @@ class BattleEvent
 
                 if (player.SkillList.Count > 1)
                 {
-                    Console.WriteLine("스킬을 골라주세요");
-                    for (int i = 0; i < player.SkillList.Count; i++)
-                    {
-                        Console.WriteLine($"{i + 1}. {player.SkillList[i].Name}");
-                    }
-
                     int sel;
                     while (true)
                     {
+                        Message();
+
+                        Console.SetCursorPosition(0, 23);
+                        Console.WriteLine("스킬을 골라주세요");
+                        for (int i = 0; i < player.SkillList.Count; i++)
+                        {
+                            Console.WriteLine($"{i + 1}. {player.SkillList[i].Name}");
+                        }
+
                         int.TryParse(Console.ReadLine(), out sel);
-                        if (sel > 0 && sel < player.SkillList.Count) break;
-                        else Console.WriteLine("다시 입력헤주세요");
+                        if (sel > 0 && sel <= player.SkillList.Count) break;
+                        else
+                        {
+                            Console.SetCursorPosition(64, 23);
+                            Console.WriteLine("다시 입력헤주세요");
+                        }
                     }
-                    this.skillPDamage = player.SkillList[sel].Attack;
+                    this.skillPDamage = player.SkillList[sel-1].Attack;
                     this.skillPsmash = true;
                 }
 
@@ -159,6 +179,7 @@ class BattleEvent
                 break;
 
             default:
+                Console.SetCursorPosition(64, 23);
                 Console.WriteLine("다시입력해주세요!");
                 break;
         }
@@ -174,34 +195,43 @@ class BattleEvent
             {
                 Console.WriteLine($"{i + 1}. {monsters[i].Name}");
             }
-
+            Console.Write(">> ");
+            
             int sel;
             while (true)
             {
                 int.TryParse(Console.ReadLine(), out sel);
                 if (sel > 0 && sel <= monsters.Count) break;
-                else Console.WriteLine("다시 입력헤주세요");
+                else
+                {
+                    Console.SetCursorPosition(64, 23);
+                    Console.WriteLine("다시 입력헤주세요");
+                }
             }
+            Console.SetCursorPosition(64, 23);
             Console.WriteLine("공격하였습니다!");
             MonsterResult(monsters[sel - 1]);
         }
         else
         {
+            Console.SetCursorPosition(64, 23);
             Console.WriteLine("공격하였습니다!");
             MonsterResult();
         }
     }
 
-    public void MonsterTurn()  // 몬스터의 행동을 입력받는 메소드 -------------------------------------------------------------------------------------------------------
+    public void MonsterTurn(int i)  // 몬스터의 행동을 입력받는 메소드 -------------------------------------------------------------------------------------------------------
     {
-        Console.Clear();
+        Message();
+        Console.SetCursorPosition(64, 23);
         Random random = new Random();
-        Console.WriteLine($"{monster.Name}이(가) 다음 행동을 준비중입니다....");
+        Console.WriteLine($"{i+1}. {monster.Name}이(가) 다음 행동을 준비중입니다....");
         switch (random.Next(1, 4))
         {
             case 1:
                 if (!monster.isAction())
                 {
+                    Console.SetCursorPosition(64, 24);
                     Console.WriteLine($"{monster.Name}이(가) 공격합니다!");
                     PlayerResult();
                 }
@@ -210,6 +240,7 @@ class BattleEvent
             case 2:
                 if (skillMguard == 1)
                 {
+                    Console.SetCursorPosition(64, 24);
                     Console.WriteLine($"{monster.Name}이(가) 방어 자세를 취합니다.");
                     skillMguard = 2;
                 }
@@ -218,6 +249,7 @@ class BattleEvent
             case 3:
                 if (skillMsmash == 1)
                 {
+                    Console.SetCursorPosition(64, 24);
                     Console.WriteLine($"{monster.Name}이(가) 공격 자세를 취합니다.");
                     skillMsmash = 2;
                 }
@@ -241,6 +273,7 @@ class BattleEvent
         {
             monster.IsDead = true;
             monsters.Remove(monster);
+            Console.SetCursorPosition(64, 27);
             Console.WriteLine($"{monster.Name}가 사망했습니다.");
             AcquireExp(monster);
             this.monster = monsters[0] != null ? monsters[0] : monster;
@@ -256,6 +289,7 @@ class BattleEvent
             if (monsters[0].Health <= 0)
             {
                 monsters[0].IsDead = true;
+                Console.SetCursorPosition(64, 27);
                 Console.WriteLine($"{monsters[0].Name}이(가) 사망했습니다.");
                 AcquireExp(monsters[0]);
             }
@@ -273,6 +307,7 @@ class BattleEvent
             if (player.Health <= 0)
             {
                 player.IsDead = true;
+                Console.SetCursorPosition(64, 27);
                 Console.WriteLine($"{player.Name}가 사망했습니다.");
             }
         });
@@ -282,15 +317,18 @@ class BattleEvent
     // 몬스터 처치 시, 경험치 획득
     public void AcquireExp(Monster monster)
     {
+        Console.SetCursorPosition(64, 29);
         Console.WriteLine($"\n+{monster.Exp}경험치를 획득하였습니다.");
         player.CurrentExp += monster.Exp;
         if (player.CurrentExp >= player.MaxExp)
         {
             player.Level += 1;
+            Console.SetCursorPosition(64, 30);
             Console.WriteLine($"레벨업! Lv.{player.Level}");
             player.CurrentExp -= player.MaxExp;
             player.MaxExp += (float)(player.MaxExp * 0.2);
         }
+        Console.SetCursorPosition(64, 31);
         Console.WriteLine($"현재 경험치: {player.CurrentExp}, 다음 레벨업 까지 남은 경험치: {player.MaxExp - player.CurrentExp}");
     }
 
@@ -305,6 +343,7 @@ class BattleEvent
         {
             if (AvoidanceToss() <= player.Avoidance)
             {
+                Console.SetCursorPosition(64, 23);
                 Console.WriteLine("플레이어가 회피하였습니다!");
                 soundManager.CallSound("avod", 100);
                 Console.ReadKey();
@@ -312,6 +351,7 @@ class BattleEvent
             }
             else if (CrtToss() <= monster.Crt)
             {
+                Console.SetCursorPosition(64, 23);
                 Console.WriteLine("치명적 일격! 피해량 : " + damage * 2);
                 soundManager.CallSound("atk2", 100);
                 Console.ReadKey();
@@ -319,6 +359,7 @@ class BattleEvent
             }
             else
             {
+                Console.SetCursorPosition(64, 23);
                 Console.WriteLine($"{monster.Name}의 공격을 받았다 피해량 : " + damage);
                 soundManager.CallSound("atk", 100);
                 Console.ReadKey();
@@ -328,6 +369,7 @@ class BattleEvent
         }
         else
         {
+            Console.SetCursorPosition(64, 25);
             Console.WriteLine($"{monster.Name}의 공격이 너무 약하다!");
             soundManager.CallSound("block", 100);
             Console.ReadKey();
@@ -340,15 +382,16 @@ class BattleEvent
     {
         float playerAttack = player.Attack;
         if (skillPsmash) playerAttack *= skillPDamage;
-        float damage = (player.Attack) - (monster.Defense * skillMguard);
-        damage *= CompareAttribute(player.Attribute.Value, monster.Attribute);
-        damage = (float)Math.Round(damage, 2);
+        float attack = (player.Attack) - (monster.Defense * skillMguard);
+        attack *= CompareAttribute(player.Attribute.Value, monster.Attribute);
+        int damage = (int)attack;
 
-        //skillPsmash = 1;
+        skillPsmash = false;
         skillMguard = 1;
 
         if (damage > 0) //데미지가 0과 같거나 작은지 체크
         {
+            Console.SetCursorPosition(64, 24);
             if (AvoidanceToss() <= monster.Avoidance) // 회피 성공 유무 체크
             {
                 Console.WriteLine($"{monster.Name}이(가) 회피하였습니다!");
@@ -373,6 +416,7 @@ class BattleEvent
         }
         else // 데미지가 0과 같거나 작을경우 0으로 데미지 리턴 ( 음수가 될경우 생명력이 회복되는 현상을 막기위한 로직)
         {
+            Console.SetCursorPosition(64, 24);
             Console.WriteLine("상대가 너무 단단하다!");
             soundManager.CallSound("block", 100);
             Console.ReadKey();

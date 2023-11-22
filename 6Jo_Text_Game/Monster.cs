@@ -35,7 +35,7 @@ public class Monster : ICharacter
     public float Avoidance { get; set; }
     public float Crt { get; set; }
     public int Exp {  get; set; }
-
+    public float maxHealth {  get; set; }
 
 
     // 몬스터의 종족과 속성
@@ -64,15 +64,10 @@ public class Monster : ICharacter
         this.Species = species;
         this.Attribute = attribute;
         this.Exp = exp;
+        this.maxHealth = health;
     }
 
-    //스테이지 몬스터 소환
-    /// <summary>
-    /// 스테이지 별 몬스터
-    /// </summary>
-    /// <param name="stage"></param>
-    /// <returns></returns>
-
+    #region 스테이지 별 몬스터
     public List<Monster> StageMonster(int stage)
     {
         List<Monster> monsters = new List<Monster>();
@@ -140,8 +135,8 @@ public class Monster : ICharacter
         }
 
         return monsters;
-    } 
-
+    }
+    #endregion
 
     // 데미지를 입는 메서드
     public virtual bool TakeDamage(float damage)
@@ -191,16 +186,13 @@ public class Monster : ICharacter
 
 
 
-// 몬스터 생성
-/// <summary>
-///  몬스터 생성 클래스
-/// </summary>
+#region 몬스터 생성
 // --------------------------------------------------------------------------------
 // Stage 1 - 경비병
 public class Guard : Monster
 {
     public Guard()
-        : base("경비병", 1, 1, 1, 1, 10, 10, Species.코볼트, 1, 1, Attribute.수, 20)
+        : base("경비병", 1, 3, 1, 1, 20, 100, Species.코볼트, 1, 1, Attribute.수, 20)
     {
         this.Add();
     }
@@ -350,7 +342,7 @@ public class CloudSpiter : Monster
 public class Assassin : Monster
 {
     public Assassin()
-        : base("자객", 1, 1, 1, 1, 10, 10, Species.기믹, 1, 1, Attribute.수, 20)
+        : base("자객", 1, 10, 10, 1, 100, 10, Species.기믹, 1, 1, Attribute.수, 20)
     {
         this.Add();
     }
@@ -575,4 +567,4 @@ public class Assassin : Monster
         return p;
     } // 적 스폰 메서드
 }
-
+#endregion
