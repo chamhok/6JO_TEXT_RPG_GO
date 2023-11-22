@@ -6,22 +6,29 @@ using System.Text;
 
 class ScreenManager
 {
-        Character player;
-        PlayerInfo playerInfo;
-        MainScreen mainScreen = new MainScreen();
-        BattleScreen battleScreen;
-        Store Displaystore;
-        bool skipcheck = false;
-        SoundManager soundManager = new SoundManager();
-        SoundManager soundManager2 = new SoundManager();
+    Character player;
+    PlayerInfo playerInfo;
+    MainScreen mainScreen = new MainScreen();
+    BattleScreen battleScreen;
+    QuestScreen questScreen;
+    Store Displaystore;
+    bool skipcheck = false;
+    SoundManager soundManager = new SoundManager();
+    SoundManager soundManager2 = new SoundManager();
 
-        public ScreenManager(Character player, BattleEvent battleEvent, Store store)
-        {
-                this.player = player;
-                playerInfo = new PlayerInfo(player);
-                battleScreen = new BattleScreen(battleEvent);
-                Displaystore = store;
-        }
+    public ScreenManager()
+    {
+        
+    }
+
+    public ScreenManager(Character player, BattleEvent battleEvent, Store store, Quest quest)
+    {
+        this.player = player;
+        playerInfo = new PlayerInfo(player);
+        battleScreen = new BattleScreen(battleEvent);
+        Displaystore = store;
+        questScreen = new QuestScreen(quest);
+    }
 
         public void ShowMainScreen()
         {
@@ -48,24 +55,27 @@ class ScreenManager
                                         CallInventory();
                                         break;//인벤토리
 
-                                case "3":
-                                        soundManager2.StopMusic();
-                                        Console.Clear();
-                                        skipcheck = false;
-                                        soundManager.PlayBackgroundMusicAsync($"battle{player.WinCount}");
-                                        battleScreen.BattleStartSecen();
-                                        soundManager.StopMusic();
-                                        break;// 전투 화면으로 이동
-                                case "4":
-                                        Console.Clear();
-                                        Displaystore.DisplayStore();
-                                        break;//상점
-
-                                case "end":
-                                        Console.Clear();
-                                        skipcheck = false;
-                                        ChapterPicker(11);
-                                        break;
+                case "3":
+                    soundManager2.StopMusic();
+                    Console.Clear();
+                    skipcheck = false;
+                    soundManager.PlayBackgroundMusicAsync($"battle{player.WinCount}");
+                    battleScreen.BattleStartSecen();
+                    soundManager.StopMusic();
+                    break;// 전투 화면으로 이동
+                case "4":
+                    Console.Clear();
+                    Displaystore.DisplayStore();
+                    break;
+                case "5":
+                    Console.Clear();
+                    questScreen.DisplayQuestList();
+                    break;
+                case "end":
+                    Console.Clear();
+                    skipcheck = false;
+                    ChapterPicker(11);
+                    break;
 
                                 case "n":
                                         player.WinCount += 1;
@@ -186,18 +196,19 @@ class ScreenManager
                         Console.WriteLine("================================================");
                 }
 
-                public void Body()
-                {
-                        Console.WriteLine("1. 정보창");
-                        Console.WriteLine("2. 인벤토리");
-                        Console.WriteLine("3. 전투");
-                        Console.WriteLine("4. 상점");
-                }
-                private void Bottom()
-                {
-                        Console.WriteLine("================================================");
-                }
-        } // 메인 화면
+        public void Body()
+        {
+            Console.WriteLine("1. 정보창");
+            Console.WriteLine("2. 인벤토리");
+            Console.WriteLine("3. 전투");
+            Console.WriteLine("4. 상점");
+            Console.WriteLine("5. 퀘스트");
+        }
+        private void Bottom()
+        {
+            Console.WriteLine("================================================");
+        }
+    } // 메인 화면
 
         class PlayerInfo
         {
@@ -219,24 +230,49 @@ class ScreenManager
                         Console.WriteLine("================================================");
                 }
 
-                public void Body(Character player)
-                {
-                        Console.WriteLine("이름 : " + player.Name);
-                        Console.WriteLine("직업 : " + player.Job);
-                        Console.WriteLine("레벨 : " + player.Level);
-                        Console.WriteLine("공격력 : " + player.Attack);
-                        Console.WriteLine("방어력 : " + player.Defense);
-                        Console.WriteLine("직업 : " + player.Speed);
-                        Console.WriteLine("치명타 : " + player.Crt);
-                        Console.WriteLine("회피 : " + player.Avoidance);
-                        Console.WriteLine("Gold : " + player.Gold);
-                }
+        public void Body(Character player)
+        {
+            Console.WriteLine("이름 : " + player.Name);
+            Console.WriteLine("직업 : " + player.Job);
+            Console.WriteLine("레벨 : " + player.Level);
+            Console.WriteLine("공격력 : " + player.Attack);
+            Console.WriteLine("방어력 : " + player.Defense);
+            Console.WriteLine("직업 : " + player.Speed);
+            Console.WriteLine("치명타 : " + player.Crt);
+            Console.WriteLine("회피 : " + player.Avoidance);
+            Console.WriteLine("Gold : " + player.Gold);
+            CurrentExp();
+        }
 
-                private void Bottom()
-                {
-                        Console.WriteLine("================================================");
-                }
-        } // 플레이어 정보 화면
+        private void CurrentExp()
+        {
+            // 현재 경험치 퍼센트 계산
+            double expPercentage = (player.CurrentExp / player.MaxExp * 100) / 2;
+
+            Console.Write("[");
+            Console.ForegroundColor = ConsoleColor.Green;
+
+            // 변수에 경험치를 표시
+            for (int i = 0; i < (int)expPercentage; i++)
+            {
+                Console.Write("█");
+            }
+
+            Console.ForegroundColor = ConsoleColor.Gray;
+
+            // 남은 부분은 공백으로 채우기
+            for (int i = (int)expPercentage; i < 50; i++)
+            {
+                Console.Write(" ");
+            }
+            Console.WriteLine($"] {player.CurrentExp}/{player.MaxExp} Exp");
+        }
+
+        private void Bottom()
+        {
+            Console.WriteLine("================================================");
+        }
+    } // 플레이어 정보 화면
 
         public void Prologue()
         {
@@ -463,26 +499,38 @@ class ScreenManager
                 }
         }
 
-
-
-
-
-
-        class BattleScreen // 전투 진행 화면
-        {
-                BattleEvent battleEvent;
+    class BattleScreen // 전투 진행 화면
+    {
+        BattleEvent battleEvent;
 
                 public BattleScreen(BattleEvent battleEvent)
                 {
                         this.battleEvent = battleEvent;
                 }
 
-                public void BattleStartSecen()
-                {
-                        Console.WriteLine("전투시작.");
-                        battleEvent.Battles();
-                }
+        public void BattleStartSecen()
+        {
+            Console.WriteLine("전투시작.");
+            battleEvent.Battles();
         }
+    }
+
+    // 퀘스트 디스플레이 화면
+    class QuestScreen
+    {
+        Quest quest;
+
+        public QuestScreen(Quest quest)
+        {
+            this.quest = quest;
+        }
+
+        public void DisplayQuestList()
+        {
+            Console.Clear();
+            quest.DisplayQuest();
+        }
+    }
 }
 
 

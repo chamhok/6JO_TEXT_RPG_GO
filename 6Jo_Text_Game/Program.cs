@@ -15,21 +15,23 @@ public class GameData
 {
         private static GameData Instance;
 
-        // 몬스터 및 캐릭터를 저장하는 데이터 구조
-        private Monster monster;
-        private List<Monster> monsters;
-        private List<Character> characters;
-        private List<Item> items;
-        private List<Skill> skills;
+    // 몬스터 및 캐릭터를 저장하는 데이터 구조
+    private Monster monster;
+    private List<Monster> monsters;
+    private List<Character> characters;
+    private List<Item> items;
+    private List<Skill> skills;
+    private List<Quest> quests;
 
-        // 인스턴스 생성을 위한 private 생성자
-        private GameData()
-        {
-                monster = new Monster();
-                monsters = new List<Monster>();
-                characters = new List<Character>();
-                items = new List<Item>();
-                skills = new List<Skill>();
+    // 인스턴스 생성을 위한 private 생성자
+    private GameData()
+    {
+        monster = new Monster();
+        monsters = new List<Monster>();
+        characters = new List<Character>();
+        items = new List<Item>();
+        skills = new List<Skill>();
+        quests = new List<Quest>();
 
                 InitializeData(); // 필요시 데이터 초기화 가능
         }
@@ -115,10 +117,22 @@ public class GameData
         }
         // 필요하다면 더 많은 메서드를 추가할 수 있음
 
-        private void InitializeData()
-        {
-                // 필요시 몬스터 및 캐릭터 초기화
-        }
+    private void InitializeData()
+    {
+        // 필요시 몬스터 및 캐릭터 초기화
+    }
+
+    // 새로운 퀘스트 추가
+    public void AddQuest(Quest quest)
+    {
+        quests.Add(quest);
+    }
+
+    // 퀘스트 목록을 가져오는 메서드
+    public List<Quest> GetQuests()
+    {
+        return quests;
+    }
 }
 
 // 캐릭터를 나타내는 인터페이스
@@ -237,19 +251,20 @@ class Program : UiManager
                     screenManager.ShowMainScreen();*/
 
 
-                SoundManager soundManager = new SoundManager();
-                soundManager.PlayBackgroundMusicAsync("Title");
-                StartScreen startScreen = new StartScreen();
-                Character character = GameData.I.GetCharacters().First();
+        SoundManager soundManager = new SoundManager();
+        soundManager.PlayBackgroundMusicAsync("Title");
+        StartScreen startScreen = new StartScreen();
+        Character character = GameData.I.GetCharacters().First();
 
-                BattleEvent battleEvent = new BattleEvent(character);
-                Store store = new Store(character);
-                ScreenManager screenManager = new ScreenManager(character, battleEvent, store);
-                character.Add();
-                GameData.I.GetCharacters().Select(x => x.ToString()).ToList().ForEach(Console.WriteLine);
-                screenManager.Prologue();
-                soundManager.StopMusic();
-                screenManager.ShowMainScreen();
+        BattleEvent battleEvent = new BattleEvent(character);
+        Store store = new Store(character);
+        Quest quest = new Quest(battleEvent, character);
+        ScreenManager screenManager = new ScreenManager(character, battleEvent, store, quest);
+        character.Add();
+        GameData.I.GetCharacters().Select(x => x.ToString()).ToList().ForEach(Console.WriteLine);
+        screenManager.Prologue();
+        soundManager.StopMusic();
+        screenManager.ShowMainScreen();
 
 
 
@@ -389,28 +404,28 @@ class Program : UiManager
                                 foreach (string line in fileContents2)
                                 {
 
-                                        // 두 번째 foreach 루프에서 좌표 설정 부분 수정
-                                        int left2 = Math.Max((Console.WindowWidth / 2) - line.Length, 0);
-                                        Console.SetCursorPosition(left2, y);
-                                        Console.Write(line);
-                                        y++;
-                                }
-                        }
-                        catch (Exception ex)
-                        {
-                                Console.WriteLine($"Error reading the file: {ex.Message}");
-                        }
-                        Console.SetCursorPosition((Console.WindowWidth) / 2 - "x를 누르시오.".Length, y + 5);
-                        Console.WriteLine("x를 누르시오.");
-                        while (true)
-                        {
-                                ConsoleKeyInfo key = Console.ReadKey();
-                                if (key.KeyChar == 'x' || key.KeyChar == 'ㅌ')
-                                {
-                                        soundManager.CallSound("sound1", 1);
-                                        break;
-                                }
-                        }
+                    // 두 번째 foreach 루프에서 좌표 설정 부분 수정
+                    int left2 = Math.Max((Console.WindowWidth / 2) - line.Length, 0);
+                    Console.SetCursorPosition(left2, y);
+                    Console.Write(line);
+                    y++;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error reading the file: {ex.Message}");
+            }
+            Console.SetCursorPosition((Console.WindowWidth) / 2 - "x를 누르시오.".Length, y + 5);
+            Console.WriteLine("x를 누르시오.");
+            while (true)
+            {
+                ConsoleKeyInfo key = Console.ReadKey();
+                if (key.KeyChar == 'x' || key.KeyChar == 'ㅌ')
+                {
+                    soundManager.CallSound("sound1", 1);
+                    break;
+                }
+            }
 
                 }
                 public void CharName(out string charName)
@@ -568,8 +583,8 @@ class Program : UiManager
                                         break;
                                 }
 
-                        }
-                        soundManager.CallSound("sound1", 1);
+            }
+            soundManager.CallSound("sound1", 1);
 
 
 
