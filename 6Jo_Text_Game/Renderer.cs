@@ -28,20 +28,20 @@ public static class Renderer
                 height = Console.LargestWindowHeight;
 
                 Console.SetCursorPosition(0, 0);
-                Console.Write(new string('=', width));
+                Console.Write(new string('━', width));
 
                 for (int i = 1; i < height - inputAreaHeight - 2; i++)
                 {
                         Console.SetCursorPosition(0, i);
-                        Console.Write('║');
+                        Console.Write('┃');
                         Console.SetCursorPosition(width - 1, i);
-                        Console.Write('║');
+                        Console.Write('┃');
                 }
 
                 if (!string.IsNullOrEmpty(title))
                 {
                         Console.SetCursorPosition(0, 2);
-                        Console.Write(new string('=', width));
+                        Console.Write(new string('━', width));
                         int correctLength = GetPrintingLength(title);
                         int horizontalStart = (width - correctLength) / 2;
                         if (horizontalStart < 0) horizontalStart = 3;
@@ -50,7 +50,7 @@ public static class Renderer
                 }
 
                 Console.SetCursorPosition(0, height - inputAreaHeight - 2);
-                Console.Write(new string('=', width));
+                Console.Write(new string('━', width));
         }
 
         // 문자열의 출력 길이를 계산하는 메서드입니다.
@@ -75,27 +75,27 @@ public static class Renderer
                 int currentLine = startLine;
 
                 // 헤더 행을 그립니다.
-                StringBuilder header = new StringBuilder("|   ");
+                StringBuilder header = new StringBuilder("┃   ");
                 foreach (var type in types)
                 {
                         header.Append(type.name.PadRight(type.length));
-                        header.Append(" | ");
+                        header.Append(" ┃ ");
                 }
                 Print(currentLine++, header.ToString());
 
                 // 수평 선을 그립니다.
-                StringBuilder horizontalLine = new StringBuilder("+--");
+                StringBuilder horizontalLine = new StringBuilder("╋━━");
                 foreach (var type in types)
                 {
-                        horizontalLine.Append(new string('-', type.length + 2));
-                        horizontalLine.Append("+");
+                        horizontalLine.Append(new string('━', type.length + 2));
+                        horizontalLine.Append("╋");
                 }
                 Print(currentLine++, horizontalLine.ToString());
 
                 int dataCount = table.GetDataCount();
                 for (int i = 0; i < dataCount; i++)
                 {
-                        StringBuilder row = new StringBuilder("| ");
+                        StringBuilder row = new StringBuilder("┃ ");
                         if (i == selectedRow)
                         {
                                 row.Append("▶");
@@ -110,7 +110,7 @@ public static class Renderer
                                 string data = rowData[j];
                                 int dataLength = GetPrintingLength(data);
                                 row.Append(data.PadRight(types[j].length - dataLength));
-                                row.Append(" | ");
+                                row.Append(" ┃ ");
                         }
                         Print(currentLine++, row.ToString());
                 }
