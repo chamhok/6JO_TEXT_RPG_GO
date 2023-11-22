@@ -326,17 +326,19 @@ class BattleEvent
         Console.SetCursorPosition(64, 29);
         Console.WriteLine($"\n+{monster.Exp}경험치를 획득하였습니다.");
         player.CurrentExp += monster.Exp;
-        if (player.CurrentExp >= player.MaxExp)
+        while (player.CurrentExp >= player.MaxExp)
         {
             player.Level += 1;
             Console.SetCursorPosition(64, 30);
             Console.WriteLine($"레벨업! Lv.{player.Level}");
-            player.CurrentExp -= player.MaxExp;
-            player.MaxExp += (float)(player.MaxExp * 0.2);
+            player.CurrentExp = player.CurrentExp - player.MaxExp; ;
+            player.MaxExp += (float)Math.Round(player.MaxExp * 0.2);
         }
+
         Console.SetCursorPosition(64, 31);
-        Console.WriteLine($"현재 경험치: {player.CurrentExp}, 다음 레벨업 까지 남은 경험치: {player.MaxExp - player.CurrentExp}");
+        Console.WriteLine($"현재 경험치: {player.CurrentExp}/{player.MaxExp}, 다음 레벨업 까지 남은 경험치: {player.MaxExp - player.CurrentExp }");
     }
+
 
     // 몬스터의 공격과 공격 성공유무, 크리티컬 유무 판정( PlayerDmg 주석 참고) -------------------------------------------------------------
     public float MonsterDmg()

@@ -305,6 +305,7 @@ class Program : UiManager
             }
             Console.SetCursorPosition(20, baseLine + 2);
             Console.WriteLine(" ▄████▀     ███    █▀      ██████████       ▀█   ███   █▀   ▀█████▀   ▄████████▀     ▄████▀   █▀      ▄████▀        ████████▀    ███    ███   ██████████   ███    █▀   ▀█   ███   █▀    ██████████   ███    ██ ");
+            
             Console.SetCursorPosition(20, baseLine + 5);
             while (true)
             {
