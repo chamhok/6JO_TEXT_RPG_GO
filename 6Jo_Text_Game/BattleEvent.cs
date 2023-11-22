@@ -47,6 +47,7 @@ class BattleEvent
         if (monsters != null) this.monsters.Clear();
         this.monsters = GameData.I.GetMonsters(player);
         this.monster = monsters[0];
+        
 
         int turnSpeed = 10;
 
@@ -86,13 +87,16 @@ class BattleEvent
         if (player.IsDead == true)
         {
             //--life; //라이프 기능 아직 구현X 추가적인 상세 게임 스토리라인 결정후 구현
+            Console.Clear();
+            player.IsDead = false;
             Console.WriteLine("전투패배!");
         }
         // 플레이어 생존시
         else
         {
             player.WinCount++; //라이프와 동일
-            Console.WriteLine("전투승리! 승리횟수: ");
+            Console.SetCursorPosition(64, 30);
+            Console.WriteLine("전투승리!");
             GetRewards();
         }
 

@@ -1,5 +1,6 @@
 ﻿
 using NAudio.Codecs;
+using System;
 using System.Drawing;
 using static System.Formats.Asn1.AsnWriter;
 
@@ -116,7 +117,7 @@ public class Monster : ICharacter
 
             // Stage 3 ----------------------------
             case 7: // 용암
-                //monsters.Add(new Rava());
+                monsters.Add(new Rava());
                 break;
 
             case 8: // 낭떠러지
@@ -141,6 +142,7 @@ public class Monster : ICharacter
     }
     #endregion
 
+    #region 몬스터 메소드 모음
     // 데미지를 입는 메서드
     public virtual bool TakeDamage(float damage)
     {
@@ -185,11 +187,13 @@ public class Monster : ICharacter
                $"SPC  : {this.Species} \n" +
                $"ATB  : {this.Attribute}";
     }
+    #endregion
 }
 
 
 
 #region 몬스터 생성
+#region 일반 몬스터
 // --------------------------------------------------------------------------------
 // Stage 1 - 경비병
 public class Guard : Monster
@@ -335,7 +339,7 @@ public class CloudSpiter : Monster
     }
 }
 
-
+#endregion
 
 
 // 기믹 전투 ==================================================================
@@ -571,161 +575,230 @@ public class Assassin : Monster
 }
 #endregion
 
-// stage 3 - 용암
-//public class Rava : Monster
-//{
-//    public Rava()
-//        : base("용암", 1, 1, 1, 1, 10, 10, Species.기믹, 1, 1, Attribute.수, 20)
-//    {
-//        this.Add();
-//    }
+#region stage 3 - 용암
+public class Rava : Monster
+{
+    public Rava()
+        : base("용암", 1, 1, 1, 1, 10, 10, Species.기믹, 1, 1, Attribute.수, 20)
+    {
+        this.Add();
+    }
 
-//    // -------------------------------------------------------------------------------
-//    enum Direction
-//    {
-//        LEFT,
-//        RIGHT
-//    }
-//    double cycleTime = 100;
-//    Timer time;
-//    //float time = 0.00f;
-//    Point player = new Point(10, 10, '▲');
+    // -------------------------------------------------------------------------------
+    enum Direction
+    {
+        LEFT,
+        RIGHT
+    }
+    float time = 0.00f;
+    System.Threading.Timer timer;
+    Point player = new Point(10, 10, '▲');
+    ConsoleKeyInfo key;
 
-//    public override bool TakeDamage(float damage)
-//    {
+    //static void timer_Tick(object? state)
+    //{
+    //    time += 0.01f;
+    //    Console.SetCursorPosition(8, 2);
+    //    Console.WriteLine($"{time.ToString("N2")}");
+    //}
 
-//        DrawWall();
+    public override bool TakeDamage(float damage)
+    {
 
-//        while (true)
-//        {
-//            Console.SetCursorPosition(2, 5);
-//            Console.Write("용암주의! 중심잡기");
-//            Console.SetCursorPosition(2, 7);
-//            Console.Write("x를 눌러 시작하세요");
-//            if (Console.ReadKey().KeyChar == 'x') break; ;
-//        }
+        DrawWall();
 
-//        Console.ReadKey();
-//        return base.TakeDamage(damage);
-//    }
+        while (true)
+        {
+            Console.SetCursorPosition(8, 2);
+            Console.Write("0.00");
+            Console.SetCursorPosition(2, 5);
+            Console.Write("용암주의! 중심잡기");
+            Console.SetCursorPosition(2, 7);
+            Console.Write("x를 눌러 시작하세요");
+            if (Console.ReadKey().KeyChar == 'x') break;
+        }
 
-//    // -------------------------------------------------------------------------------
-//    void DrawWall()
-//    {
-//        // 상하 벽 그리기
-//        for (int i = 0; i < 21; i++)
-//        {
-//            Console.SetCursorPosition(i, 0);
-//            Console.Write("#");
-//            Console.SetCursorPosition(i, 21);
-//            Console.Write("#");
-//        }
+        Console.Clear();
+        DrawWall();
+        player.Draw();
+        DrawInfo();
+        
+        
+        //timer = new Timer(timer_Tick, null, 0, 10);
+        Thread.Sleep(100);
+        Random rand = new Random();
+        while (true)
+        {
+            time += 0.1f;
+            Console.SetCursorPosition(8, 2);
+            Console.WriteLine($"{time.ToString("N2")}");
 
-//        // 좌우 벽 그리기
-//        for (int i = 0; i < 21; i++)
-//        {
-//            Console.SetCursorPosition(0, i);
-//            Console.Write("#");
-//            Console.SetCursorPosition(21, i);
-//            Console.Write("#");
-//        }
-
-//        // 중간선 그리기
-//        for (int i = 1; i < 21; i++)
-//        {
-//            Console.SetCursorPosition(10, i);
-//            Console.Write("│");
-//        }
-
-//        // 한계선 그리기
-//        for (int i = 1; i < 21; i++)
-//        {
-//            Console.SetCursorPosition(7, i);
-//            Console.Write("┃");
-//            Console.SetCursorPosition(12, i);
-//            Console.Write("┃");
-//        }
-
-//    } // 벽 그리기
-
-//    void DrawInfo()
-//    {
-//        Console.SetCursorPosition(10, 2);
-//        //Console.Write(time);
-
-//        Console.SetCursorPosition(30, 7);
-//        Console.WriteLine($"현재 위치 : {player.x} / 30");
-
-//        Console.SetCursorPosition(30, 9);
-//        Console.WriteLine($"한계 위치 : 8 ~ 12");
-//    }
-
-
-//    class Point
-//    {
-//        public int x { get; set; }
-//        public int y { get; set; }
-//        public char sym { get; set; }
-//        public Direction direction { get; set; }
-
-//        public Point(int x, int y, char sym)
-//        {
-//            this.x = x;
-//            this.y = y;
-//            this.sym = sym;
-//        }
-
-//        // 점을 그리는 메서드
-//        public void Draw()
-//        {
-//            Console.CursorVisible = false;
-//            Console.SetCursorPosition(x, y);
-//            Console.Write(sym);
-
-//        }
-//        public void Draw(string sym)
-//        {
-//            Console.CursorVisible = false;
-//            Console.SetCursorPosition(x, y);
-//            Console.Write(sym);
-//        }
-
-//        // 점을 지우는 메서드
-//        public void Clear()
-//        {
-//            Draw("  ");
-//        }
-
-//        // 두 점이 같은지 비교하는 메서드
-//        public bool IsHit(Point p)
-//        {
-//            return p.x == x && p.y == y;
-//        }
-
-//    } // 위치 클래스
-
-//    void PlayerMove(ref Point p)
-//    {
-//        switch (p.direction)
-//        {
-//            case Direction.LEFT:
-//                p.Clear();
-//                p.x--;
-//                if (p.x < 1) p.x = 1;
-//                p.Draw();
-//                break;
-
-//            case Direction.RIGHT:
-//                p.Clear();
-//                p.x++;
-//                if (p.x > 20) p.x = 20;
-//                p.Draw();
-//                break;
-//        }
-//    } // 플레이어 움직이기 메서드
+            //DrawWall();
+            if (rand.Next(0, 2) == 0)
+            {
+                player.direction = Direction.LEFT;
+                PlayerMove(player, rand.Next(0, 3));
+            }
+            else
+            {
+                player.direction = Direction.RIGHT;
+                PlayerMove(player, rand.Next(0, 3));
+            }
 
 
 
+            // 플레이어 움직임
+            if (Console.KeyAvailable)
+            {
+                key = Console.ReadKey(true);
+            }
+            switch (key.Key)
+            {
+                case ConsoleKey.LeftArrow:
+                    player.direction = Direction.LEFT;
+                    PlayerMove(player, 1);
+                    break;
+                case ConsoleKey.RightArrow:
+                    player.direction = Direction.RIGHT;
+                    PlayerMove(player, 1);
+                    break;
+            }
 
-//}
+
+            DrawInfo();
+
+            // 적 움직임
+            if (time >= 5) break;
+            Thread.Sleep(10);
+        }
+        //timer.Dispose();
+
+
+        if (player.x > 8 && player.x < 12) return false;
+        else return true;
+    }
+
+    // -------------------------------------------------------------------------------
+    void DrawWall()
+    {
+        // 상하 벽 그리기
+        for (int i = 0; i < 21; i++)
+        {
+            Console.SetCursorPosition(i, 0);
+            Console.Write("#");
+            Console.SetCursorPosition(i, 21);
+            Console.Write("#");
+        }
+
+        // 좌우 벽 그리기
+        for (int i = 0; i < 21; i++)
+        {
+            Console.SetCursorPosition(0, i);
+            Console.Write("#");
+            Console.SetCursorPosition(21, i);
+            Console.Write("#");
+        }
+
+        // 중간선 그리기
+        for (int i = 1; i < 21; i++)
+        {
+            Console.SetCursorPosition(10, i);
+            Console.Write("│");
+        }
+
+        // 한계선 그리기
+        for (int i = 1; i < 21; i++)
+        {
+            Console.SetCursorPosition(7, i);
+            Console.Write("┃");
+            Console.SetCursorPosition(12, i);
+            Console.Write("┃");
+        }
+
+    } // 벽 그리기
+
+    void DrawInfo()
+    {
+        Console.SetCursorPosition(30, 7);
+        Console.WriteLine($"현재 위치 : {player.x, 3}");
+
+        Console.SetCursorPosition(30, 9);
+        Console.WriteLine($"한계 위치 : 8 ~ 12");
+    }
+
+
+    class Point
+    {
+        public int x { get; set; }
+        public int y { get; set; }
+        public char sym { get; set; }
+        public Direction direction { get; set; }
+
+        public Point(int x, int y, char sym)
+        {
+            this.x = x;
+            this.y = y;
+            this.sym = sym;
+        }
+
+        // 점을 그리는 메서드
+        public void Draw()
+        {
+            Console.CursorVisible = false;
+            Console.SetCursorPosition(x, y);
+            Console.Write(sym);
+
+        }
+        public void Draw(string sym)
+        {
+            Console.CursorVisible = false;
+            Console.SetCursorPosition(x, y);
+            Console.Write(sym);
+        }
+
+        // 점을 지우는 메서드
+        public void Clear()
+        {
+            Draw("  ");
+        }
+
+        // 두 점이 같은지 비교하는 메서드
+        public bool IsHit(Point p)
+        {
+            return p.x == x && p.y == y;
+        }
+
+    } // 위치 클래스
+
+    void PlayerMove(Point p, int move)
+    {
+        switch (p.direction)
+        {
+            case Direction.LEFT:
+                //p.Clear();
+                Console.SetCursorPosition(1, p.y);
+                Console.Write("      ┃  │ ┃       ");
+                Thread.Sleep(30);
+                p.x-=move;
+                if (p.x < 1) p.x = 1;
+                p.Draw();
+                Thread.Sleep(30);
+                break;
+
+            case Direction.RIGHT:
+                //p.Clear();
+                Console.SetCursorPosition(1, p.y);
+                Console.Write("      ┃  │ ┃       ");
+                Thread.Sleep(30);
+                p.x+=move;
+                if (p.x > 20) p.x = 20;
+                p.Draw();
+                Thread.Sleep(30);
+                break;
+        }
+    } // 플레이어 움직이기 메서드
+}
+#endregion
+
+
 #endregion
