@@ -484,7 +484,6 @@ public class BattleEvent
                 if (skillPsmash)
                 {
                     soundManager.CallSound(getSkillSound, 1);
-                    Console.WriteLine(getSkillSound);
                     Console.ReadKey();
                     skillPsmash = false;
                 }
