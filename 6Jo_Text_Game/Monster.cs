@@ -2,6 +2,7 @@
 using NAudio.Codecs;
 using System;
 using System.Drawing;
+using System.Text.RegularExpressions;
 using static System.Formats.Asn1.AsnWriter;
 
 
@@ -122,7 +123,7 @@ public class Monster : ICharacter
                 break;
 
             case 8: // 낭떠러지
-                monsters.Add(new Cerberus());
+                monsters.Add(new Bridge());
                 break;
 
             case 9: // 케르베로스
@@ -576,11 +577,11 @@ public class Assassin : Monster
 }
 #endregion
 
-#region stage 3 - 용암
-public class Rava : Monster
+#region stage 3 - (기믹) 징검다리
+public class Bridge : Monster
 {
-    public Rava()
-        : base("용암", 1, 1, 1, 1, 10, 10, Species.기믹, 1, 1, Attribute.수, 20)
+    public Bridge()
+        : base("징검다리", 1, 1, 1, 1, 10, 10, Species.기믹, 1, 1, Attribute.수, 20)
     {
         this.Add();
     }
@@ -613,8 +614,10 @@ public class Rava : Monster
             Console.SetCursorPosition(8, 2);
             Console.Write("0.00");
             Console.SetCursorPosition(2, 5);
-            Console.Write("용암주의! 중심잡기");
-            Console.SetCursorPosition(2, 7);
+            Console.Write("낙하주의! 중심잡기");
+            Console.SetCursorPosition(2, 5);
+            Console.Write("5초간 버티세요!");
+            Console.SetCursorPosition(2, 11);
             Console.Write("x를 눌러 시작하세요");
             if (Console.ReadKey().KeyChar == 'x') break;
         }
@@ -801,5 +804,188 @@ public class Rava : Monster
 }
 #endregion
 
+#region stage 3 - (기믹) 횡단보도
+
+public class Rava : Monster
+{
+    public Rava()
+        : base("용암", 1, 1, 1, 1, 10, 10, Species.기믹, 1, 1, Attribute.수, 20)
+    {
+        this.Add();
+    }
+
+    // -------------------------------------------------------------------------------
+    float time = 30.00f;
+    int playerBottomY = 16;
+    bool playerLeg = true;
+    int ravaBottomY = 21;
+    int ravaBottomX = 45;
+    int gravity = 2;
+
+    
+    public override bool TakeDamage(float damage)
+    {
+        DrawWall();
+
+        while (true)
+        {
+            Console.SetCursorPosition(8, 2);
+            Console.Write("0.00");
+            Console.SetCursorPosition(5, 5);
+            Console.Write("용암주의! 떨어지지 마세요!");
+            Console.SetCursorPosition(5, 7);
+            Console.Write("x를 눌러 시작하세요");
+            if (Console.ReadKey().KeyChar == 'x') break;
+        }
+
+
+        int ravaX = ravaBottomX;
+        int playerY = playerBottomY;
+        bool isJumping = false;
+        bool isBottom = true;
+        while (true)
+        {
+            ConsoleKeyInfo key = new ConsoleKeyInfo();
+            Console.Clear();
+            DrawWall();
+            DrawRava(ravaBottomX);
+
+
+            time -= 0.1f;
+            Console.SetCursorPosition(40, 3);
+            Console.WriteLine($"{time.ToString("N2")}");
+
+
+            if (GameOver(ravaX, playerY))
+            {
+                Console.SetCursorPosition(10, 10);
+                Console.WriteLine("GameOver");
+                return true;
+                //break;
+            }
+
+            if (Console.KeyAvailable)
+            {
+                key = Console.ReadKey(true);
+            }
+
+            if (key.Key == ConsoleKey.Spacebar && isBottom)
+            {
+                isJumping = true;
+                isBottom = false;
+            }
+
+            
+            
+
+            if (isJumping)
+            {
+                if (playerY <= 10) isJumping = false;
+                playerY -= gravity;
+            }
+            else
+            {
+                if (playerY >= playerBottomY)
+                {
+                    playerY = playerBottomY;
+                    isBottom = true;
+                }
+                playerY += gravity;
+            }
+
+            
+
+            ravaX -= 2;
+
+            if(ravaX <= 0)
+            {
+                ravaX = ravaBottomX;
+            }
+
+            
+
+            DrawPlayer(playerY);
+            DrawRava(ravaX);
+
+            if (time <= 0) break;
+            Thread.Sleep(100);
+
+        }
+
+        Console.SetCursorPosition(10, 10);
+        Console.WriteLine("Clear! 아무키나 눌러주세요");
+        Console.ReadKey();
+        return false;
+    }
+
+    // -------------------------------------------------------------------------------
+
+    void DrawWall()
+    {
+        // 상하 벽 그리기
+        for (int i = 0; i < 51; i++)
+        {
+            Console.SetCursorPosition(i, 0);
+            Console.Write("#");
+            Console.SetCursorPosition(i, 23);
+            Console.Write("#");
+            Console.SetCursorPosition(i, 22);
+            Console.Write("#");
+            Console.SetCursorPosition(i, 21);
+            Console.Write("#");
+        }
+
+        // 좌우 벽 그리기
+        for (int i = 0; i < 21; i++)
+        {
+            Console.SetCursorPosition(0, i);
+            Console.Write("#");
+            Console.SetCursorPosition(51, i);
+            Console.Write("#");
+        }
+    } // 벽 그리기
+
+
+    void DrawRava(int ravaX)
+    {
+        Console.SetCursorPosition(ravaX, ravaBottomY);
+        Console.WriteLine("        ");
+        Console.SetCursorPosition(ravaX, ravaBottomY+1);
+        Console.WriteLine("        ");
+    }
+
+    void DrawPlayer(int playerY)
+    {
+        Console.SetCursorPosition(4, playerY);
+        Console.Write(" @ ");
+        Console.SetCursorPosition(4, playerY+1);
+        Console.Write("@@@");
+        Console.SetCursorPosition(4, playerY+2);
+        Console.Write(" @ ");
+        if (playerLeg)
+        {
+            Console.SetCursorPosition(4, playerY + 3);
+            Console.Write(" @ ");
+        }
+        else
+        {
+            Console.SetCursorPosition(4, playerY + 3);
+            Console.Write("@ @");
+        }
+
+        playerLeg = !playerLeg;
+    }
+
+    bool GameOver(int ravaX, int playerY)
+    {
+        if (ravaX <= 6 && ravaX > 2 && playerY > 15) return true;
+        
+        return false;
+    }
+
+
+}
+
+#endregion
 
 #endregion
