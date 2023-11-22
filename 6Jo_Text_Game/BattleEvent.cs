@@ -43,6 +43,7 @@ class BattleEvent
 
     public void Battles()  // 배틀 시작
     {
+        Console.CursorVisible = false;
         if (monsters != null) this.monsters.Clear();
         this.monsters = GameData.I.GetMonsters(player);
         this.monster = monsters[0];
@@ -118,7 +119,7 @@ class BattleEvent
             else
             {
                 Console.SetCursorPosition(0, 26);
-                Console.WriteLine("다시 입력헤주세요");
+                Console.WriteLine("다시 입력해주세요");
                 Message();
             }
         }
@@ -271,8 +272,8 @@ class BattleEvent
     public void MonsterResult(Monster monster) // 다수의 몬스터 처리
     {
         monster.TakeDamage((float)PlayerDmg());
-        monster.SetChangedCallback(health =>
-        {
+        //monster.SetChangedCallback(health =>
+        //{
             if (monster.Health <= 0)
             {
                 monster.IsDead = true;
@@ -280,17 +281,17 @@ class BattleEvent
                 Console.SetCursorPosition(64, 27);
                 Console.WriteLine($"{monster.Name}가 사망했습니다.");
                 AcquireExp(monster);
-                this.monster = monsters[0] != null ? monsters[0] : monster;
+                this.monster = monsters.Count != 0 ? monsters[0] : monster;
                 Console.ReadKey();
             }
-        });
+        //});
     }
 
     public void MonsterResult() // 단일 몬스터 처리
     {
         monsters[0].TakeDamage((float)PlayerDmg());
-        monsters[0].SetChangedCallback(health =>
-        {
+        //monsters[0].SetChangedCallback(health =>
+        //{
             if (monsters[0].Health <= 0)
             {
                 monsters[0].IsDead = true;
@@ -298,7 +299,7 @@ class BattleEvent
                 Console.WriteLine($"{monsters[0].Name}이(가) 사망했습니다.");
                 AcquireExp(monsters[0]);
             }
-        });
+        //});
         Console.ReadKey();
     }
 

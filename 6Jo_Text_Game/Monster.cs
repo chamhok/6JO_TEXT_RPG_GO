@@ -3,6 +3,7 @@ using NAudio.Codecs;
 using System.Drawing;
 using static System.Formats.Asn1.AsnWriter;
 
+
 public class Monster : ICharacter
 {
     // 체력 변경 시 호출될 콜백
@@ -36,8 +37,8 @@ public class Monster : ICharacter
     public int Gold { get; set; }
     public float Avoidance { get; set; }
     public float Crt { get; set; }
-    public int Exp {  get; set; }
-    public float maxHealth {  get; set; }
+    public int Exp { get; set; }
+    public float maxHealth { get; set; }
 
 
     // 몬스터의 종족과 속성
@@ -47,7 +48,7 @@ public class Monster : ICharacter
     // 몬스터 기본 생성자
     public Monster()
     {
-        
+
     }
 
     // 모든 속성을 초기화하는 생성자
@@ -77,63 +78,63 @@ public class Monster : ICharacter
         switch (stage)
         {
             // Stage 1----------------------------
-        case 0: // 경비병 * 3
-            monsters.Add(new Guard());
-            monsters.Add(new Guard());
-            monsters.Add(new Guard());
-            break;
+            case 0: // 경비병 * 3
+                monsters.Add(new Guard());
+                monsters.Add(new Guard());
+                monsters.Add(new Guard());
+                break;
 
             case 1: // 기사 * 3
-            monsters.Add(new Knight());
-            monsters.Add(new Knight());
-            monsters.Add(new Knight());
-            break;
+                monsters.Add(new Knight());
+                monsters.Add(new Knight());
+                monsters.Add(new Knight());
+                break;
 
-        case 2: // 기사*2 + 기사단장
-            monsters.Add(new Knight());
-            monsters.Add(new Knight());
-            monsters.Add(new Commander());
-            break;
+            case 2: // 기사*2 + 기사단장
+                monsters.Add(new Knight());
+                monsters.Add(new Knight());
+                monsters.Add(new Commander());
+                break;
 
-        // Stage 2 --------------------------
-        case 3: // 마녀
-            monsters.Add(new Witch());
-            break;
+            // Stage 2 --------------------------
+            case 3: // 마녀
+                monsters.Add(new Witch());
+                break;
 
-        case 4: // 고블린 + 트롤
-            monsters.Add(new Troll());
-            monsters.Add(new Goblin());
-            break;
+            case 4: // 고블린 + 트롤
+                monsters.Add(new Troll());
+                monsters.Add(new Goblin());
+                break;
 
-        case 5: // 자객 (기믹)
-            monsters.Add(new Assassin());
-            break;
+            case 5: // 자객 (기믹)
+                monsters.Add(new Assassin());
+                break;
 
-        case 6: // 상어
-            monsters.Add(new DesertShark());
-            break;
+            case 6: // 상어
+                monsters.Add(new DesertShark());
+                break;
 
-        // Stage 3 ----------------------------
-        case 7: // 용암
-            //monsters.Add(new Rava());
-            break;
+            // Stage 3 ----------------------------
+            case 7: // 용암
+                //monsters.Add(new Rava());
+                break;
 
-        case 8: // 낭떠러지
-            monsters.Add(new Cerberus());
-            break;
+            case 8: // 낭떠러지
+                monsters.Add(new Cerberus());
+                break;
 
-        case 9: // 케르베로스
-            monsters.Add(new Cerberus());
-            break;
+            case 9: // 케르베로스
+                monsters.Add(new Cerberus());
+                break;
 
-        case 10: // 사천왕
-            monsters.Add(new VoidMaster());
-            monsters.Add(new ShadowWizard());
-            monsters.Add(new FireQueen());
-            monsters.Add(new CloudSpiter());
-            break;
+            case 10: // 사천왕
+                monsters.Add(new VoidMaster());
+                monsters.Add(new ShadowWizard());
+                monsters.Add(new FireQueen());
+                monsters.Add(new CloudSpiter());
+                break;
 
-        default: break;
+            default: break;
         }
 
         return monsters;
@@ -360,7 +361,7 @@ public class Assassin : Monster
     Point player = new Point(10, 20, '▲');
     List<Point> enemy = new List<Point>();
     ConsoleKeyInfo key;
-    string[] hp = new string[2] {"♥", "♥" };
+    string[] hp = new string[2] { "♥", "♥" };
     int hpCount = 2;
     int score = 0;
 
@@ -406,8 +407,8 @@ public class Assassin : Monster
                     PlayerMove(ref player);
                     break;
             }
-            
-            
+
+
 
             // 적 움직임
             if (enemy.Count == 0 || rand.Next(0, 3) % 3 == 0) enemy.Add(EnemySpawn());
@@ -438,13 +439,14 @@ public class Assassin : Monster
         }
 
 
-        if(hpCount == 0)
+        if (hpCount == 0)
         {
             soundManager.CallSound("atk2", 1000);
             Console.SetCursorPosition(0, 22);
             Console.WriteLine("Fail");
             Console.WriteLine("Enter키를 눌러주세요");
-            while (true) {
+            while (true)
+            {
                 if (Console.ReadKey().Key == ConsoleKey.Enter) break;
             }
             return true;
@@ -488,11 +490,11 @@ public class Assassin : Monster
     void DrawInfo()
     {
         Console.SetCursorPosition(30, 7);
-        for(int i=0; i<2; i++)
+        for (int i = 0; i < 2; i++)
         {
             Console.Write(hp[i] + " ");
         }
-        Console.SetCursorPosition (30, 9);
+        Console.SetCursorPosition(30, 9);
         Console.WriteLine($"회피 한 자객 수 : {score} / 30");
     }
 
@@ -584,12 +586,14 @@ public class Assassin : Monster
 //        LEFT,
 //        RIGHT
 //    }
-//    //Timer time = new System.Timers.Timer(cycleTime);
+//    double cycleTime = 100;
+//    Timer time;
 //    //float time = 0.00f;
 //    Point player = new Point(10, 10, '▲');
 
 //    public override bool TakeDamage(float damage)
 //    {
+
 //        DrawWall();
 
 //        while (true)
@@ -720,7 +724,7 @@ public class Assassin : Monster
 //        }
 //    } // 플레이어 움직이기 메서드
 
-    
+
 
 
 //}
