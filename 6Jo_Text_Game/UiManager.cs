@@ -5,37 +5,37 @@
 
         private static int _goldLeftPostion = 64;
 
-    private static int _goldTopPostion = 3;
-    private static int _itemsTopPostion = 7;
+        private static int _goldTopPostion = 3;
+        private static int _itemsTopPostion = 7;
 
-    private char[,] buffer;
+        private char[,] buffer;
 
-    public void MakeTab()
-    {
-        var currentCursor = Console.GetCursorPosition();
+        public void MakeTab()
+        {
+                var currentCursor = Console.GetCursorPosition();
 
                 int left = 2, top = 1, right = 90, bottom = 28;
                 MakeUIContainer(left, top, right, bottom);
 
-        Console.SetCursorPosition(currentCursor.Left, currentCursor.Top);
-    }
-    public void BattleMakeTab(int left, int top, int right, int bottom)
-    {
-        var currentCursor = Console.GetCursorPosition();
+                Console.SetCursorPosition(currentCursor.Left, currentCursor.Top);
+        }
+        public void BattleMakeTab(int left, int top, int right, int bottom)
+        {
+                var currentCursor = Console.GetCursorPosition();
 
-        MakeBattleContainer(left, top, right, bottom);
+                MakeBattleContainer(left, top, right, bottom);
 
-        Console.SetCursorPosition(currentCursor.Left, currentCursor.Top);
-    }
+                Console.SetCursorPosition(currentCursor.Left, currentCursor.Top);
+        }
 
-    public void BattleClearTab(int left, int top, int right, int bottom)
-    {
-        var currentCursor = Console.GetCursorPosition();
+        public void BattleClearTab(int left, int top, int right, int bottom)
+        {
+                var currentCursor = Console.GetCursorPosition();
 
-        ClearBattleContainer(left, top, right, bottom);
+                ClearBattleContainer(left, top, right, bottom);
 
-        Console.SetCursorPosition(currentCursor.Left, currentCursor.Top);
-    }
+                Console.SetCursorPosition(currentCursor.Left, currentCursor.Top);
+        }
         private static void MakeBattleContainer(int left, int top, int right, int bottom)
         {   //┌ ─ ┐ └ ┘ │
                 if (left < 0 || top < 0 || --right > Console.WindowWidth || --bottom > Console.WindowHeight) return;
@@ -67,9 +67,9 @@
                 }
         }
         public static void PrintDef()
-    {
-        var currentCursor = Console.GetCursorPosition();
-        var player = GameData.I.GetCharacters().First();
+        {
+                var currentCursor = Console.GetCursorPosition();
+                var player = GameData.I.GetCharacters().First();
 
                 Console.SetCursorPosition(_goldLeftPostion, _goldTopPostion);
                 Console.Write("┌─────────────────────────┐");
@@ -222,53 +222,53 @@
                              }
                              break;
              }*/
+                }
+                Console.SetCursorPosition(currentCursor.Left, currentCursor.Top);
         }
-        Console.SetCursorPosition(currentCursor.Left, currentCursor.Top);
-    }
 
-    public void PrintHp()
-    {
-        var currentCursor = Console.GetCursorPosition();
-        var player = GameData.I.GetCharacters().First();
+        public void PrintHp()
+        {
+                var currentCursor = Console.GetCursorPosition();
+                var player = GameData.I.GetCharacters().First();
 
-        int rate = 20;
-        int fillExpBar = (int)(rate * (float)player.Health / 100);
-        if (fillExpBar >= rate) fillExpBar = rate;
+                int rate = 20;
+                int fillExpBar = (int)(rate * (float)player.Health / 100);
+                if (fillExpBar >= rate) fillExpBar = rate;
 
-        Console.SetCursorPosition(0, _goldTopPostion);
-        Console.Write("┌──────┬───────────────┬───────┬──────────────────┬─────────┐");
-        Console.SetCursorPosition(0, _goldTopPostion + 1);
-        Console.Write($"│ 이 름│{player.Name, 14} │ 직 업 │{player.Job, 14} │ {player.Attribute,2}속성 │");
-        Console.SetCursorPosition(0, _goldTopPostion + 2);
-        Console.Write("├──────┴───────────────┴───────┴──────────────────┴─────────┴");
+                Console.SetCursorPosition(0, _goldTopPostion);
+                Console.Write("┌──────┬───────────────┬───────┬──────────────────┬─────────┐");
+                Console.SetCursorPosition(0, _goldTopPostion + 1);
+                Console.Write($"│ 이 름│{player.Name,14} │ 직 업 │{player.Job,14} │ {player.Attribute,2}속성 │");
+                Console.SetCursorPosition(0, _goldTopPostion + 2);
+                Console.Write("├──────┴───────────────┴───────┴──────────────────┴─────────┴");
 
 
 
-        Console.SetCursorPosition(64, _goldTopPostion);
-        Console.Write("┌──────┬──────────────────────────────────────────┐");
-        Console.SetCursorPosition(64, _goldTopPostion + 1);
-        Console.Write($"│ 체 력│  ");
-        Console.BackgroundColor = ConsoleColor.Red;
-        Console.Write("".PadRight(fillExpBar, '　'));
-        Console.BackgroundColor = ConsoleColor.DarkRed;
-        Console.Write("".PadRight(rate - fillExpBar, '　'));
-        Console.BackgroundColor = ConsoleColor.Black;
-        Console.Write("│");
-        Console.SetCursorPosition(64, _goldTopPostion + 2);
-        Console.Write("┴──────┴──────────────────────────────────────────┴");
+                Console.SetCursorPosition(64, _goldTopPostion);
+                Console.Write("┌──────┬──────────────────────────────────────────┐");
+                Console.SetCursorPosition(64, _goldTopPostion + 1);
+                Console.Write($"│ 체 력│  ");
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.Write("".PadRight(fillExpBar, '　'));
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                Console.Write("".PadRight(rate - fillExpBar, '　'));
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.Write("│");
+                Console.SetCursorPosition(64, _goldTopPostion + 2);
+                Console.Write("┴──────┴──────────────────────────────────────────┴");
 
-        Console.SetCursorPosition(currentCursor.Left, currentCursor.Top);
-    }
+                Console.SetCursorPosition(currentCursor.Left, currentCursor.Top);
+        }
 
 
 
 
-    public void ShowMonsterCard(List<Monster> monsters)
-    {
-        var currentCursor = Console.GetCursorPosition();
-        int size = monsters.Count;
-        int top = 6, bottom = 19;
-        int width = 21;
+        public void ShowMonsterCard(List<Monster> monsters)
+        {
+                var currentCursor = Console.GetCursorPosition();
+                int size = monsters.Count;
+                int top = 6, bottom = 19;
+                int width = 21;
 
                 List<int> leftPosition = new List<int>();
 
@@ -314,26 +314,26 @@
                                 paddingSize++;
                         Console.Write("".PadLeft(paddingSize, ' ') + monster.Name);
 
-            int fillHpBar = (int)(7 * (float)monster.Health / monster.maxHealth + 0.9f);//현재 체력과 최대 체력이 필요한데 그냥 이렇게함
-            if (fillHpBar >= 7) fillHpBar = 7;
+                        int fillHpBar = (int)(7 * (float)monster.Health / monster.maxHealth + 0.9f);//현재 체력과 최대 체력이 필요한데 그냥 이렇게함
+                        if (fillHpBar >= 7) fillHpBar = 7;
 
-            Console.SetCursorPosition(leftPosition[i] + 2, top + 4);
-            string atkString = $"공격력 : {monsters[i].Attack}";
-            paddingSize = (17 - (atkString.Length + 3)) / 2;
-            Console.Write("".PadLeft(paddingSize, ' ') + atkString);
-            Console.SetCursorPosition(leftPosition[i] + 2, top + 5);
-            string defString = $"방어력 : {monsters[i].Defense}";
-            paddingSize = (17 - (defString.Length + 3)) / 2;
-            Console.Write("".PadLeft(paddingSize, ' ') + defString);
-            Console.SetCursorPosition(leftPosition[i] + 2, top + 10);
-            Console.SetCursorPosition(leftPosition[i] + 2, top + 6);
-            string attributeString = $"속성 : {monsters[i].Attribute}속성";
-            paddingSize = (17 - (attributeString.Length + 3)) / 2;
-            Console.Write("".PadLeft(paddingSize, ' ') + attributeString);
-            Console.SetCursorPosition(leftPosition[i] + 2, top + 10);
-            string hpString = $"체력 : {monsters[i].Health}/{monsters[i].maxHealth}";//현재 체력과 최대 체력이 필요한데 그냥 이렇게함
-            paddingSize = (17 - (hpString.Length + 2)) / 2;
-            Console.Write("".PadLeft(Math.Max(paddingSize, 0), ' ') + hpString);
+                        Console.SetCursorPosition(leftPosition[i] + 2, top + 4);
+                        string atkString = $"공격력 : {monsters[i].Attack}";
+                        paddingSize = (17 - (atkString.Length + 3)) / 2;
+                        Console.Write("".PadLeft(paddingSize, ' ') + atkString);
+                        Console.SetCursorPosition(leftPosition[i] + 2, top + 5);
+                        string defString = $"방어력 : {monsters[i].Defense}";
+                        paddingSize = (17 - (defString.Length + 3)) / 2;
+                        Console.Write("".PadLeft(paddingSize, ' ') + defString);
+                        Console.SetCursorPosition(leftPosition[i] + 2, top + 10);
+                        Console.SetCursorPosition(leftPosition[i] + 2, top + 6);
+                        string attributeString = $"속성 : {monsters[i].Attribute}속성";
+                        paddingSize = (17 - (attributeString.Length + 3)) / 2;
+                        Console.Write("".PadLeft(paddingSize, ' ') + attributeString);
+                        Console.SetCursorPosition(leftPosition[i] + 2, top + 10);
+                        string hpString = $"체력 : {monsters[i].Health}/{monsters[i].maxHealth}";//현재 체력과 최대 체력이 필요한데 그냥 이렇게함
+                        paddingSize = (17 - (hpString.Length + 2)) / 2;
+                        Console.Write("".PadLeft(Math.Max(paddingSize, 0), ' ') + hpString);
 
 
                         if (monsters[i].IsDead)
@@ -491,7 +491,7 @@
                                         case 0:
                                                 break;
                                         case 1:
-                                               
+
                                                 break;
                                         default:
                                                 break;

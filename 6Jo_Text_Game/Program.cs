@@ -389,28 +389,28 @@ class Program : UiManager
                 foreach (string line in fileContents2)
                 {
 
-                    // 두 번째 foreach 루프에서 좌표 설정 부분 수정
-                    int left2 = Math.Max((Console.WindowWidth / 2) - line.Length, 0);
-                    Console.SetCursorPosition(left2, y);
-                    Console.Write(line);
-                    y++;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error reading the file: {ex.Message}");
-            }
-            Console.SetCursorPosition((Console.WindowWidth) / 2 - "x를 누르시오.".Length, y + 5);
-            Console.WriteLine("x를 누르시오.");
-            while (true)
-            {
-                ConsoleKeyInfo key = Console.ReadKey();
-                if (key.KeyChar == 'x' || key.KeyChar == 'ㅌ')
-                {
-                    soundManager.CallSound("sound1", 1);
-                    break;
-                }
-            }
+                                        // 두 번째 foreach 루프에서 좌표 설정 부분 수정
+                                        int left2 = Math.Max((Console.WindowWidth / 2) - line.Length, 0);
+                                        Console.SetCursorPosition(left2, y);
+                                        Console.Write(line);
+                                        y++;
+                                }
+                        }
+                        catch (Exception ex)
+                        {
+                                Console.WriteLine($"Error reading the file: {ex.Message}");
+                        }
+                        Console.SetCursorPosition((Console.WindowWidth) / 2 - "x를 누르시오.".Length, y + 5);
+                        Console.WriteLine("x를 누르시오.");
+                        while (true)
+                        {
+                                ConsoleKeyInfo key = Console.ReadKey();
+                                if (key.KeyChar == 'x' || key.KeyChar == 'ㅌ')
+                                {
+                                        soundManager.CallSound("sound1", 1);
+                                        break;
+                                }
+                        }
 
         }
         public void CharName(out string charName)
@@ -568,8 +568,8 @@ class Program : UiManager
                     break;
                 }
 
-            }
-            soundManager.CallSound("sound1", 1);
+                        }
+                        soundManager.CallSound("sound1", 1);
 
 
 
