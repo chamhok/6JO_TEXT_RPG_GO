@@ -62,7 +62,7 @@
                         string a = ((Item.Store.IndexOf(item) + 1).ToString().Length) > 1 ? "" : " ";
                         Console.WriteLine($"- {Item.Store.IndexOf(item) + 1}" +
                                 $"{a}" +
-                                $"{Item.stallationManagement(item)}" +
+                                $"{Item.StallationManagement(item)}" +
                                 $"{item.Name + new string('　', 10 - item.Name.Length)}" +
                                 $"{item.Akt} " +
                                 $"{item.Def} " +
@@ -101,7 +101,7 @@
                         string a = ((Item.Store.IndexOf(item) + 1).ToString().Length) > 1 ? "" : " ";
                         Console.WriteLine($"- {Item.Store.IndexOf(item) + 1}" +
                                 $"{a}" +
-                                $"{Item.stallationManagement(item)}" +
+                                $"{Item.StallationManagement(item)}" +
                                 $"{item.Name + new string('　', 10 - item.Name.Length)}" +
                                 $"{item.Akt} " +
                                 $"{item.Def} " +

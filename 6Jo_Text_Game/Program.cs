@@ -611,12 +611,12 @@ class Program : UiManager
 
             CharJob(out charJob, out attribute);
 
-            Console.Clear();
-            Character character = new Character(charName, 1, 10, 10, 10, 100, 500, charJob, 10, 10, attribute, 0, 10);
-            character.Add();
-            Skill skill = new Skill();
-            skill.Add();
-            Item item = new Item();
+                        Console.Clear();
+                        Character character = new Character(charName, 1, 10, 10, 10, 100, 50000, charJob, 10, 10, attribute, 0, 10);
+                        character.Add();
+                        Skill skill = new Skill();
+                        skill.Add();
+                        Item item = new Item();
 
             foreach (var var in GameData.I.GetSkill())
             {

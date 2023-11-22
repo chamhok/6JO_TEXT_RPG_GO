@@ -65,7 +65,7 @@ class ScreenManager
                                         break;// 전투 화면으로 이동
                                 case "4":
                                         Console.Clear();
-                                        Displaystore.DisplayStore();
+                                        CallStore();
                                         break;
                                 case "5":
                                         Console.Clear();
@@ -88,6 +88,114 @@ class ScreenManager
                         }
                 } while (true);
         }
+        public void CallStore()
+        {
+                // 게임 화면 초기화 및 테이블 설정
+                Renderer.Initialize("");
+                // 테두리와 테이블 그리기
+                Renderer.DrawBorder("상점");
+                Renderer.Print(3, "아이템을 구매하거나 판매할 수 있습니다.");
+                Renderer.Print(4, $"당신의 소지금: {player.Gold}GOLD");
+                // 입력 영역 그리기
+                Renderer.DrawInputInventoryArea();
+                // 테이블에 데이터 추가
+                Table table = new Table();
+                table.AddType("Index", 5, false);
+                table.AddType("Name", 15, false);
+                table.AddType("Description", 40, false);
+                table.AddType("[E]", 3, false);
+                table.AddType("Akt", 5, false);
+                table.AddType("Def", 5, false);
+                table.AddType("GOLD", 5, false);
+                table.AddType("BUY", 15, false);
+
+                foreach (var item in GameData.I.GetItem())
+                {
+
+                        table.AddData("Index", (GameData.I.GetItem().IndexOf(item) + 1).ToString());
+                        table.AddData("Name", item.Name);
+                        table.AddData("Description", item.ItemDescription);// 무기 1 추가
+                        table.AddData("[E]", Item.StallationManagement(item));
+                        table.AddData("Akt", item.Akt.ToString());
+                        table.AddData("Def", item.Def.ToString());
+                        table.AddData("GOLD", item.Gold.ToString());
+                        table.AddData("BUY", Item.BuyManagement(item));
+
+                }
+
+
+
+                int currentSelection = 0;
+
+                while (true)
+                {
+                        bool BuyBool = false;
+                        Renderer.DrawTable(table, 5, currentSelection);
+                        Renderer.DrawInputArea();
+
+                        ConsoleKeyInfo key = Console.ReadKey();
+                        if (key.Key == ConsoleKey.Z)
+                        {
+                                break;
+                        }
+                        if (key.Key == ConsoleKey.UpArrow && currentSelection > 0)
+                        {
+                                currentSelection--;
+                        }
+                        if (key.Key == ConsoleKey.DownArrow && currentSelection < table.GetDataCount() - 1)
+                        {
+                                currentSelection++;
+                        }
+                        if (key.Key == ConsoleKey.Enter)
+                        {
+                                Item item = player.Inventory.FirstOrDefault(x => x == GameData.I.GetItem()[currentSelection]);
+                                if (item == null)
+                                {
+                                        if (player.Gold >= GameData.I.GetItem()[currentSelection].Gold)
+                                        {
+                                                player.Gold -= GameData.I.GetItem()[currentSelection].Gold;
+                                                Item.BuyReverse(GameData.I.GetItem()[currentSelection]);
+                                                player.Inventory.Add(GameData.I.GetItem()[currentSelection]);
+                                        }
+                                }
+                                else
+                                {
+                                        Item.BuyReverse(GameData.I.GetItem()[currentSelection]);
+                                        Item.BuyReverse(item);
+                                        player.Inventory.Remove(item);
+                                        Item.StallationManagement(item);
+                                        Item.StallationManagement(GameData.I.GetItem()[currentSelection]);
+                                        player.Gold += item.Gold;
+                                }
+
+
+                               
+                                break;
+
+
+                                /*
+                                                                Item.StallationReverse(player.Inventory[currentSelection]);
+
+                                                                if (player.Inventory[currentSelection].Stallation == true)
+                                                                {
+                                                                        player.Attack += player.Inventory[currentSelection].Akt;
+                                                                        player.Defense += player.Inventory[currentSelection].Def;
+
+                                                                }
+                                                                else
+                                                                {
+                                                                        player.Attack -= player.Inventory[currentSelection].Akt;
+                                                                        player.Defense -= player.Inventory[currentSelection].Def;
+                                                                }*/
+                        }
+                }
+
+
+                soundManager.CallSound("sound1", 1);
+
+
+
+        }
 
         public void CallInventory()
         {
@@ -104,7 +212,7 @@ class ScreenManager
                 table.AddType("Index", 5, false);
                 table.AddType("Name", 15, false);
                 table.AddType("Description", 40, false);
-                table.AddType("Stallation", 10, false);
+                table.AddType("[E]", 10, false);
                 table.AddType("Akt", 5, false);
                 table.AddType("Def", 5, false);
 
@@ -114,12 +222,12 @@ class ScreenManager
                         table.AddData("Index", (player.Inventory.IndexOf(item) + 1).ToString());
                         table.AddData("Name", item.Name);
                         table.AddData("Description", item.ItemDescription);// 무기 1 추가
-                        table.AddData("Stallation", Item.stallationManagement(item));
+                        table.AddData("[E]", Item.StallationManagement(item));
                         table.AddData("Akt", item.Akt.ToString());
                         table.AddData("Def", item.Def.ToString());
                 }
 
-
+                Console.WriteLine(player.Inventory.Count);
 
                 int currentSelection = 0;
 
@@ -143,7 +251,7 @@ class ScreenManager
                         }
                         if (key.Key == ConsoleKey.Enter)
                         {
-                                Item.stallationReverse(player.Inventory[currentSelection]);
+                                Item.StallationReverse(player.Inventory[currentSelection]);
                                 if (player.Inventory[currentSelection].Stallation == true)
                                 {
                                         player.Attack += player.Inventory[currentSelection].Akt;
@@ -164,34 +272,6 @@ class ScreenManager
 
 
 
-                /*      bool outcheck = true;
-              do
-              {
-                  Console.Clear();
-                  player.DisplayInventory();
-                  Console.WriteLine("1, 장착관리");
-                  Console.WriteLine("2, 돌아가기");
-                  Console.Write(">>");
-                  int input = Console.Read();
-                  char check = (char)input;
-                  soundManager.CallSound("sound1", 1);
-                  switch (check)
-                  {
-                      case '1':
-                          Console.WriteLine("장착관리모드 활성화");
-                          break;
-                      case '2':
-                          outcheck = false;
-                          break;
-                      default:
-                          Console.WriteLine("잘못된 입력입니다. 1과 2를 입력해주세요");
-                          Console.ReadKey();
-                          break;
-
-                  }
-
-              }
-              while (outcheck);*/
         }
 
         class MainScreen
