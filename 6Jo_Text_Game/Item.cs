@@ -134,7 +134,7 @@ public class Item : IItem
     }
 
     // 아이템 추가 메서드
-    private void Add(IItem item)
+    private void Add(Item item)
     {
         GameData.I.AddItem(item);
     }

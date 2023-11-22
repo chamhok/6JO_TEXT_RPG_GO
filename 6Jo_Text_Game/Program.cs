@@ -19,7 +19,7 @@ public class GameData
     private Monster monster;
     private List<Monster> monsters;
     private List<Character> characters;
-    private List<IItem> items;
+    private List<Item> items;
     private List<Skill> skills;
 
     // 인스턴스 생성을 위한 private 생성자
@@ -28,7 +28,7 @@ public class GameData
         monster = new Monster();
         monsters = new List<Monster>();
         characters = new List<Character>();
-        items = new List<IItem>();
+        items = new List<Item>();
         skills = new List<Skill>();
 
         InitializeData(); // 필요시 데이터 초기화 가능
@@ -84,17 +84,17 @@ public class GameData
         return characters;
     }
 
-    public void AddItem(IItem item)
+    public void AddItem(Item item)
     {
         items.Add(item);
     }
 
-    public void RemoveItem(IItem item)
+    public void RemoveItem(Item item)
     {
         items.RemoveAll(x => x.Name == item.Name);
     }
 
-    public List<IItem> GetItem()
+    public List<Item> GetItem()
     {
         return items;
     }

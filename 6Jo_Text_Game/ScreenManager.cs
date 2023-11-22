@@ -67,13 +67,13 @@ class ScreenManager
                                         ChapterPicker(11);
                                         break;
 
-                case "n":
-                    player.WinCount += 1;
-                    break;
+                                case "n":
+                                        player.WinCount += 1;
+                                        break;
 
-                default:
-                    Console.WriteLine("잘못된입력입니다.");
-                    break; //1 과 2가 아닌 입력을 받을시 메인 화면으로 다시 로드
+                                default:
+                                        Console.WriteLine("잘못된입력입니다.");
+                                        break; //1 과 2가 아닌 입력을 받을시 메인 화면으로 다시 로드
 
                         }
                 } while (true);
@@ -208,7 +208,7 @@ class ScreenManager
                                         }
                                         Console.WriteLine();
                                 }
-                                Console.SetCursorPosition((Console.WindowWidth) / 2 - "x를 누르십시오".Length, yCount+3);
+                                Console.SetCursorPosition((Console.WindowWidth) / 2 - "x를 누르십시오".Length, yCount + 3);
                                 Console.WriteLine("x를 누르십시오");
 
 
@@ -277,7 +277,17 @@ class ScreenManager
                                 skipcheck = false;
                                 ChapterPicker("Ending");
                                 skipcheck = false;
-                                Console.ReadKey();
+                                Console.WriteLine();
+                                Console.WriteLine("x를 누르십시오");
+                                while (true)
+                                {
+                                        ConsoleKeyInfo key = Console.ReadKey();
+                                        if (key.KeyChar == 'x' || key.KeyChar == 'ㅌ')
+                                        {
+                                                soundManager.CallSound("sound1", 1);
+                                                break;
+                                        }
+                                }
                                 Console.Clear();
                                 soundManager2.StopMusic();
                                 soundManager.StopMusic();
@@ -300,35 +310,34 @@ class ScreenManager
                 try
                 {
 
-                        string getTxt = File.ReadAllText($"../../../Story/{filename}.txt")
-                        .Replace("주인공", $"\u001b[94m주인공\u001b[0m")
-                        .Replace("경비병", $"\u001b[91m경비병\u001b[0m")
-                        .Replace("기사", $"\u001b[91m기사\u001b[0m")
-                        .Replace("단장", $"\u001b[91m단장\u001b[0m")
-                        .Replace("마녀", $"\u001b[95m마녀\u001b[0m")
-                        .Replace("고블린", $"\u001b[92m고블린\u001b[0m")
-                        .Replace("트롤", $"\u001b[92m트롤\u001b[0m")
-                        .Replace("상어", $"\u001b[91m상어\u001b[0m")
-                        .Replace("케르베로스", $"\u001b[91m케르베로스\u001b[0m")
-                        .Replace("공허의 마스터", $"\u001b[95m공허의 마스터\u001b[0m")
-                        .Replace("불의 여왕", $"\u001b[91m불의 여왕\u001b[0m")
-                        .Replace("그림자 마법사", $"\u001b[90m그림자 마법사\u001b[0m")
-                        .Replace("무자비한 검사", $"\u001b[91;1m무자비한 검사\u001b[0m");
+
                         string[] readTxt = File.ReadAllLines($"../../../Story/{filename}.txt")
                                                        .Select(x => x.Replace("주인공", $"\u001b[94m주인공\u001b[0m")
-                                                      .Replace("경비병", $"\u001b[91m경비병\u001b[0m")
-                                                      .Replace("기사", $"\u001b[91m기사\u001b[0m")
-                                                      .Replace("단장", $"\u001b[91m단장\u001b[0m")
-                                                      .Replace("마녀", $"\u001b[95m마녀\u001b[0m")
-                                                      .Replace("고블린", $"\u001b[92m고블린\u001b[0m")
-                                                      .Replace("트롤", $"\u001b[92m트롤\u001b[0m")
-                                                      .Replace("상어", $"\u001b[91m상어\u001b[0m")
-                                                      .Replace("케르베로스", $"\u001b[91m케르베로스\u001b[0m")
-                                                      .Replace("공허의 마스터", $"\u001b[95m공허의 마스터\u001b[0m")
-                                                      .Replace("불의 여왕", $"\u001b[91m불의 여왕\u001b[0m")
-                                                      .Replace("그림자 마법사", $"\u001b[90m그림자 마법사\u001b[0m")
-                                                      .Replace("무자비한 검사", $"\u001b[91;1m무자비한 검사\u001b[0m"))
-                                                      .ToArray();
+                                                       .Replace("엄마", $"\u001b[36m엄마\u001b[0m")
+                                                       .Replace("경비병", $"\u001b[91m경비병\u001b[0m")
+                                                       .Replace("반장", $"\u001b[91m반장\u001b[0m")
+                                                       .Replace("기사", $"\u001b[91m기사\u001b[0m")
+                                                       .Replace("형드리", $"\u001b[91m형드리\u001b[0m")
+                                                       .Replace("단장", $"\u001b[91m단장\u001b[0m")
+                                                       .Replace("선생님", $"\u001b[91m선생님\u001b[0m")
+                                                       .Replace("마녀", $"\u001b[95m마녀\u001b[0m")
+                                                       .Replace("할머니", $"\u001b[95m할머니\u001b[0m")
+                                                       .Replace("고블린", $"\u001b[92m고블린\u001b[0m")
+                                                       .Replace("축구공", $"\u001b[92m축구공\u001b[0m")
+                                                       .Replace("트롤", $"\u001b[92m트롤\u001b[0m")
+                                                       .Replace("야구공", $"\u001b[92m야구공\u001b[0m")
+                                                       .Replace("상어", $"\u001b[91m상어\u001b[0m")
+                                                       .Replace("케르베로스", $"\u001b[91m케르베로스\u001b[0m")
+                                                       .Replace("무서운개", $"\u001b[91m무서운개\u001b[0m")
+                                                       .Replace("용암", $"\u001b[94m용암\u001b[0m")
+                                                       .Replace("경찰과 도둑 놀이", $"\u001b[91m경찰과 도둑 놀이\u001b[0m")
+                                                       .Replace("횡단보도", $"\u001b[94m횡단보도\u001b[0m")
+                                                       .Replace("형누나", $"\u001b[95m형누나\u001b[0m")
+                                                       .Replace("공허의 마스터", $"\u001b[95m공허의 마스터\u001b[0m")
+                                                       .Replace("불의 여왕", $"\u001b[91m불의 여왕\u001b[0m")
+                                                       .Replace("그림자 마법사", $"\u001b[90m그림자 마법사\u001b[0m")
+                                                       .Replace("무자비한 검사", $"\u001b[91;1m무자비한 검사\u001b[0m"))
+                                                       .ToArray();
 
 
                         if (filename != "Ending2")
@@ -344,7 +353,8 @@ class ScreenManager
                         }
                         else
                         {
-                                ConsoleHelper.SetCurrentFont("UhBee Rami BOLD", 35);
+                                yCount = 0;
+                                ConsoleHelper.SetCurrentFont("UhBee Rami BOLD", 33);
                                 Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
                                 Console.SetBufferSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
                                 Console.WindowWidth = Console.LargestWindowWidth;
@@ -360,40 +370,29 @@ class ScreenManager
                                     line.Contains("고블린") ||
                                     line.Contains("트롤") ||
                                     line.Contains("상어") ||
+                                    line.Contains("축구공") ||
+                                    line.Contains("야구공") ||
+                                    line.Contains("선생님") ||
+                                    line.Contains("엄마") ||
+                                    line.Contains("반장") ||
+                                    line.Contains("할머니") ||
+                                    line.Contains("횡단보도") ||
+                                    line.Contains("형드리") ||
+                                    line.Contains("무서운개") ||
                                     line.Contains("케르베로스왕") ||
                                     line.Contains("공허의 마스터") ||
                                     line.Contains("그림자 마법사") ||
-                                    line.Contains("무자비한 검사")) Console.SetCursorPosition((Console.WindowWidth) / 2 - line.Length + 15, yCount++);
+                                    line.Contains("경찰과 도둑 놀이") ||
+                                    line.Contains("무자비한 검사")) Console.SetCursorPosition((Console.WindowWidth) / 2 - line.Length + 10, yCount++);
                                 else Console.SetCursorPosition((Console.WindowWidth) / 2 - line.Length, yCount++);
                                 foreach (char cha in line)
                                 {
                                         Console.Write(cha);
-                                        if (!Console.KeyAvailable) Thread.Sleep(50);
+                                        if (!Console.KeyAvailable) Thread.Sleep(40);
                                 }
                                 Console.WriteLine();
                         }
-                       /* foreach (char c in getTxt)
-                        {
-                                if (skipcheck == true)
-                                {
-                                        Console.WriteLine(getTxt);
-                                        break;
-                                }
-                                Console.Write(c);
-                                Thread.Sleep(100); // 출력 간격 조절 (밀리초 단위)
-                                if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Enter)
-                                {
-                                        soundManager.CallSound("sound1", 1);
-                                        Console.Clear();
-                                        Console.ForegroundColor = ConsoleColor.Yellow;
-                                        Console.WriteLine($"[ {filename} ]");
-                                        Console.ResetColor();
-                                        Console.WriteLine(getTxt);
-                                        skipcheck = true;
-                                        break;
-                                }
 
-                        }*/
                         Console.WriteLine(); // 문단 잘리는 현상 수정
                         skipcheck = true;
                 }
