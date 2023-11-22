@@ -345,10 +345,9 @@ public class BattleEvent
             Console.WriteLine($"레벨업! Lv.{player.Level}");
             player.CurrentExp = player.CurrentExp - player.MaxExp; ;
             player.MaxExp += (float)Math.Round(player.MaxExp * 0.2);
-            player.CurrentExp -= player.MaxExp;
-            player.MaxExp += (player.MaxExp * 0.2);
         }
 
+        Console.SetCursorPosition(64, 31);
         // 현재 경험치 퍼센트 계산
         double expPercentage = (player.CurrentExp / player.MaxExp * 100) / 2;
 
@@ -368,9 +367,9 @@ public class BattleEvent
         {
             Console.Write(" ");
         }
-
-        Console.SetCursorPosition(64, 31);
-        Console.WriteLine($"현재 경험치: {player.CurrentExp}/{player.MaxExp}, 다음 레벨업 까지 남은 경험치: {player.MaxExp - player.CurrentExp }");
+        Console.WriteLine("]");
+        Console.SetCursorPosition(64, 32);
+        Console.WriteLine($"현재 경험치: {player.CurrentExp}/{player.MaxExp}, 다음 레벨업 까지 남은 경험치: {player.MaxExp - player.CurrentExp}");
         Console.ReadKey();
     }
     public void Addmoney(Monster monster)
