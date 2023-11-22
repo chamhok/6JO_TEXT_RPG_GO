@@ -3,12 +3,13 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Linq;
 
-class BattleEvent
+public class BattleEvent
 {
     Monster monster;
     Character player;
     List<Monster> monsters;
     SoundManager soundManager = new SoundManager();
+    List<Quest> quests = GameData.I.GetQuests();
     UiManager uiManager = new UiManager();
 
     int skillPguard = 1;
@@ -19,8 +20,12 @@ class BattleEvent
     int skillMsmash = 1;
 
     int life = 10;
+    public int deadMonsterCnt { get; set; } = 0;
 
+    public BattleEvent()
+    {
 
+    }
 
     public BattleEvent(Character player)
     {
@@ -50,7 +55,6 @@ class BattleEvent
         
 
         int turnSpeed = 10;
-
 
         // 턴제전투 (누구 하난 죽을때까지)
         do
@@ -273,12 +277,12 @@ class BattleEvent
 
 
 
+
     // 몬스터의 피격시 데미지 계산 및 사망처리 -------------------------------------------------------------------------------------------
+
     public void MonsterResult(Monster monster) // 다수의 몬스터 처리
     {
         monster.TakeDamage((float)PlayerDmg());
-        //monster.SetChangedCallback(health =>
-        //{
             if (monster.Health <= 0)
             {
                 monster.IsDead = true;
@@ -288,16 +292,15 @@ class BattleEvent
                 AcquireExp(monster);
                 Addmoney(monster);
                 this.monster = monsters.Count != 0 ? monsters[0] : monster;
-                Console.ReadKey();
+            if (quests[0].Msg == "[...ING]") deadMonsterCnt++;
+            if (quests[0].Msg == "[Clear]") deadMonsterCnt = 0;
+            Console.ReadKey();
             }
-        //});
     }
 
     public void MonsterResult() // 단일 몬스터 처리
     {
         monsters[0].TakeDamage((float)PlayerDmg());
-        //monsters[0].SetChangedCallback(health =>
-        //{
             if (monsters[0].Health <= 0)
             {
                 monsters[0].IsDead = true;
@@ -305,9 +308,11 @@ class BattleEvent
                 Console.WriteLine($"{monsters[0].Name}이(가) 사망했습니다.");
                 AcquireExp(monsters[0]);
                 Addmoney(monsters[0]);
-            }
-        //});
-        Console.ReadKey();
+            if (quests[0].Msg == "[...ING]") deadMonsterCnt++;
+            if (quests[0].Msg == "[Clear]") deadMonsterCnt = 0;
+            Console.ReadKey();
+        }
+        
     }
 
     // 플레이어의 피격시 데미지 계산 및 사망처리 -------------------------------------------------------------------------------------------
@@ -340,6 +345,28 @@ class BattleEvent
             Console.WriteLine($"레벨업! Lv.{player.Level}");
             player.CurrentExp = player.CurrentExp - player.MaxExp; ;
             player.MaxExp += (float)Math.Round(player.MaxExp * 0.2);
+            player.CurrentExp -= player.MaxExp;
+            player.MaxExp += (player.MaxExp * 0.2);
+        }
+
+        // 현재 경험치 퍼센트 계산
+        double expPercentage = (player.CurrentExp / player.MaxExp * 100) / 2;
+
+        Console.Write("[");
+        Console.ForegroundColor = ConsoleColor.Green;
+
+        // 변수에 경험치를 표시
+        for (int i = 0; i < (int)expPercentage; i++)
+        {
+            Console.Write("█");
+        }
+
+        Console.ForegroundColor = ConsoleColor.Gray;
+
+        // 남은 부분은 공백으로 채우기
+        for (int i = (int)expPercentage; i < 50; i++)
+        {
+            Console.Write(" ");
         }
 
         Console.SetCursorPosition(64, 31);
@@ -527,7 +554,7 @@ class BattleEvent
                 for (int i = 0; i < rewardItems.Count; i++)
                 {
                     Console.WriteLine($"{i + 1}. {rewardItems[i].Name}");
-                    Thread.Sleep(500);
+                    Thread.Sleep(350);
                 }
                 IItem selectedReward = rewardItems[selectedNumber - 1];
                 selectedReward.Use(player);

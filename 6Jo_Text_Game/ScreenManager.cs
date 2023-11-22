@@ -10,17 +10,24 @@ class ScreenManager
     PlayerInfo playerInfo;
     MainScreen mainScreen = new MainScreen();
     BattleScreen battleScreen;
+    QuestScreen questScreen;
     Store Displaystore;
     bool skipcheck = false;
     SoundManager soundManager = new SoundManager();
     SoundManager soundManager2 = new SoundManager();
 
-    public ScreenManager(Character player, BattleEvent battleEvent, Store store)
+    public ScreenManager()
+    {
+        
+    }
+
+    public ScreenManager(Character player, BattleEvent battleEvent, Store store, Quest quest)
     {
         this.player = player;
         playerInfo = new PlayerInfo(player);
         battleScreen = new BattleScreen(battleEvent);
         Displaystore = store;
+        questScreen = new QuestScreen(quest);
     }
 
     public void ShowMainScreen()
@@ -60,7 +67,10 @@ class ScreenManager
                     Console.Clear();
                     Displaystore.DisplayStore();
                     break;
-
+                case "5":
+                    Console.Clear();
+                    questScreen.DisplayQuestList();
+                    break;
                 case "end":
                     Console.Clear();
                     skipcheck = false;
@@ -104,7 +114,6 @@ class ScreenManager
                     Console.WriteLine("잘못된 입력입니다. 1과 2를 입력해주세요");
                     Console.ReadKey();
                     break;
-
             }
 
         }
@@ -131,6 +140,7 @@ class ScreenManager
             Console.WriteLine("2. 인벤토리");
             Console.WriteLine("3. 전투");
             Console.WriteLine("4. 상점");
+            Console.WriteLine("5. 퀘스트");
         }
         private void Bottom()
         {
@@ -169,6 +179,31 @@ class ScreenManager
             Console.WriteLine("치명타 : " + player.Crt);
             Console.WriteLine("회피 : " + player.Avoidance);
             Console.WriteLine("Gold : " + player.Gold);
+            CurrentExp();
+        }
+
+        private void CurrentExp()
+        {
+            // 현재 경험치 퍼센트 계산
+            double expPercentage = (player.CurrentExp / player.MaxExp * 100) / 2;
+
+            Console.Write("[");
+            Console.ForegroundColor = ConsoleColor.Green;
+
+            // 변수에 경험치를 표시
+            for (int i = 0; i < (int)expPercentage; i++)
+            {
+                Console.Write("█");
+            }
+
+            Console.ForegroundColor = ConsoleColor.Gray;
+
+            // 남은 부분은 공백으로 채우기
+            for (int i = (int)expPercentage; i < 50; i++)
+            {
+                Console.Write(" ");
+            }
+            Console.WriteLine($"] {player.CurrentExp}/{player.MaxExp} Exp");
         }
 
         private void Bottom()
@@ -402,11 +437,6 @@ class ScreenManager
                 }
         }
 
-
-
-
-
-
     class BattleScreen // 전투 진행 화면
     {
         BattleEvent battleEvent;
@@ -420,6 +450,23 @@ class ScreenManager
         {
             Console.WriteLine("전투시작.");
             battleEvent.Battles();
+        }
+    }
+
+    // 퀘스트 디스플레이 화면
+    class QuestScreen
+    {
+        Quest quest;
+
+        public QuestScreen(Quest quest)
+        {
+            this.quest = quest;
+        }
+
+        public void DisplayQuestList()
+        {
+            Console.Clear();
+            quest.DisplayQuest();
         }
     }
 }
