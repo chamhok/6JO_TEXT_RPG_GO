@@ -107,7 +107,7 @@ class ScreenManager
                 table.AddType("Akt", 5, false);
                 table.AddType("Def", 5, false);
                 table.AddType("GOLD", 5, false);
-                table.AddType("BUY", 15, false);
+             //   table.AddType("BUY", 15, false);
 
                 foreach (var item in GameData.I.GetItem())
                 {
@@ -119,7 +119,7 @@ class ScreenManager
                         table.AddData("Akt", item.Akt.ToString());
                         table.AddData("Def", item.Def.ToString());
                         table.AddData("GOLD", item.Gold.ToString());
-                        table.AddData("BUY", Item.BuyManagement(item));
+                       // table.AddData("BUY", Item.BuyManagement(item));
 
                 }
 
