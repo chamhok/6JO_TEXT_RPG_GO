@@ -66,6 +66,10 @@ class ScreenManager
                     ChapterPicker(11);
                     break;
 
+                case "n":
+                    player.WinCount += 1;
+                    break;
+
                 default:
                     Console.WriteLine("잘못된입력입니다.");
                     break; //1 과 2가 아닌 입력을 받을시 메인 화면으로 다시 로드
