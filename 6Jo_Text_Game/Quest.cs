@@ -37,7 +37,6 @@ public class Quest
     public void DisplayQuest()
     {
         Console.Clear();
-
         int questIndex = 1;
         Console.WriteLine("===========================================================\n");
 
@@ -54,8 +53,9 @@ public class Quest
         Console.Write(">>");
 
         int input = CheckValidInput(1, 4);
+
         // 선택한 퀘스트의 Msg가 "[Clear]"인 경우 처리
-        if(input != 4)
+        if (input != 4)
         {
             if (quests[input - 1].Msg == "[Clear]")
             {
@@ -95,7 +95,6 @@ public class Quest
             Console.WriteLine("\n- 보상 -");
             Console.WriteLine($"+{quests[0].RewardExp}Exp");
             Console.WriteLine("\n===========================================================\n");
-
             Console.WriteLine("1. 수락");
             Console.WriteLine("2. 거절");
             Console.Write(">>");
@@ -117,7 +116,7 @@ public class Quest
             if(battle.deadMonsterCnt < 5)
             {
                     Console.Clear();
-                    Console.WriteLine("===========================================================\n");
+                    Console.WriteLine("=============================================================\n");
                     Console.WriteLine($"{quests[0].Name}\n\n{quests[0].QuestInfo}\n");
                     Console.WriteLine($"- 몬스터 {quests[0].Mission}마리 처치 ({battle.deadMonsterCnt}/{quests[0].Mission})");
                     Console.WriteLine("\n- 보상 -");
@@ -139,7 +138,7 @@ public class Quest
             else
             {
                 Console.Clear();
-                Console.WriteLine("===========================================================\n");
+                Console.WriteLine("=============================================================\n");
                 Console.WriteLine($"{quests[0].Name}\n\n{quests[0].QuestInfo}\n");
                 Console.WriteLine($"- 몬스터 {quests[0].Mission}마리 처치 ({battle.deadMonsterCnt}/{quests[0].Mission})");
                 Console.WriteLine("\n- 보상 -");
@@ -167,12 +166,11 @@ public class Quest
     public void Quest2()
     {
         Console.Clear();
-        Console.WriteLine("===========================================================\n");
+        Console.WriteLine("=============================================================\n");
         Console.WriteLine($"{quests[1].Name}\n\n{quests[1].QuestInfo}\n");
         Console.WriteLine("\n- 보상 -");
         Console.WriteLine($"+{quests[1].RewardExp}Exp");
         Console.WriteLine("\n===========================================================\n");
-
         Console.WriteLine("1. 수락");
         Console.WriteLine("2. 거절");
         Console.Write(">>");
@@ -197,7 +195,6 @@ public class Quest
         Console.WriteLine("\n- 보상 -");
         Console.WriteLine($"+{quests[2].RewardExp}Exp");
         Console.WriteLine("\n===========================================================\n");
-
         Console.WriteLine("1. 수락");
         Console.WriteLine("2. 거절");
         Console.Write(">>");
@@ -246,8 +243,6 @@ public class Quest
     {
         Console.WriteLine($"퀘스트를 완료하였습니다. 보상이 지급되었습니다.");
         player.CurrentExp += quests[Index-1].RewardExp;
-        Console.WriteLine($"현재 경험치: {player.CurrentExp} / {player.MaxExp}");
-
         if (player.CurrentExp >= player.MaxExp)
         {
             player.Level += 1;
@@ -255,7 +250,7 @@ public class Quest
             player.CurrentExp -= player.MaxExp;
             player.MaxExp += (int)(player.MaxExp * 0.2);
         }
-
+        Console.WriteLine($"현재 경험치: {player.CurrentExp} / {player.MaxExp}");
         player.IsQuest = false;
         quests[0].Msg = "[Clear]";
         Console.ReadKey();
