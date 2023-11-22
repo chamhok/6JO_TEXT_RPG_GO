@@ -190,16 +190,16 @@ class BattleEvent
     {
         if (monsters.Count > 1)
         {
-            Console.WriteLine("공격 대상을 골라주세요");
-            for (int i = 0; i < monsters.Count; i++)
-            {
-                Console.WriteLine($"{i + 1}. {monsters[i].Name}");
-            }
-            Console.Write(">> ");
-            
             int sel;
             while (true)
             {
+                Console.WriteLine("공격 대상을 골라주세요");
+                for (int i = 0; i < monsters.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1}. {monsters[i].Name}");
+                }
+                Console.Write(">> ");
+
                 int.TryParse(Console.ReadLine(), out sel);
                 if (sel > 0 && sel <= monsters.Count) break;
                 else
@@ -260,7 +260,7 @@ class BattleEvent
                 break;
         }
 
-
+        soundManager.CallSound("sound1", 100);
     }
 
 
@@ -338,7 +338,7 @@ class BattleEvent
         float damage = (monster.Attack * skillMsmash) - (player.Defense * skillPguard);
         skillMsmash = 1;
         skillPguard = 1;
-
+        
         if (damage > 0)
         {
             if (AvoidanceToss() <= player.Avoidance)
