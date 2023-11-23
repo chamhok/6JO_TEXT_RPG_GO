@@ -601,4 +601,4 @@ public class BattleEvent
         }
     }
 
-}
+} //
